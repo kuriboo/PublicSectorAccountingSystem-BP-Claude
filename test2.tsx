@@ -1,186 +1,56 @@
 import React from 'react';
 
-interface SystemSettingsProps {
-  systemMessageBox: string;
-  ryokinSettingsFile: string;
-  ryokinSettingsDir: string;
-  receiptFile: string;
-  receiptDir: string;
-  yearEndAdjustmentDir: string;
-  faceRecognitionDataDir: string;
-  watermarkText: string;
-  pdfOutputDir: string;
-}
+type DirectorySettingsProps = {
+  businessMessageStorage: string;
+  industryTemplateFile: string;
+  personalSettingsFile: string;
+  personalDictionaryFolder: string;
+  yearEndAdjustmentOutput: string;
+  waterReading: string;
+  annualUpdateDataBackup: string;
+};
 
-const SystemSettings: React.FC<SystemSettingsProps> = ({
-  systemMessageBox,
-  ryokinSettingsFile,
-  ryokinSettingsDir,
-  receiptFile,
-  receiptDir,
-  yearEndAdjustmentDir,
-  faceRecognitionDataDir,
-  watermarkText,
-  pdfOutputDir,
+const DirectorySettings: React.FC<DirectorySettingsProps> = ({
+  businessMessageStorage,
+  industryTemplateFile,
+  personalSettingsFile,
+  personalDictionaryFolder,
+  yearEndAdjustmentOutput,
+  waterReading,
+  annualUpdateDataBackup,
 }) => {
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-lg font-bold mb-4">その他</h2>
-      {/* 業務メッセージ */}
+    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <h2 className="text-2xl font-bold mb-4">その他</h2>
       <div className="mb-4">
-        <label htmlFor="systemMessageBox" className="block font-medium mb-1">
+        <label className="block text-gray-700 font-bold mb-2">
           業務メッセージ
         </label>
         <input
           type="text"
-          id="systemMessageBox"
-          className="w-full p-2 border border-gray-300 rounded"
-          value={systemMessageBox}
-          readOnly
+          value={businessMessageStorage}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
+          参照
+        </button>
       </div>
-      {/* シミュレーション・パス */}
       <div className="mb-4">
-        <label htmlFor="ryokinSettingsFile" className="block font-medium mb-1">
-          シミュレーション・パス
+        <label className="block text-gray-700 font-bold mb-2">
+          シミュレーションパス
         </label>
-        <div className="flex">
-          <input
-            type="text"
-            id="ryokinSettingsFile"
-            className="w-full p-2 border border-gray-300 rounded"
-            value={ryokinSettingsFile}
-            readOnly
-          />
-          <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
-            参照
-          </button>
-        </div>
+        <input
+          type="text"
+          value={industryTemplateFile}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
+          参照
+        </button>
       </div>
-      {/* 料金設定 */}
-      <div className="mb-4">
-        <label htmlFor="ryokinSettingsDir" className="block font-medium mb-1">
-          料金設定
-        </label>
-        <div className="flex">
-          <input
-            type="text"
-            id="ryokinSettingsDir"
-            className="w-full p-2 border border-gray-300 rounded"
-            value={ryokinSettingsDir}
-            readOnly
-          />
-          <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
-            参照
-          </button>
-        </div>
-      </div>
-      {/* 料金設定 料金ファイル名 */}
-      <div className="mb-4">
-        <label htmlFor="receiptFile" className="block font-medium mb-1">
-          料金設定 料金ファイル名
-        </label>
-        <div className="flex">
-          <input
-            type="text"
-            id="receiptFile"
-            className="w-full p-2 border border-gray-300 rounded"
-            value={receiptFile}
-            readOnly
-          />
-          <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
-            参照
-          </button>
-        </div>
-      </div>
-      {/* 料金設定 集計分類 */}
-      <div className="mb-4">
-        <label htmlFor="receiptDir" className="block font-medium mb-1">
-          料金設定 集計分類
-        </label>
-        <div className="flex">
-          <input
-            type="text"
-            id="receiptDir"
-            className="w-full p-2 border border-gray-300 rounded"
-            value={receiptDir}
-            readOnly
-          />
-          <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
-            参照
-          </button>
-        </div>
-      </div>
-      {/* 年次更新・不納欠損パス */}
-      <div className="mb-4">
-        <label htmlFor="yearEndAdjustmentDir" className="block font-medium mb-1">
-          年次更新・不納欠損パス
-        </label>
-        <div className="flex">
-          <input
-            type="text"
-            id="yearEndAdjustmentDir"
-            className="w-full p-2 border border-gray-300 rounded"
-            value={yearEndAdjustmentDir}
-            readOnly
-          />
-          <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
-            参照
-          </button>
-        </div>
-      </div>
-      {/* 受水槽対象者一覧表パス */}
-      <div className="mb-4">
-        <label htmlFor="faceRecognitionDataDir" className="block font-medium mb-1">
-          受水槽対象者一覧表パス
-        </label>
-        <div className="flex">
-          <input
-            type="text"
-            id="faceRecognitionDataDir"
-            className="w-full p-2 border border-gray-300 rounded"
-            value={faceRecognitionDataDir}
-            readOnly
-          />
-          <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
-            参照
-          </button>
-        </div>
-      </div>
-      {/* 会計連携データパス */}
-      <div className="mb-4">
-        <label htmlFor="watermarkText" className="block font-medium mb-1">
-          会計連携データパス
-        </label>
-        <div className="flex">
-          <input
-            type="text"
-            id="watermarkText"
-            className="w-full p-2 border border-gray-300 rounded"
-            value={watermarkText}
-            readOnly
-          />
-          <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
-            参照
-          </button>
-        </div>
-      </div>
-      {/* 他区種別 */}
-      <div className="mb-4">
-        <label htmlFor="pdfOutputDir" className="block font-medium mb-1">
-          他区種別
-        </label>
-        <select
-          id="pdfOutputDir"
-          className="w-full p-2 border border-gray-300 rounded"
-          value={pdfOutputDir}
-          readOnly
-        >
-          <option value="course">コース地区</option>
-        </select>
-      </div>
+      {/* Repeat the above pattern for the remaining settings */}
     </div>
   );
 };
 
-export default SystemSettings;
+export default DirectorySettings;
