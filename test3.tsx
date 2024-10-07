@@ -1,80 +1,157 @@
 import React from 'react';
 
-interface ReservationFormProps {
-  onSubmit: (formData: FormData) => void;
-}
+type Props = {
+  title: string;
+  year: number;
+  month: number;
+  departureDate: string;
+  returnDate: string;
+  adultCount: number;
+  childCount: number;
+  infantCount: number;
+  departureAirport: string;
+  arrivalAirport: string;
+  seatClass: string;
+  airlines: string[];
+  onSearch: () => void;
+  onReset: () => void;
+};
 
-const ReservationForm: React.FC<ReservationFormProps> = ({ onSubmit }) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    onSubmit(formData);
-  };
-
+const FlightSearchForm: React.FC<Props> = ({
+  title,
+  year,
+  month,
+  departureDate,
+  returnDate,
+  adultCount,
+  childCount,
+  infantCount,
+  departureAirport,
+  arrivalAirport,
+  seatClass,
+  airlines,
+  onSearch,
+  onReset,
+}) => {
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow">
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        {/* 予約科目 */}
+    <div className="bg-white p-4 rounded shadow">
+      <h2 className="text-lg font-bold mb-4">{title}</h2>
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        {/* Year and Month Input */}
         <div>
-          <label htmlFor="subject" className="block mb-1">予約科目</label>
-          <select id="subject" name="subject" className="w-full border border-gray-300 rounded px-2 py-1">
-            <option value="">選択してください</option>
-            {/* 予約科目のオプションをここに追加 */}
-          </select>
+          <input
+            type="number"
+            value={year}
+            className="border rounded px-2 py-1 w-full"
+            readOnly
+          />
         </div>
-        
-        {/* 教員 */}
         <div>
-          <label htmlFor="teacher" className="block mb-1">教員</label>
-          <select id="teacher" name="teacher" className="w-full border border-gray-300 rounded px-2 py-1">
-            <option value="">選択してください</option>
-            {/* 教員のオプションをここに追加 */}
-          </select>
-        </div>
-
-        {/* 数量 */}
-        <div>
-          <label htmlFor="quantity" className="block mb-1">数量</label>
-          <input type="number" id="quantity" name="quantity" min="1" className="w-full border border-gray-300 rounded px-2 py-1" />
-        </div>
-
-        {/* 利用日 */}
-        <div>
-          <label htmlFor="date" className="block mb-1">利用日</label>
-          <input type="date" id="date" name="date" className="w-full border border-gray-300 rounded px-2 py-1" />
-        </div>
-        
-        {/* 時間帯 */}
-        <div>
-          <fieldset>
-            <legend className="block mb-1">時間帯</legend>
-            <label><input type="radio" name="time" value="午前" /> 午前</label>
-            <label><input type="radio" name="time" value="午後" /> 午後</label>
-          </fieldset>
+          <input
+            type="number"
+            value={month}
+            className="border rounded px-2 py-1 w-full"
+            readOnly
+          />
         </div>
       </div>
-
-      {/* 予約区分 */}
-      <div className="mb-4">  
-        <label htmlFor="category" className="block mb-1">予約区分</label>
-        <select id="category" name="category" className="w-full border border-gray-300 rounded px-2 py-1">
-          <option value="">選択してください</option>
-          {/* 予約区分のオプションをここに追加 */}
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        {/* Departure and Return Date Input */}
+        <div>
+          <input
+            type="text"
+            value={departureDate}
+            className="border rounded px-2 py-1 w-full"
+            readOnly
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            value={returnDate}
+            className="border rounded px-2 py-1 w-full"
+            readOnly
+          />
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        {/* Passenger Count Input */}
+        <div>
+          <label>Adults:</label>
+          <input
+            type="number"
+            value={adultCount}
+            className="border rounded px-2 py-1 w-full"
+          />
+        </div>
+        <div>
+          <label>Children:</label>
+          <input
+            type="number"
+            value={childCount}
+            className="border rounded px-2 py-1 w-full"
+          />
+        </div>
+        <div>
+          <label>Infants:</label>
+          <input
+            type="number"
+            value={infantCount}
+            className="border rounded px-2 py-1 w-full"
+          />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        {/* Departure and Arrival Airport Input */}
+        <div>
+          <input
+            type="text"
+            value={departureAirport}
+            className="border rounded px-2 py-1 w-full"
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            value={arrivalAirport}
+            className="border rounded px-2 py-1 w-full"
+          />
+        </div>
+      </div>
+      <div className="mb-4">
+        {/* Seat Class Selector */}
+        <select className="border rounded px-2 py-1 w-full">
+          <option>{seatClass}</option>
         </select>
       </div>
-
-      {/* メモ欄 */}
       <div className="mb-4">
-        <label htmlFor="memo" className="block mb-1">メモ欄</label>
-        <textarea id="memo" name="memo" rows={3} className="w-full border border-gray-300 rounded px-2 py-1" />
+        {/* Airline Checkboxes */}
+        {airlines.map((airline, index) => (
+          <div key={index}>
+            <label>
+              <input type="checkbox" className="mr-2" />
+              {airline}
+            </label>
+          </div>
+        ))}
       </div>
-
-      {/* 送信ボタン */}
-      <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-        予約
-      </button>
-    </form>
+      <div className="flex justify-between">
+        {/* Search and Reset Buttons */}
+        <button 
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={onSearch}
+        >
+          Search
+        </button>
+        <button
+          className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+          onClick={onReset}
+        >
+          Reset
+        </button>
+      </div>
+    </div>
   );
 };
 
-export default ReservationForm;
+export default FlightSearchForm;
