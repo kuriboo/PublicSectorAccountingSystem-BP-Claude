@@ -1,52 +1,40 @@
-```tsx
 import React from 'react';
 
 interface FormData {
-  prediction1: string;
-  prediction1Ratio: number;
-  prediction2: string;
-  prediction2Ratio: number;
-  entryFee: number;
-  acquisitionRatio: number;
-  payoutRatio: number;
-  paymentMethod: 'transfer' | 'cash';
-  operationFee: string;
-  transferFee: string;
-  managementFee: string;
-  remark: string;
-  venue: string;
-  organizer: string;
+  tax: number;
+  endOfTerm: string;
+  interestRate: number;
+  paymentMethod: string;
+  entryField: string;
+  unknown1: string;
+  unknown2: string;
+  unknown3: string;
+  business: string;
+  dateOpened: string;
 }
 
-interface BookingFormProps {
-  defaultData?: FormData;
+interface FormProps {
+  initialData?: FormData;
   onSubmit: (data: FormData) => void;
 }
 
-const BookingForm: React.FC<BookingFormProps> = ({ defaultData, onSubmit }) => {
-  const [formData, setFormData] = React.useState<FormData>(defaultData || {
-    prediction1: '',
-    prediction1Ratio: 0,
-    prediction2: '',
-    prediction2Ratio: 0,
-    entryFee: 0,
-    acquisitionRatio: 0,
-    payoutRatio: 0,
-    paymentMethod: 'transfer',
-    operationFee: '',
-    transferFee: '',
-    managementFee: '',
-    remark: '',
-    venue: '',
-    organizer: ''
+const Form: React.FC<FormProps> = ({ initialData, onSubmit }) => {
+  const [formData, setFormData] = React.useState<FormData>(initialData || {
+    tax: 0,
+    endOfTerm: '',
+    interestRate: 0,
+    paymentMethod: '',
+    entryField: '',
+    unknown1: '',
+    unknown2: '',
+    unknown3: '',
+    business: '',
+    dateOpened: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -55,161 +43,44 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultData, onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* 予想1 */}
+    <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
       <div>
-        <label htmlFor="prediction1" className="block font-medium text-gray-700">
-          予想1
-        </label>
-        <div className="mt-1 flex">
-          <input
-            type="text"
-            id="prediction1"
-            name="prediction1"
-            value={formData.prediction1}
-            onChange={handleChange}
-            className="w-2/3 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-          <input
-            type="number"
-            id="prediction1Ratio"
-            name="prediction1Ratio"
-            value={formData.prediction1Ratio}
-            onChange={handleChange}
-            className="w-1/3 ml-2 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-      </div>
-
-      {/* 予想2 */}
-      <div>
-        <label htmlFor="prediction2" className="block font-medium text-gray-700">
-          予想2
-        </label>
-        <div className="mt-1 flex">
-          <input
-            type="text"
-            id="prediction2"
-            name="prediction2"
-            value={formData.prediction2}
-            onChange={handleChange}
-            className="w-2/3 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-          <input
-            type="number"
-            id="prediction2Ratio"
-            name="prediction2Ratio"
-            value={formData.prediction2Ratio}
-            onChange={handleChange}
-            className="w-1/3 ml-2 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-      </div>
-
-      {/* 税区分 */}
-      <div>
-        <label htmlFor="acquisitionRatio" className="block font-medium text-gray-700">
-          税区分
-        </label>
-        <select
-          id="acquisitionRatio"
-          name="acquisitionRatio"
-          value={formData.acquisitionRatio}
-          onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option value={0}>内税</option>
-          <option value={8}>外税(8%)</option>
-          <option value={10}>外税(10%)</option>
+        <label htmlFor="tax">税区分</label>
+        <select id="tax" name="tax" value={formData.tax} onChange={handleChange}>
+          <option value={1}>課税1</option>
+          <option value={2}>課税2</option>
         </select>
       </div>
-
-      {/* 精算基礎税込フラグ */}
       <div>
-        <label htmlFor="paymentMethod" className="block font-medium text-gray-700">
-          精算基礎税込フラグ
-        </label>
-        <select
-          id="paymentMethod"
-          name="paymentMethod"
-          value={formData.paymentMethod}
-          onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option value="transfer">振込</option>
-          <option value="cash">現金</option>
+        <label htmlFor="endOfTerm">末払計上区分</label>
+        <select id="endOfTerm" name="endOfTerm" value={formData.endOfTerm} onChange={handleChange}>
+          <option value="1">通常末払計上1</option>
+          <option value="2">通常末払計上2</option>
         </select>
       </div>
-
-      {/* 運営手数料 */}
       <div>
-        <label htmlFor="operationFee" className="block font-medium text-gray-700">
-          運営手数料
-        </label>
-        <input
-          type="text"
-          id="operationFee"
-          name="operationFee"
-          value={formData.operationFee}
-          onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        />
+        <label htmlFor="interestRate">予算科目区分</label>
+        <input type="number" id="interestRate" name="interestRate" value={formData.interestRate} onChange={handleChange} />
       </div>
-
-      {/* 振込手数料 */}
       <div>
-        <label htmlFor="transferFee" className="block font-medium text-gray-700">
-          振込手数料
-        </label>
-        <input
-          type="text"
-          id="transferFee"
-          name="transferFee"
-          value={formData.transferFee}
-          onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        />
+        <label htmlFor="paymentMethod">エントリー区分</label>
+        <select id="paymentMethod" name="paymentMethod" value={formData.paymentMethod} onChange={handleChange}>
+          {/* Add options */}
+        </select>
       </div>
-
-      {/* 事業料 */}
       <div>
-        <label htmlFor="managementFee" className="block font-medium text-gray-700">
-          事業料
-        </label>
-        <input
-          type="text"
-          id="managementFee"
-          name="managementFee"
-          value={formData.managementFee}
-          onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        />
+        <label htmlFor="entryField">積算基礎税込フラグ</label>
+        <select id="entryField" name="entryField" value={formData.entryField} onChange={handleChange}>
+          <option value="excluded">税抜</option>
+          <option value="included">税込</option>
+        </select>
       </div>
-
-      {/* 備考 */}
-      <div>
-        <label htmlFor="remark" className="block font-medium text-gray-700">
-          備考
-        </label>
-        <input
-          type="text"
-          id="remark"
-          name="remark"
-          value={formData.remark}
-          onChange={handleChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        予約する
+      {/* Add remaining form fields */}
+      <button type="submit" className="col-span-2 bg-blue-500 text-white font-bold py-2 px-4 rounded">
+        事業科目
       </button>
     </form>
   );
 };
 
-export default BookingForm;
-```
+export default Form;
