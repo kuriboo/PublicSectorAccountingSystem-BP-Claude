@@ -1,0 +1,2 @@
+# PublicSectorAccountingSystem-BP-Claude
+公営企業会計システムの画像変換後ソース保存先（claudeを用いての変換）
