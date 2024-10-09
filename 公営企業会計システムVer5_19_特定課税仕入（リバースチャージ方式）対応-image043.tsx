@@ -1,36 +1,49 @@
 import React from 'react';
 
-// Define the props for the component
+// Define the types for the component props
 interface CardProps {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   description: string;
-  buttonText: string;
-  onButtonClick: () => void;
+  price: number;
+  onButtonClick?: () => void;
 }
 
-// Create a reusable card component
-const Card: React.FC<CardProps> = ({ title, subtitle, description, buttonText, onButtonClick }) => {
+// Card component
+const Card: React.FC<CardProps> = ({ title, subtitle, description, price, onButtonClick }) => {
   return (
-    <div className="bg-green-100 p-6 rounded-lg shadow-md">
-      {/* Card title */}
+    <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-bold mb-2">{title}</h2>
-      
-      {/* Card subtitle */}
-      <p className="text-gray-600 mb-4">{subtitle}</p>
-      
-      {/* Card description */}
-      <p className="text-gray-800 mb-6">{description}</p>
-      
-      {/* Card button */}
+      {subtitle && <p className="text-gray-600 mb-4">{subtitle}</p>}
+      <p className="text-gray-700 mb-4">{description}</p>
+      <p className="text-lg font-bold mb-4">${price.toFixed(2)}</p>
       <button
-        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         onClick={onButtonClick}
       >
-        {buttonText}
+        Add to Cart
       </button>
     </div>
   );
 };
 
-export default Card;
+// Example usage of the Card component
+const ExampleCard: React.FC = () => {
+  const handleButtonClick = () => {
+    console.log('Button clicked!');
+  };
+
+  return (
+    <div className="max-w-sm mx-auto">
+      <Card
+        title="Sample Product"
+        subtitle="Limited Edition"
+        description="This is a sample product description."
+        price={19.99}
+        onButtonClick={handleButtonClick}
+      />
+    </div>
+  );
+};
+
+export default ExampleCard;
