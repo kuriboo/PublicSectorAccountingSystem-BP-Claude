@@ -1,57 +1,79 @@
 import React from 'react';
+import styled from 'styled-components';
 
-type AssetData = {
+// アセットマネジメントのデータ型定義
+type AssetManagement = {
   code: string;
   name: string;
-  yomi: string;
-  market?: string;
-};
+  dateOfEstablishment: string;
+}
 
-type AssetTableProps = {
-  data: AssetData[];
-};
+type Props = {
+  assetManagements: AssetManagement[];
+}
 
-const AssetTable: React.FC<AssetTableProps> = ({ data }) => {
+// コンポーネントのスタイリング
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 0.8rem;
+  }
+`;
+
+// アセットマネジメント一覧コンポーネント
+const AssetManagementList: React.FC<Props> = ({ assetManagements }) => {
+  // プロパティが空の場合は空配列とする
+  const safeAssetManagements = assetManagements || [];
+
   return (
-    <table className="table-auto border-collapse border border-gray-400">
+    <Table>
       <thead>
         <tr>
-          <th className="border border-gray-400 px-4 py-2">コード</th>
-          <th className="border border-gray-400 px-4 py-2">資産名</th>
-          <th className="border border-gray-400 px-4 py-2">読み方</th>
-          <th className="border border-gray-400 px-4 py-2">取扱市場</th>
+          <th>コード</th>
+          <th>名称</th>
+          <th>設定日付</th>
         </tr>
       </thead>
       <tbody>
-        {data.map((asset, index) => (
+        {safeAssetManagements.map((data, index) => (
           <tr key={index}>
-            <td className="border border-gray-400 px-4 py-2">{asset.code}</td>
-            <td className="border border-gray-400 px-4 py-2">{asset.name}</td>
-            <td className="border border-gray-400 px-4 py-2">{asset.yomi}</td>
-            <td className="border border-gray-400 px-4 py-2">{asset.market || '-'}</td>
+            <td>{data.code}</td>
+            <td>{data.name}</td>
+            <td>{data.dateOfEstablishment}</td>
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   );
 };
 
-// サンプルデータ
-const sampleData: AssetData[] = [
-  { code: '020101', name: '国債', yomi: '(物証用)国債', market: '日本証券業協会' },
-  { code: '020102', name: '地方債', yomi: '(物証用)国債', market: '日本証券業協会' },
-  { code: '020103', name: '政府保証債', yomi: '(物証用)国債', market: '日本証券業協会' },
-  { code: '020104', name: '財投機関債・政府保証なし', yomi: '(物証用)国債', market: '日本証券業協会' },
-  // ... 省略 ...
+export default AssetManagementList;
+
+// 使用例
+const sampleData: AssetManagement[] = [
+  { code: '020101', name: '大和コード', dateOfEstablishment: '(標準用)お勧め' },
+  { code: '020104', name: '時間積立全重要低コード', dateOfEstablishment: '(標準用)お勧め' },
+  { code: '020201', name: '朝日証書全重要低コード', dateOfEstablishment: '(管理用)お勧め' },
+  { code: '100101', name: '東京汐留コード', dateOfEstablishment: '(標準用)お勧め' },
 ];
 
-const AssetTableExample: React.FC = () => {
+const App: React.FC = () => {
   return (
     <div>
-      <h2>資産一覧表</h2>
-      <AssetTable data={sampleData} />
+      <h1>アセットマネジメント一覧</h1>
+      <AssetManagementList assetManagements={sampleData} />
     </div>
   );
 };
-
-export default AssetTableExample;
