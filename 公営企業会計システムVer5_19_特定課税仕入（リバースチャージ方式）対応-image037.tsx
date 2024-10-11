@@ -1,74 +1,82 @@
-// DateCell.tsx
 import React from 'react';
+import styled from 'styled-components';
 
-type DateCellProps = {
-  date: string;
-  className?: string;
+type DateTableProps = {
+  /** テーブルの行データ */
+  rows: string[][];
 };
 
-const DateCell: React.FC<DateCellProps> = ({ date, className = '' }) => {
-  return <td className={`border px-4 py-2 ${className}`}>{date}</td>;
-};
-
-// Table.tsx
-import React from 'react';
-import DateCell from './DateCell';
-
-type TableRow = {
-  date: string;
-  data: (string | number)[];
-};
-
-type TableProps = {
-  rows: TableRow[];
-  headers: string[];
-};
-
-const Table: React.FC<TableProps> = ({ rows, headers }) => {
+/**
+ * 日付テーブルコンポーネント
+ */
+const DateTable: React.FC<DateTableProps> = ({ rows }) => {
   return (
-    <table className="table-auto border-collapse border border-gray-400">
+    <Table>
       <thead>
         <tr>
-          <th className="border px-4 py-2">日付</th>
-          {headers.map((header, index) => (
-            <th key={index} className="border px-4 py-2">
-              {header}
-            </th>
-          ))}
+          <HeaderCell>次年度</HeaderCell>
+          <HeaderCell>款</HeaderCell>
+          <HeaderCell>項</HeaderCell>
+          <HeaderCell>目</HeaderCell>
+          <HeaderCell>節</HeaderCell>
+          <HeaderCell>細節</HeaderCell>
+          <HeaderCell>明細</HeaderCell>
         </tr>
       </thead>
       <tbody>
-        {rows.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            <DateCell date={row.date} />
-            {row.data.map((value, colIndex) => (
-              <td key={colIndex} className="border px-4 py-2">
-                {value}
-              </td>
+        {rows.map((row, index) => (
+          <tr key={index}>
+            {row.map((cell, cellIndex) => (
+              <DataCell key={cellIndex}>{cell}</DataCell>
             ))}
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   );
 };
 
-// サンプルデータと使用例
-const sampleData: TableRow[] = [
-  { date: '002', data: ['01', '01', '13', '001', '0001'] },
-  { date: '005', data: ['03', '05', '20', '003', '0002'] },
-  { date: '008', data: ['06', '08', '26', '005', '0003'] },
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+`;
+
+const HeaderCell = styled.th`
+  padding: 8px;
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  text-align: center;
+  font-weight: bold;
+`;
+
+const DataCell = styled.td`
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+`;
+
+// サンプルデータ
+const sampleRows = [
+  ['002', '01', '01', '13', '001', '001', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
 ];
 
-const headers = ['項目1', '項目2', '項目3', '項目4', '項目5'];
-
-const SampleTable: React.FC = () => {
+/**
+ * DateTableコンポーネントの使用例
+ */
+const DateTableExample: React.FC = () => {
   return (
     <div>
-      <h2>サンプルテーブル</h2>
-      <Table rows={sampleData} headers={headers} />
+      <h2>日付テーブル</h2>
+      <DateTable rows={sampleRows} />
     </div>
   );
 };
 
-export default SampleTable;
+export default DateTableExample;
