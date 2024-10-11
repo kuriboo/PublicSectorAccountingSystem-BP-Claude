@@ -1,142 +1,161 @@
 import React from 'react';
+import styled from 'styled-components';
 
-type SupportTicketProps = {
-  ticketNumber: string;
+// 支払伝票コンポーネントの型定義
+type PaymentSlipProps = {
+  fiscalYear: number;
+  slipNumber: number;
   date: string;
-  department: string;
-  billedPerson: string;
-  billedDepartment: string;
-  billedLocation: string;
-  cashierStampRecipient: string;
-  expenseDetails: {
-    date: string;
-    description: string;
-    vendor: string;
-    amount: number;
-  }[];
+  payee: string;
+  address: string;
+  accountTitle1: string;
+  accountTitle2: string;
+  accountAmount1: number;
+  accountAmount2: number;
   totalAmount: number;
+  remarks: string;
 };
 
-const SupportTicket: React.FC<SupportTicketProps> = ({
-  ticketNumber,
+// スタイル定義
+const SlipContainer = styled.div`
+  width: 100%;
+  border: 1px solid #000;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: sans-serif;
+`;
+
+const SlipHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`;
+
+const SlipTitle = styled.h2`
+  margin: 0;
+`;
+
+const FiscalYear = styled.span`
+  margin-left: 20px;
+`;
+
+const SlipNumber = styled.span`
+  margin-left: auto;
+`;
+
+const SlipTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    border: 1px solid #000;
+    padding: 5px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #eee;
+  }
+`;
+
+const AmountCell = styled.td`
+  text-align: right;
+`;
+
+const TotalAmount = styled.td`
+  text-align: right;
+  font-weight: bold;
+`;
+
+// 支払伝票コンポーネント
+const PaymentSlip: React.FC<PaymentSlipProps> = ({
+  fiscalYear,
+  slipNumber,
   date,
-  department,
-  billedPerson,
-  billedDepartment,
-  billedLocation,
-  cashierStampRecipient,
-  expenseDetails,
+  payee,
+  address,
+  accountTitle1,
+  accountTitle2,
+  accountAmount1,
+  accountAmount2,
   totalAmount,
+  remarks,
 }) => {
+  // 例外処理
+  if (!fiscalYear || !slipNumber) {
+    return <div>伝票番号と年度は必須です。</div>;
+  }
+
   return (
-    <div className="bg-white p-4">
-      <div className="text-center text-lg font-bold mb-4">支払伝票（単票）</div>
-      <div className="flex justify-between mb-2">
-        <div>平成27年度</div>
-        <div>伝票No. {ticketNumber}</div>
-      </div>
-      <table className="table-auto w-full text-left whitespace-no-wrap mb-4">
+    <SlipContainer>
+      <SlipHeader>
+        <SlipTitle>支払伝票（単票）</SlipTitle>
+        <div>
+          <FiscalYear>年度 {fiscalYear}</FiscalYear>
+          <SlipNumber>伝票No {slipNumber}</SlipNumber>
+        </div>
+      </SlipHeader>
+
+      <SlipTable>
         <thead>
           <tr>
-            <th className="px-4 py-2">所属</th>
-            <th className="px-4 py-2">氏名</th>
-            <th className="px-4 py-2">平成28年3月27日</th>
-            <th className="px-4 py-2">事務所長</th>
-            <th className="px-4 py-2">課長</th>
-            <th className="px-4 py-2">係長</th>
-            <th className="px-4 py-2">起案者</th>
+            <th>年月日</th>
+            <th>支払先</th>
+            <th colSpan={4}>支払科目</th>
+            <th>経費負担</th>
+            <th>備考</th>
+            <th>起案者</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td className="border px-4 py-2">{department}</td>
-            <td className="border px-4 py-2">{billedPerson}</td>
-            <td className="border px-4 py-2"></td>
-            <td className="border px-4 py-2"></td>
-            <td className="border px-4 py-2"></td>
-            <td className="border px-4 py-2"></td>
-            <td className="border px-4 py-2"></td>
+            <td rowSpan={3}>{date}</td>
+            <td rowSpan={3}>{payee}</td>
+            <td>{accountTitle1}</td>
+            <AmountCell>{accountAmount1.toLocaleString()}円</AmountCell>
+            <td rowSpan={3}></td>
+            <td rowSpan={3}>{remarks}</td>
+            <td rowSpan={5}></td>
           </tr>
-        </tbody>
-      </table>
-      <div className="flex mb-4">
-        <div className="w-1/2">
-          <div className="mb-2">借方科目</div>
-          <div>事業費用</div>
-          <div>○○事業</div>
-          <div>印刷製本費</div>
-          <div>消耗品費</div>
-          <div>食糧費</div>
-        </div>
-        <div className="w-1/2">
-          <div className="mb-2">貸方科目</div>
-          <div>現金預金</div>
-          <div>現金預金</div>
-          <div>普通預金</div>
-          <div>普通預金</div>
-          <div>普通預金</div>
-        </div>
-      </div>
-      <div className="text-right mb-4">金額 {totalAmount.toLocaleString()}円</div>
-      <table className="table-auto w-full text-left whitespace-no-wrap mb-4">
-        <thead>
           <tr>
-            <th className="px-4 py-2">年月日</th>
-            <th className="px-4 py-2">摘要</th>
-            <th className="px-4 py-2">金額</th>
+            <td>{accountTitle2}</td>
+            <AmountCell>{accountAmount2.toLocaleString()}円</AmountCell>
           </tr>
-        </thead>
-        <tbody>
-          {expenseDetails.map((detail, index) => (
-            <tr key={index}>
-              <td className="border px-4 py-2">{detail.date}</td>
-              <td className="border px-4 py-2">
-                {detail.description}
-                <br />
-                {detail.vendor}
-              </td>
-              <td className="border px-4 py-2 text-right">
-                {detail.amount.toLocaleString()}
-              </td>
-            </tr>
-          ))}
+          <tr>
+            <td colSpan={2}></td>
+          </tr>
+          <tr>
+            <td colSpan={2}>住所</td>
+            <td colSpan={2}>{address}</td>
+            <td>金額</td>
+          </tr>
+          <tr>
+            <td colSpan={4}></td>
+            <TotalAmount>{totalAmount.toLocaleString()}円</TotalAmount>
+          </tr>
         </tbody>
-      </table>
-      <div className="flex justify-end">
-        <div>収入印紙貼付 収入印紙</div>
-      </div>
-    </div>
+      </SlipTable>
+    </SlipContainer>
   );
 };
 
-// Example usage:
-const SampleSupportTicket: React.FC = () => {
-  const sampleData: SupportTicketProps = {
-    ticketNumber: '27-000451',
-    date: '平成27年度',
-    department: '××課',
-    billedPerson: '鈴木',
-    billedDepartment: '',
-    billedLocation: '',
-    cashierStampRecipient: '',
-    expenseDetails: [
-      {
-        date: '3/1',
-        description: '○○の購入',
-        vendor: '△△商事',
-        amount: 30000,
-      },
-      {
-        date: '3/5',
-        description: '□□の印刷',
-        vendor: '◇◇印刷',
-        amount: 50000,
-      },
-    ],
-    totalAmount: 80000,
-  };
+export default PaymentSlip;
 
-  return <SupportTicket {...sampleData} />;
+// 使用例
+const App: React.FC = () => {
+  return (
+    <PaymentSlip
+      fiscalYear={27}
+      slipNumber={451}
+      date="平成28年3月27日"
+      payee="鈴木商店"
+      address="東京都新宿区XX町X-X"
+      accountTitle1="交際費"
+      accountTitle2="研究開発費"
+      accountAmount1={1000000}
+      accountAmount2={1000000}
+      totalAmount={2000000}
+      remarks=""
+    />
+  );
 };
-
-export default SampleSupportTicket;
