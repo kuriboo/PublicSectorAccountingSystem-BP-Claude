@@ -1,68 +1,74 @@
-// UserProfile.tsx
 import React from 'react';
+import styled from 'styled-components';
 
-type UserProfileProps = {
-  profileImageUrl: string;
-  userName: string;
-  userDescription: string;
-  userRole: string;
+interface CompanySystemProps {
+  title?: string;
+  description?: string;
+}
+
+const CompanySystem: React.FC<CompanySystemProps> = ({ title = '株式会社ぎょうせい', description = 'データ・システム事業部' }) => {
+  return (
+    <Container>
+      {/* Globe icon */}
+      <Icon>🌐</Icon>
+
+      {/* Company name and department */}
+      <ContentWrapper>
+        <Title>{title}</Title>
+        <Description>{description}</Description>
+      </ContentWrapper>
+    </Container>
+  );
 };
 
-const UserProfile: React.FC<UserProfileProps> = ({
-  profileImageUrl,
-  userName,
-  userDescription,
-  userRole,
-}) => {
-  return (
-    <div className="flex items-center space-x-4">
-      {/* Profile Image */}
-      {profileImageUrl ? (
-        <img
-          src={profileImageUrl}
-          alt={`${userName}'s profile`}
-          className="w-16 h-16 rounded-full"
-        />
-      ) : (
-        <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
-      )}
+// Styling with CSS-in-JS
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #000;
+  color: #fff;
+  padding: 16px;
+  border-radius: 8px;
 
-      <div>
-        {/* User Name */}
-        <h2 className="text-xl font-bold">
-          {userName ? userName : 'Unknown User'}
-        </h2>
-        
-        {/* User Description */}
-        {userDescription && (
-          <p className="text-gray-600">{userDescription}</p>
-        )}
-        
-        {/* User Role */}
-        {userRole && (
-          <p className="text-sm text-gray-500">{userRole}</p>  
-        )}
-      </div>
+  @media (max-width: 600px) {
+    flex-direction: column;
+    text-align: center;
+  }
+`;
+
+const Icon = styled.div`
+  font-size: 48px;
+  margin-right: 16px;
+
+  @media (max-width: 600px) {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  margin: 0;
+`;
+
+const Description = styled.p`
+  font-size: 18px;
+  margin: 4px 0 0;
+`;
+
+// Example usage
+const App: React.FC = () => {
+  return (
+    <div>
+      <CompanySystem />
+      <CompanySystem title="株式会社ABC" description="営業部" />
     </div>
   );
 };
 
-// Sample data for demonstration
-const sampleUser = {
-  profileImageUrl: 'https://example.com/profile.jpg',
-  userName: 'John Doe',
-  userDescription: 'Software Engineer',
-  userRole: 'Admin',
-};
-
-// Usage example
-const UserProfileExample: React.FC = () => {
-  return (
-    <div>
-      <h1>User Profile Example</h1>
-      <UserProfile {...sampleUser} />
-    </div>
-  );  
-};
-
-export default UserProfile;
+export default App;
