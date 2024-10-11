@@ -1,111 +1,120 @@
-import React from 'react';
+// 簡易的な住所入力フォームコンポーネント
+import React, { useState } from 'react';
+import styled from '@emotion/styled';
 
-// 賃借区分コンポーネント
-type LeaseDivisionProps = {
-  boroughDivision?: string;
-  districtDivision?: string;
-}
+// 入力フィールドのスタイル定義
+const InputField = styled.input`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+`;
 
-const LeaseDivision: React.FC<LeaseDivisionProps> = ({
-  boroughDivision = '',
-  districtDivision = '',
-}) => {
+// セレクトボックスのスタイル定義
+const SelectBox = styled.select`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+`;
+
+// ラベルのスタイル定義
+const Label = styled.label`
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  display: block;
+`;
+
+type AddressFormProps = {
+  onSubmit: (address: Address) => void;
+};
+
+type Address = {
+  postalCode: string;
+  prefecture: string;
+  city: string;
+  street: string;
+  building: string;
+};
+
+const AddressForm: React.FC<AddressFormProps> = ({ onSubmit }) => {
+  const [postalCode, setPostalCode] = useState('');
+  const [prefecture, setPrefecture] = useState('');
+  const [city, setCity] = useState('');
+  const [street, setStreet] = useState('');
+  const [building, setBuilding] = useState('');
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const address: Address = {
+      postalCode,
+      prefecture,
+      city,
+      street,
+      building,
+    };
+    onSubmit(address);
+  };
+
   return (
-    <div className="flex space-x-4">
-      <div>
-        <label htmlFor="boroughDivision">貸借区分</label>
-        <input type="text" id="boroughDivision" value={boroughDivision} className="border rounded px-2 py-1" readOnly />
-      </div>
-      <div>
-        <label htmlFor="districtDivision">勤定区分</label>
-        <input type="text" id="districtDivision" value={districtDivision} className="border rounded px-2 py-1" readOnly />
-      </div>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <Label>
+        郵便番号
+        <InputField
+          type="text"
+          value={postalCode}
+          onChange={(e) => setPostalCode(e.target.value)}
+          required
+        />
+      </Label>
+      <Label>
+        都道府県
+        <SelectBox value={prefecture} onChange={(e) => setPrefecture(e.target.value)} required>
+          <option value="">選択してください</option>
+          {/* 都道府県のオプションを追加 */}
+        </SelectBox>
+      </Label>
+      <Label>
+        市区町村
+        <InputField type="text" value={city} onChange={(e) => setCity(e.target.value)} required />
+      </Label>
+      <Label>
+        番地
+        <InputField
+          type="text"
+          value={street}
+          onChange={(e) => setStreet(e.target.value)}
+          required
+        />
+      </Label>
+      <Label>
+        建物名・部屋番号
+        <InputField type="text" value={building} onChange={(e) => setBuilding(e.target.value)} />
+      </Label>
+      <button type="submit">送信</button>
+    </form>
   );
 };
 
-// 最終納品日コンポーネント
-type FinalDeliveryDateProps = {
-  date?: string;
-}
+// サンプルデータを使用した表示用コンポーネント
+const App: React.FC = () => {
+  const handleAddressSubmit = (address: Address) => {
+    console.log('Submitted address:', address);
+  };
 
-const FinalDeliveryDate: React.FC<FinalDeliveryDateProps> = ({ date = '' }) => {
   return (
     <div>
-      <label htmlFor="finalDeliveryDate">仕訳科目区分</label>
-      <input type="text" id="finalDeliveryDate" value={date} className="border rounded px-2 py-1" readOnly />
+      <h1>住所入力フォーム</h1>
+      <AddressForm onSubmit={handleAddressSubmit} />
     </div>
   );
 };
 
-// 未払計上コンポーネント
-type UnpaidProps = {
-  journalVoucherDivision?: string;
-  subAccountDivision?: string;
-}
-
-const Unpaid: React.FC<UnpaidProps> = ({
-  journalVoucherDivision = '',
-  subAccountDivision = '',
-}) => {
-  return (
-    <div className="space-y-2">
-      <div>
-        <label htmlFor="journalVoucherDivision">伝票仕訳区分</label>
-        <input type="text" id="journalVoucherDivision" value={journalVoucherDivision} className="border rounded px-2 py-1" readOnly />
-      </div>
-      <div>
-        <label htmlFor="subAccountDivision">補助決裁区分</label>
-        <input type="text" id="subAccountDivision" value={subAccountDivision} className="border rounded px-2 py-1" readOnly />
-      </div>
-    </div>
-  );
-};
-
-// 未払計上サンプルコンポーネント
-const UnpaidSample: React.FC = () => {
-  return (
-    <Unpaid
-      journalVoucherDivision="ABC"
-      subAccountDivision="XYZ"
-    />
-  );
-};
-
-// その他項目コンポーネント
-type OtherItemsProps = {
-  acquisitionDate?: string;
-  usefulLife?: number;
-  depreciationStartDate?: string;
-  BSDailyDepreciation?: number;
-}
-
-const OtherItems: React.FC<OtherItemsProps> = ({
-  acquisitionDate = '',
-  usefulLife = 0,
-  depreciationStartDate = '',
-  BSDailyDepreciation = 0,
-}) => {
-  return (
-    <div className="space-y-2">
-      <div>
-        <label htmlFor="acquisitionDate">取得日</label>
-        <input type="text" id="acquisitionDate" value={acquisitionDate} className="border rounded px-2 py-1" readOnly />
-      </div>
-      <div className="flex items-center space-x-4">
-        <div>
-          <label htmlFor="usefulLife">耐用年数</label>
-          <input type="number" id="usefulLife" value={usefulLife} className="border rounded px-2 py-1 w-20" readOnly />
-        </div>
-        <div>
-          <label htmlFor="BSDailyDepreciation">BS科目稼働額</label>
-          <input type="number" id="BSDailyDepreciation" value={BSDailyDepreciation} className="border rounded px-2 py-1 w-20" readOnly />
-        </div>
-      </div>
-      <div>
-        <label htmlFor="depreciationStartDate">償却開始日</label>
-        <input type="text" id="depreciationStartDate" value={depreciationStartDate} className="border rounded px-2 py-1" readOnly />
-      </div>
-    </div>
-  );
-};
+export default App;
