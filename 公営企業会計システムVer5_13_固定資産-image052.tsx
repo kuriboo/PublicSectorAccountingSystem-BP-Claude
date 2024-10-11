@@ -1,179 +1,173 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
-interface FixedTermProductionProps {
-  workType?: '管理' | '管理以外';
-  managementNumber: string;
-  fromSequenceNumber: string;
-  toSequenceNumber: string;
-  department1: '01' | '02';
-  department2: '01' | '02';
-  expirationDate: string;
-  effectiveDate: string;
+// 抽出固定資産の一覧表示コンポーネントの型定義
+interface ExtractedFixedAssetListProps {
+  extractionDate: string;
+  returnDate: string;
+  assetClassification: '管理(資産番号)' | '管理以外';
+  assetNumberRange: {
+    start: number;
+    end: number;
+  };
+  registrationDateRange: {
+    start: string;
+    end: string;
+  };
+  disposalNumbers: {
+    start: string;
+    end: string;
+  };
+  accountingYears: {
+    start: string;
+    end: string;
+  };
 }
 
-const FixedTermProduction: React.FC<FixedTermProductionProps> = ({
-  workType = '管理',
-  managementNumber = '',
-  fromSequenceNumber = '',
-  toSequenceNumber = '',
-  department1 = '01',
-  department2 = '02',
-  expirationDate = '',
-  effectiveDate = '',
+// スタイル定義
+const Container = styled.div`
+  background-color: #f0f0f0;
+  padding: 16px;
+  border-radius: 8px;
+
+  @media (max-width: 600px) {
+    padding: 8px;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 20px;
+  margin-bottom: 16px;
+
+  @media (max-width: 600px) {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+`;
+
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const Label = styled.label`
+  margin-right: 8px;
+  min-width: 100px;
+
+  @media (max-width: 600px) {
+    margin-bottom: 4px;
+  }
+`;
+
+const Input = styled.input`
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+`;
+
+const Select = styled.select`
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+`;
+
+const Button = styled.button`
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-right: 8px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+// 抽出固定資産の一覧表示コンポーネント
+const ExtractedFixedAssetList: React.FC<ExtractedFixedAssetListProps> = ({
+  extractionDate,
+  returnDate,
+  assetClassification,
+  assetNumberRange,
+  registrationDateRange,
+  disposalNumbers,
+  accountingYears,
 }) => {
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-lg font-bold mb-4">抽出固定資産一覧表作成</h2>
-      <div className="mb-4">
-        <span className="mr-4">
-          <input
-            type="radio"
-            id="management"
-            name="workType"
-            value="管理"
-            checked={workType === '管理'}
-            readOnly
-          />
-          <label htmlFor="management" className="ml-1">
-            管理
-          </label>
-        </span>
-        <span>
-          <input
-            type="radio"
-            id="nonManagement"
-            name="workType"
-            value="管理以外"
-            checked={workType === '管理以外'}
-            readOnly
-          />
-          <label htmlFor="nonManagement" className="ml-1">
-            管理以外
-          </label>
-        </span>
-      </div>
-      <div className="mb-4 grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="managementNumber" className="block mb-1">
-            管理番号
-          </label>
-          <input
-            type="text"
-            id="managementNumber"
-            className="w-full px-2 py-1 border rounded"
-            value={managementNumber}
-            readOnly
-          />
-        </div>
-        <div>
-          <label htmlFor="sequenceNumber" className="block mb-1">
-            資産番号
-          </label>
-          <div className="flex">
-            <input
-              type="text"
-              id="fromSequenceNumber"
-              className="w-full px-2 py-1 border rounded"
-              value={fromSequenceNumber}
-              readOnly
-            />
-            <span className="mx-2">〜</span>
-            <input
-              type="text"
-              id="toSequenceNumber"
-              className="w-full px-2 py-1 border rounded"
-              value={toSequenceNumber}
-              readOnly
-            />
-          </div>
-        </div>
-      </div>
-      <div className="mb-4 grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="department1" className="block mb-1">
-            部門
-          </label>
-          <div className="flex items-center">
-            <input
-              type="text"
-              id="department1"
-              className="w-12 px-2 py-1 border rounded"
-              value={department1}
-              readOnly
-            />
-            <span className="ml-2">設水</span>
-          </div>
-        </div>
-        <div>
-          <label htmlFor="department2" className="block mb-1">
-            部門
-          </label>
-          <div className="flex items-center">
-            <input
-              type="text"
-              id="department2"
-              className="w-12 px-2 py-1 border rounded"
-              value={department2}
-              readOnly
-            />
-            <span className="ml-2">導水</span>
-          </div>
-        </div>
-      </div>
-      <div className="mb-4 grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="expirationDate" className="block mb-1">
-            取得年月日
-          </label>
-          <input
-            type="text"
-            id="expirationDate"
-            className="w-full px-2 py-1 border rounded"
-            value={expirationDate}
-            readOnly
-          />
-        </div>
-        <div>
-          <label htmlFor="effectiveDate" className="block mb-1">
-            〜
-          </label>
-          <input
-            type="text"
-            id="effectiveDate"
-            className="w-full px-2 py-1 border rounded"
-            value={effectiveDate}
-            readOnly
-          />
-        </div>
-      </div>
-      <div className="text-center">
-        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-          OK
-        </button>
-        <button className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded ml-4">
-          クリア
-        </button>
-        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded ml-4">
-          終了
-        </button>
-      </div>
-    </div>
+    <Container>
+      <Title>抽出固定資産一覧表作成</Title>
+      <Row>
+        <Label>作成年月日</Label>
+        <Input type="text" value={extractionDate} readOnly />
+        <Label>平成29年09月11日</Label>
+        <Input type="text" value={returnDate} readOnly />
+      </Row>
+      <Row>
+        <Label>作表区分</Label>
+        <Select value={assetClassification}>
+          <option value="管理(資産番号)">管理(資産番号)</option>
+          <option value="管理以外">管理以外</option>
+        </Select>
+      </Row>
+      <Row>
+        <Label>範囲指定</Label>
+        <Label>資産番号</Label>
+        <Input type="number" value={assetNumberRange.start} /> ～ <Input type="number" value={assetNumberRange.end} />
+      </Row>
+      <Row>
+        <Label>固定資産科目</Label>
+        <Input type="text" value={registrationDateRange.start} /> ～ <Input type="text" value={registrationDateRange.end} />
+      </Row>
+      <Row>
+        <Label>部門</Label>
+        <Input type="text" value={disposalNumbers.start} /> ～ <Input type="text" value={disposalNumbers.end} />
+      </Row>
+      <Row>
+        <Label>取得年月日</Label>
+        <Input type="text" value={accountingYears.start} /> ～ <Input type="text" value={accountingYears.end} />
+      </Row>
+      <Row>
+        <Button>OK</Button>
+        <Button>クリア</Button>
+        <Button>終了</Button>        
+      </Row>
+    </Container>
   );
 };
 
-// Usage example
-const App: React.FC = () => {
-  return (
-    <div className="container mx-auto mt-8">
-      <FixedTermProduction
-        managementNumber="999999999999"
-        fromSequenceNumber="000000000"
-        toSequenceNumber="999999999"
-        expirationDate="平成29年09月"
-        effectiveDate="平成30年09月"
-      />
-    </div>
-  );
+// サンプルデータを用いた使用例
+const SampleUsage: React.FC = () => {
+  const sampleData: ExtractedFixedAssetListProps = {
+    extractionDate: '平成29年09月11日',
+    returnDate: '平成29年09月11日',  
+    assetClassification: '管理(資産番号)',
+    assetNumberRange: {
+      start: 0,
+      end: 9999999999,
+    },
+    registrationDateRange: {
+      start: '00000000',
+      end: '99999999',
+    },
+    disposalNumbers: {
+      start: '001 取水',
+      end: '002 導水',   
+    },
+    accountingYears: {
+      start: '平成29年04月',
+      end: '平成30年03月',
+    },
+  };
+
+  return <ExtractedFixedAssetList {...sampleData} />;
 };
 
-export default App;
+export default ExtractedFixedAssetList;
