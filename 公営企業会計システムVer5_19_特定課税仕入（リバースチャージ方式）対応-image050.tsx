@@ -1,149 +1,144 @@
 import React from 'react';
+import styled from 'styled-components';
 
-interface SupportTicketProps {
-  ticketNumber: string;
+// 支払伝票の型定義
+interface Invoice {
   date: string;
+  company: string;
   department: string;
-  extension: string;
-  details: string;
-  manager: string;
-  amountCollected: number;
-  amountSpent: number;
+  payee: string;
+  amount: number;
+  tax: number;
+  totalAmount: number;
+  stampField: string;
+  transactionDetails: string[];
+  taxWithholdingDetails: string[];
   remarks: string;
-  divisionChief: string;
-  divisionChiefDate: string;
-  accountingManager: string;
-  accountingManagerDate: string;
-  signature: string;
 }
 
-const SupportTicket: React.FC<SupportTicketProps> = ({
-  ticketNumber = '',
-  date = '',
-  department = '',
-  extension = '',
-  details = '',
-  manager = '',
-  amountCollected = 0,
-  amountSpent = 0,
-  remarks = '',
-  divisionChief = '',
-  divisionChiefDate = '',
-  accountingManager = '',
-  accountingManagerDate = '',
-  signature = '',
-}) => {
-  return (
-    <div className="border border-gray-400 p-4">
-      {/* Header */}
-      <div className="flex justify-between mb-4">
-        <h2 className="text-lg font-bold">支払伝票（単票）</h2>
-        <div>
-          <span className="mr-2">伝票No</span>
-          <span>{ticketNumber}</span>
-        </div>
-      </div>
+// 支払伝票コンポーネント
+const InvoiceComponent: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
+  // 金額の3桁区切りを行うヘルパー関数
+  const formatAmount = (amount: number) => {
+    return amount.toLocaleString();
+  };
 
-      {/* Table */}
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th className="border px-4 py-2">所属</th>
-            <th className="border px-4 py-2">氏名</th>
-            <th className="border px-4 py-2">摘要</th>
-            <th className="border px-4 py-2">領収書等</th>
-            <th className="border px-4 py-2">金額</th>
-            <th className="border px-4 py-2">起案者</th>
-          </tr>
-        </thead>
+  return (
+    <InvoiceWrapper>
+      <InvoiceHeader>
+        <h2>支払伝票（単票）</h2>
+        <InvoiceNumber>伝票No 27-000451</InvoiceNumber>
+      </InvoiceHeader>
+      <InvoiceTable>
         <tbody>
           <tr>
-            <td className="border px-4 py-2">{department}</td>
-            <td className="border px-4 py-2">{manager}</td>
-            <td className="border px-4 py-2">{details}</td>
-            <td className="border px-4 py-2"></td>
-            <td className="border px-4 py-2"></td>
-            <td className="border px-4 py-2"></td>
+            <th>所属</th>
+            <td colSpan={2}>{invoice.department}</td>
+            <th>氏名</th>
+            <td colSpan={2}>{invoice.payee}</td>
+            <th>金額</th>
+            <td>{formatAmount(invoice.amount)}円</td>
+            <th>起案者</th>
+          </tr>
+          <tr>
+            <td colSpan={4}>
+              <h4>借方科目</h4>
+              <ul>
+                {invoice.transactionDetails.map((detail, index) => (
+                  <li key={index}>{detail}</li>
+                ))}
+              </ul>
+            </td>
+            <td colSpan={4}>
+              <h4>貸方科目</h4>
+              <ul>
+                {invoice.taxWithholdingDetails.map((detail, index) => (
+                  <li key={index}>{detail}</li>
+                ))}
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th colSpan={6}>金額</th>
+            <td colSpan={2}>{formatAmount(invoice.totalAmount)}円</td>
+          </tr>
+          <tr>
+            <th>摘要</th>
+            <td colSpan={7}>{invoice.remarks}</td>
           </tr>
         </tbody>
-      </table>
-
-      {/* Approval */}
-      <div className="flex justify-between mt-8">
-        <div>
-          <p>借方科目</p>
-          <p>細節</p>          
-          <div className="flex flex-col">
-            <span>事業費用</span>
-            <span>○○事業</span>
-            <span>印刷製本費</span>
-            <span>調査委託費</span>
-            <span>電子事務費</span>
-          </div>
-
-          <p>貸方科目</p>
-          <div className="flex flex-col">
-            <span>現金預金</span>
-            <span>現金預金</span>
-            <span>普通預金</span>
-            <span>普通預金</span>
-            <span>普通預金</span>
-          </div>
-        </div>
-
-        <div>
-          <p>借方科目細節</p>
-          <div className="flex flex-col">
-            <span>{amountSpent.toLocaleString()}円</span>
-          </div>
-          
-          <p>貸方科目細節</p>
-          <div className="flex flex-col">
-            <span>{amountCollected.toLocaleString()}円</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <p>備考: {remarks}</p>
-      </div>
-      
-      {/* Footer */}
-      <div className="flex justify-end mt-12">
-        <div className="mr-8">
-          <p>{divisionChief}</p>
-          <p>{divisionChiefDate}</p>
-        </div>
-        <div>
-          <p>{accountingManager}</p>
-          <p>{accountingManagerDate}</p>
-        </div>
-      </div>
-
-      <div className="flex justify-end mt-8">
-        <div>{signature}</div>
-      </div>
-      
-    </div>
+      </InvoiceTable>
+      <InvoiceFooter>
+        <div>協議</div>
+        <div>確認</div>
+        <div>取入区分</div>
+      </InvoiceFooter>
+    </InvoiceWrapper>
   );
 };
 
-// Sample usage
-const SampleSupportTicket = () => {
-  return (
-    <SupportTicket
-      ticketNumber="27-000451"
-      date="平成28年3月27日"
-      department="事務部"
-      manager="鈴木"
-      details="平成28年3月27日の費用"
-      amountCollected={1000000}
-      amountSpent={1000000}
-      remarks="備考"
-      divisionChief="課長"
-      accountingManager="経理"
-    />
-  );
+// サンプルデータを用いた支払伝票コンポーネントの使用例
+const InvoiceSample = () => {
+  const sampleInvoice: Invoice = {
+    date: '2023年3月27日',
+    company: 'サンプル会社',
+    department: '経理部',
+    payee: '山田太郎', 
+    amount: 1000000,
+    tax: 100000,
+    totalAmount: 1100000,
+    stampField: '',
+    transactionDetails: ['事業費用', '〇〇事業', '印刷製本費', '会議費'],
+    taxWithholdingDetails: ['源泉所得税', '県民税', '市民税', '健康保険料', '厚生年金保険料'],
+    remarks: '',
+  };
+
+  return <InvoiceComponent invoice={sampleInvoice} />;
 };
 
-export default SampleSupportTicket;
+// スタイリング
+const InvoiceWrapper = styled.div`
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
+
+const InvoiceHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const InvoiceNumber = styled.div`
+  font-size: 18px;
+`;
+
+const InvoiceTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f0f0f0;
+    font-weight: normal;
+  }
+`;
+
+const InvoiceFooter = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+`;
+
+export default InvoiceComponent;
