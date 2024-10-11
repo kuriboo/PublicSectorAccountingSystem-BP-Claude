@@ -1,59 +1,96 @@
-// 財務諸表のテーブルコンポーネント
 import React from 'react';
+import styled from '@emotion/styled';
 
-// 財務諸表の型定義
-type FinancialStatementProps = {
-  data: {
-    category: string;
-    currentYear: number;
-    previousYear: number;
-    yearOverYear: number;
-  }[];
+type Item = {
+  category: string;
+  currentTotalAmount: number;
+  currentTotalPercent: number;
+  previousTotalAmount: number;
+  previousTotalPercent: number;
 };
 
-// 財務諸表コンポーネント
-const FinancialStatement: React.FC<FinancialStatementProps> = ({ data }) => {
+type TableProps = {
+  items: Item[];
+};
+
+const TableContainer = styled.div`
+  overflow-x: auto;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  
+  th, td {
+    padding: 8px;
+    text-align: right;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  @media (max-width: 600px) {
+    th, td {
+      padding: 4px;
+      font-size: 12px;
+    }
+  }
+`;
+
+const Amount = styled.td<{ negative?: boolean }>`
+  color: ${({ negative }) => (negative ? 'red' : 'inherit')};
+`;
+
+const FinancialTable: React.FC<TableProps> = ({ items }) => {
   return (
-    <table className="w-full border-collapse">
-      <thead>
-        <tr className="bg-gray-100">
-          <th className="border px-4 py-2">科目</th>
-          <th className="border px-4 py-2">当期</th>
-          <th className="border px-4 py-2">前期</th>
-          <th className="border px-4 py-2">対前年比</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, index) => (
-          <tr key={index} className="hover:bg-gray-50">
-            <td className="border px-4 py-2">{item.category}</td>
-            <td className="border px-4 py-2 text-right">{item.currentYear.toLocaleString()}</td>
-            <td className="border px-4 py-2 text-right">{item.previousYear.toLocaleString()}</td>
-            <td className="border px-4 py-2 text-right">{item.yearOverYear.toLocaleString()}</td>
+    <TableContainer>
+      <Table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>当期31・4・1～令和2・3・31</th>
+            <th>総資産対比率</th>
+            <th>前期30年度末</th>
+            <th>総資産対比率</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {items.map((item, index) => (
+            <tr key={index}>
+              <td>{item.category}</td>
+              <Amount negative={item.currentTotalAmount < 0}>{item.currentTotalAmount.toLocaleString()}</Amount>
+              <td>{item.currentTotalPercent.toFixed(2)}%</td>
+              <Amount negative={item.previousTotalAmount < 0}>{item.previousTotalAmount.toLocaleString()}</Amount>
+              <td>{item.previousTotalPercent.toFixed(2)}%</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </TableContainer>
   );
 };
 
-// サンプルデータ
-const sampleData = [
-  { category: '売上高', currentYear: 6465491000, previousYear: 6900741000, yearOverYear: 6990689704 },
-  { category: '売上総利益', currentYear: 1514165411176, previousYear: 1514165184538, yearOverYear: 1520000 },
-  { category: '営業利益', currentYear: 407220745, previousYear: 448478867, yearOverYear: 408478867 },
-  { category: '経常利益', currentYear: 1820557, previousYear: 1348272, yearOverYear: 370725062 },
-  { category: '当期純利益', currentYear: 265895327, previousYear: 370725062, yearOverYear: 74829736 },
+// サンプルデータを用いた表示例
+const SampleData: Item[] = [
+  {
+    category: '流動資産計',
+    currentTotalAmount: 6465491000,
+    currentTotalPercent: 22.7,
+    previousTotalAmount: 525023000,
+    previousTotalPercent: 6.99,
+  },
+  // ... その他のデータを追加
 ];
 
-// 使用例
-const App: React.FC = () => {
+const FinancialTableExample: React.FC = () => {
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">財務諸表</h1>
-      <FinancialStatement data={sampleData} />
+      <h2>財務諸表1-1</h2>
+      <FinancialTable items={SampleData} />
     </div>
   );
 };
 
-export default App;
+export default FinancialTableExample;
