@@ -1,163 +1,200 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
-type InvestmentSummaryProps = {
-  investmentNumber: string;
-  node: string;
-  usage: string;
-  startDate: string;
-  endDate: string;
-  investmentPlan: {
-    annualAmount: number;
-    years: number;
-    interestRate: number;
-    premiumType: string;
-    targetYield: number;
-    managementFee: number;
-    yearlyPremium: number;
-    totalPremium: number;
-  };
-  accountingGroup: {
-    accountCode: string;
-    subAccountCode: string;
-    managementCostCode: string;
-    ratio: number;
-    debitNumber: string;
-    amount: number;
-  };
+type InvoiceData = {
+  date: string;
+  number: string;
+  price: number;
+  deliveryMethod: string;
+  paymentMethod: string;
+  paymentDue: string;
+  paymentDate: string;
+  taxRate: number;
+  taxAmount: number;
+  totalAmount: number;
+  depositAmount: number;
+  bankAccountNumber: string;
+  bankName: string;
+  bankBranchCode: string;
+  bankAccountType: string;
+  effectiveDate: string;
+  expirationDate: string;
+  termsCode: string;
+  termsName: string;
+  managementNumber: string;
+  managementName: string;
 };
 
-const InvestmentSummary: React.FC<InvestmentSummaryProps> = ({
-  investmentNumber,
-  node,
-  usage,
-  startDate,
-  endDate,
-  investmentPlan,
-  accountingGroup,
-}) => {
+type InvoiceProps = {
+  data: InvoiceData;
+};
+
+const InvoiceWrapper = styled.div`
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+
+  @media (max-width: 600px) {
+    padding: 10px;
+  }
+`;
+
+const InvoiceHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+const InvoiceTitle = styled.h2`
+  margin: 0;
+  font-size: 24px;
+
+  @media (max-width: 600px) {
+    margin-bottom: 10px;
+  }
+`;
+
+const InvoiceNumber = styled.p`
+  margin: 0;
+  font-size: 18px;
+`;
+
+const InvoiceDetails = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const InvoiceDetailItem = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const InvoiceDetailLabel = styled.span`
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+const InvoiceDetailValue = styled.span``;
+
+const InvoicePaymentDetails = styled.div`
+  margin-top: 40px;
+`;
+
+const InvoicePaymentTitle = styled.h3`
+  margin: 0 0 10px;
+  font-size: 20px;
+`;
+
+const InvoicePaymentTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+const InvoicePaymentTableHeader = styled.th`
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+`;
+
+const InvoicePaymentTableCell = styled.td`
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+`;
+
+const Invoice: React.FC<InvoiceProps> = ({ data }) => {
+  // Render invoice details
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <h2 className="text-2xl font-bold mb-4">予算書作成内容表示</h2>
-      <div className="mb-4">
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">予算番号</label>
-            <div>{investmentNumber || '-'}</div>
-          </div>
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">節</label>
-            <div>{node || '-'}</div>
-          </div>
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">細節</label>
-            <div>{usage || '-'}</div>
-          </div>
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2">予測年月</label>
-        <div>
-          {startDate} 〜 {endDate}
-        </div>
-      </div>
-      <div className="mb-4">
-        <h3 className="text-lg font-bold mb-2">取得年月</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">取得金額</label>
-            <div>{investmentPlan.annualAmount.toLocaleString() || '-'}</div>
-          </div>
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">耐用年数</label>
-            <div>{investmentPlan.years || '-'} 年</div>
-          </div>
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">利用率</label>
-            <div>{investmentPlan.interestRate || '-'} %</div>
-          </div>
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">償却方法</label>
-            <div>{investmentPlan.premiumType || '-'}</div>
-          </div>
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">残存価額</label>
-            <div>{investmentPlan.targetYield.toLocaleString() || '-'}</div>
-          </div>
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">年間償却額</label>
-            <div>{investmentPlan.yearlyPremium.toLocaleString() || '-'}</div>
-          </div>
-          <div>
-            <label className="block text-gray-700 font-bold mb-2">償却累計額</label>
-            <div>{investmentPlan.totalPremium.toLocaleString() || '-'}</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3 className="text-lg font-bold mb-2">管理明細</h3>
-        <table className="table-auto w-full">
+    <InvoiceWrapper>
+      <InvoiceHeader>
+        <InvoiceTitle>発注書</InvoiceTitle>
+        <InvoiceNumber>発注番号: {data.number}</InvoiceNumber>
+      </InvoiceHeader>
+      <InvoiceDetails>
+        <InvoiceDetailItem>
+          <InvoiceDetailLabel>発行年月日</InvoiceDetailLabel>
+          <InvoiceDetailValue>{data.date}</InvoiceDetailValue>
+        </InvoiceDetailItem>
+        <InvoiceDetailItem>
+          <InvoiceDetailLabel>前回引当金</InvoiceDetailLabel>
+          <InvoiceDetailValue>{data.depositAmount}</InvoiceDetailValue>
+        </InvoiceDetailItem>
+        <InvoiceDetailItem>
+          <InvoiceDetailLabel>発注金額</InvoiceDetailLabel>
+          <InvoiceDetailValue>{data.totalAmount}</InvoiceDetailValue>
+        </InvoiceDetailItem>
+        <InvoiceDetailItem>
+          <InvoiceDetailLabel>管理グループ</InvoiceDetailLabel>
+          <InvoiceDetailValue>{data.managementName}</InvoiceDetailValue>
+        </InvoiceDetailItem>
+      </InvoiceDetails>
+      <InvoicePaymentDetails>
+        <InvoicePaymentTitle>管理明細</InvoicePaymentTitle>
+        <InvoicePaymentTable>
           <thead>
             <tr>
-              <th className="px-4 py-2">管轄コード</th>
-              <th className="px-4 py-2">現場コード</th>
-              <th className="px-4 py-2">管理名称</th>
-              <th className="px-4 py-2">現場名称</th>
-              <th className="px-4 py-2">取得数量</th>
-              <th className="px-4 py-2">単位</th>
-              <th className="px-4 py-2">取得金額</th>
+              <InvoicePaymentTableHeader>管理コード</InvoicePaymentTableHeader>
+              <InvoicePaymentTableHeader>規格コード</InvoicePaymentTableHeader>
+              <InvoicePaymentTableHeader>規格名称</InvoicePaymentTableHeader>
+              <InvoicePaymentTableHeader>取得価格</InvoicePaymentTableHeader>
+              <InvoicePaymentTableHeader>取得数量</InvoicePaymentTableHeader>
+              <InvoicePaymentTableHeader>単価</InvoicePaymentTableHeader>
+              <InvoicePaymentTableHeader>取得金額</InvoicePaymentTableHeader>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="border px-4 py-2">{accountingGroup.accountCode || '-'}</td>
-              <td className="border px-4 py-2">{accountingGroup.subAccountCode || '-'}</td>
-              <td className="border px-4 py-2">{accountingGroup.managementCostCode || '-'}</td>
-              <td className="border px-4 py-2">{accountingGroup.ratio || '-'}</td>
-              <td className="border px-4 py-2">{accountingGroup.debitNumber || '-'}</td>
-              <td className="border px-4 py-2">本</td>
-              <td className="border px-4 py-2">{accountingGroup.amount.toLocaleString() || '-'}</td>
+              <InvoicePaymentTableCell>000001</InvoicePaymentTableCell>
+              <InvoicePaymentTableCell>000001</InvoicePaymentTableCell>
+              <InvoicePaymentTableCell>DIF(AT)規格管理</InvoicePaymentTableCell>
+              <InvoicePaymentTableCell>0.75</InvoicePaymentTableCell>
+              <InvoicePaymentTableCell>2000 本</InvoicePaymentTableCell>
+              <InvoicePaymentTableCell>500000</InvoicePaymentTableCell>
+              <InvoicePaymentTableCell></InvoicePaymentTableCell>
             </tr>
           </tbody>
-        </table>
-      </div>
-    </div>
+        </InvoicePaymentTable>
+      </InvoicePaymentDetails>
+    </InvoiceWrapper>
   );
 };
 
-// 使用例
-const sampleData: InvestmentSummaryProps = {
-  investmentNumber: '8000320',
-  node: '001',
-  usage: '001',
-  startDate: '05101/0501',
-  endDate: '05103/0403',
-  investmentPlan: {
-    annualAmount: 20.0,
-    years: 2000,
-    interestRate: 5000.0,
-    premiumType: '定額法',
-    targetYield: 2.50,
-    managementFee: 10.00,
-    yearlyPremium: 11280,
-    totalPremium: 96.00,
-  },
-  accountingGroup: {
-    accountCode: '000001',
-    subAccountCode: '000001',
-    managementCostCode: 'DIP(AT)減耗費',
-    ratio: 0.75,
-    debitNumber: '2000',
-    amount: 5000.0,
-  },
-};
-
+// Example usage
 const App: React.FC = () => {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold mb-4">Investment Summary Example</h1>
-      <InvestmentSummary {...sampleData} />
-    </div>
-  );
+  const invoiceData: InvoiceData = {
+    date: '2023年06月01日',
+    number: '8002020',
+    price: 5000.0,
+    deliveryMethod: '宅配',  
+    paymentMethod: '現金払い',
+    paymentDue: '2023年06月30日',
+    paymentDate: '2023年06月15日',
+    taxRate: 0.1,
+    taxAmount: 500,
+    totalAmount: 5500,
+    depositAmount: 500000,
+    bankAccountNumber: '0010169',
+    bankName: '湯浅郵便局',
+    bankBranchCode: '001',
+    bankAccountType: '湯浅郵便局',
+    effectiveDate: '2023年06月01日',
+    expirationDate: '',
+    termsCode: '250',
+    termsName: '現金払い',
+    managementNumber: '040',
+    managementName: '定額法',
+  };
+
+  return <Invoice data={invoiceData} />;
 };
 
 export default App;
