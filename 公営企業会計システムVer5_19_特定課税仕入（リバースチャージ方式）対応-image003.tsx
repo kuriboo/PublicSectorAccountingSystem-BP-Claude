@@ -1,183 +1,145 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
-// 特定課税仕入伝票管理入力用のコンポーネントの型定義
-interface TaxInvoiceInputProps {
-  onSubmit: (data: TaxInvoiceInputData) => void;
+interface TaxWithholdingEntryFormProps {
+  onSubmit: (data: FormData) => void;
 }
 
-// 特定課税仕入伝票管理入力用のデータの型定義
-interface TaxInvoiceInputData {
-  taxCategory: string;
-  orderDate: string;
-  deliveryDate: string;
-  checkDeductionLimit: boolean;
-  taxRate: number;
-  totalAmount: number;
-  note: string;
+interface FormData {
+  startDate: string;
+  endDate: string;
+  paymentDate: string;
+  taxAmount: number;
+  locationCategory: '給与' | '賞与' | '年金';
+  pensionCategory: '老齢' | '障害' | '遺族';
 }
 
-// 特定課税仕入伝票管理入力用のコンポーネント
-const TaxInvoiceInput: React.FC<TaxInvoiceInputProps> = ({ onSubmit }) => {
-  const [data, setData] = React.useState<TaxInvoiceInputData>({
-    taxCategory: '',
-    orderDate: '',
-    deliveryDate: '',
-    checkDeductionLimit: false,
-    taxRate: 0,
-    totalAmount: 0,
-    note: '',
-  });
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  font-family: sans-serif;
+`;
 
-  // フォーム送信時の処理
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const Title = styled.h2`
+  margin-bottom: 20px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+`;
+
+const InputGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`;
+
+const DateInputGroup = styled(InputGroup)`
+  input {
+    width: 120px;
+  }
+`;
+
+const Label = styled.label`
+  margin-right: 10px;
+`;
+
+const Input = styled.input`
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const Select = styled.select`
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const SubmitButton = styled.button`
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const TaxWithholdingEntryForm: React.FC<TaxWithholdingEntryFormProps> = ({ onSubmit }) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data: FormData = {
+      startDate: form.startDate.value,
+      endDate: form.endDate.value,
+      paymentDate: form.paymentDate.value,
+      taxAmount: parseFloat(form.taxAmount.value),
+      locationCategory: form.locationCategory.value as FormData['locationCategory'],
+      pensionCategory: form.pensionCategory.value as FormData['pensionCategory'],
+    };
     onSubmit(data);
   };
 
-  // 入力値変更時の処理
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === 'checkbox' ? checked : value;
-    setData((prevData) => ({ ...prevData, [name]: newValue }));
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="taxCategory">
-          課税区分
-        </label>
-        <select
-          id="taxCategory"
-          name="taxCategory"
-          value={data.taxCategory}
-          onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
-        >
-          <option value="">選択してください</option>
-          <option value="課税">課税</option>
-          <option value="非課税">非課税</option>
-        </select>
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="orderDate">
-          伝票日付
-        </label>
-        <input
-          type="date"
-          id="orderDate"
-          name="orderDate"
-          value={data.orderDate}
-          onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="deliveryDate">
-          仕入年月日
-        </label>
-        <input
-          type="date"
-          id="deliveryDate"
-          name="deliveryDate"
-          value={data.deliveryDate}
-          onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2">
-          <input
-            type="checkbox"
-            name="checkDeductionLimit"
-            checked={data.checkDeductionLimit}
-            onChange={handleChange}
-            className="mr-2 leading-tight"
-          />
-          <span className="text-sm">課税の支出予算額行から税額中の伝票のみ抽出</span>
-        </label>
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="taxRate">
-          税率
-        </label>
-        <select
-          id="taxRate"
-          name="taxRate"
-          value={data.taxRate}
-          onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        >
-          <option value={0}>選択してください</option>
-          <option value={5}>5%</option>
-          <option value={8}>8%</option>
-          <option value={10}>10%</option>
-        </select>
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="totalAmount">
-          合計金額
-        </label>
-        <input
-          type="number"
-          id="totalAmount"
-          name="totalAmount"
-          value={data.totalAmount}
-          onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="note">
-          摘要
-        </label>
-        <textarea
-          id="note"
-          name="note"
-          value={data.note}
-          onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        ></textarea>
-      </div>
-      <div className="flex items-center justify-between">
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        >
-          実行
-        </button>
-      </div>
-    </form>
+    <Container>
+      <Title>特定課税仕入伝票管理入力</Title>
+      <Form onSubmit={handleSubmit}>
+        <DateInputGroup>
+          <Label>提出日付</Label>
+          <Input type="date" name="startDate" required />
+          <span>〜</span>
+          <Input type="date" name="endDate" required />
+        </DateInputGroup>
+        <InputGroup>
+          <Label>支払年月日</Label>
+          <Input type="date" name="paymentDate" required />
+        </InputGroup>
+        <InputGroup>
+          <Label>税額</Label>
+          <Input type="number" name="taxAmount" required />
+        </InputGroup>
+        <InputGroup>
+          <Label>支払区分</Label>
+          <Select name="locationCategory" required>
+            <option value="給与">給与</option>
+            <option value="賞与">賞与</option>    
+            <option value="年金">年金</option>
+          </Select>
+        </InputGroup>
+        <InputGroup>
+          <Label>年金区分</Label>
+          <Select name="pensionCategory" required>
+            <option value="老齢">老齢</option>
+            <option value="障害">障害</option>
+            <option value="遺族">遺族</option>  
+          </Select>
+        </InputGroup>
+        <SubmitButton type="submit">登録</SubmitButton>
+      </Form>
+    </Container>
   );
 };
 
-// サンプルデータ
-const sampleData: TaxInvoiceInputData = {
-  taxCategory: '課税',
-  orderDate: '2023-03-27',
-  deliveryDate: '2023-03-27',
-  checkDeductionLimit: true,
-  taxRate: 10,
-  totalAmount: 1000000,
-  note: '電子書籍購入',
-};
-
-// 表示用のコンポーネント
+// Usage example
 const App: React.FC = () => {
-  const handleSubmit = (data: TaxInvoiceInputData) => {
+  const handleFormSubmit = (data: FormData) => {
     console.log(data);
+    // Handle form submission
   };
 
   return (
-    <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-4">特定課税仕入伝票管理入力</h1>
-      <TaxInvoiceInput onSubmit={handleSubmit} />
-      <h2 className="text-xl font-bold mt-8 mb-4">サンプルデータ</h2>
-      <pre className="bg-gray-100 p-4 rounded">{JSON.stringify(sampleData, null, 2)}</pre>
+    <div>
+      <TaxWithholdingEntryForm onSubmit={handleFormSubmit} />
     </div>
   );
 };
