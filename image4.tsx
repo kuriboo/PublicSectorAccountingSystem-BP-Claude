@@ -1,156 +1,138 @@
 import React from 'react';
+import styled from '@emotion/styled';
+import { format } from 'date-fns';
 
-interface Reservation {
-  date: string;
-  time: string;
-  numberOfPeople: number;
+type Reservation = {
+  date: Date;
+  adultCount: number;
+  childCount: number;
+  destination: string;
   name: string;
-  phoneNumber: string;
-  email: string;
-  requests: string;
-}
+  phone: string;
+};
 
-interface ReservationFormProps {
-  onSubmit: (reservation: Reservation) => void;
-}
+type Props = {
+  reservation: Reservation;
+  onClose: () => void;
+};
 
-const ReservationForm: React.FC<ReservationFormProps> = ({ onSubmit }) => {
-  const [date, setDate] = React.useState('');
-  const [time, setTime] = React.useState('');
-  const [numberOfPeople, setNumberOfPeople] = React.useState(1);
-  const [name, setName] = React.useState('');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [requests, setRequests] = React.useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const reservation: Reservation = {
-      date,
-      time,
-      numberOfPeople,
-      name,
-      phoneNumber,
-      email,
-      requests,
-    };
-    onSubmit(reservation);
-  };
+const ReservationForm: React.FC<Props> = ({ reservation, onClose }) => {
+  // 現在の年月日を取得
+  const currentDate = format(new Date(), 'yyyy/MM/dd');
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
-      <div className="mb-4">
-        <label htmlFor="date" className="block text-gray-700 font-bold mb-2">
-          予約日
-        </label>
-        <input
-          type="date"
-          id="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="time" className="block text-gray-700 font-bold mb-2">
-          時間
-        </label>
-        <input
-          type="time"
-          id="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="numberOfPeople" className="block text-gray-700 font-bold mb-2">
-          人数
-        </label>
-        <input
-          type="number"
-          id="numberOfPeople"
-          min="1"
-          value={numberOfPeople}
-          onChange={(e) => setNumberOfPeople(Number(e.target.value))}
-          className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
-          氏名
-        </label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="phoneNumber" className="block text-gray-700 font-bold mb-2">
-          電話番号
-        </label>
-        <input
-          type="tel"
-          id="phoneNumber"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
-          メールアドレス
-        </label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="requests" className="block text-gray-700 font-bold mb-2">
-          要望
-        </label>
-        <textarea
-          id="requests"
-          value={requests}
-          onChange={(e) => setRequests(e.target.value)}
-          className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
-        />
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none"
-      >
-        予約する
-      </button>
-    </form>
+    <Container>
+      <Title>予約科目マスタ</Title>
+      <DateInfo>{currentDate}の予約</DateInfo>
+      
+      <Form>
+        <Row>
+          <Label>年度</Label>
+          <span>{format(reservation.date, 'yyyy')}年度</span>
+        </Row>
+        
+        <Row>
+          <Field>
+            <Label>大人</Label>
+            <span>{reservation.adultCount}名</span>
+          </Field>
+          <Field>
+            <Label>子供</Label>
+            <span>{reservation.childCount}名</span>
+          </Field>
+        </Row>
+
+        <Row>
+          <Label>行き先</Label>
+          <span>{reservation.destination}</span>
+        </Row>
+
+        <Row>
+          <Field>
+            <Label>代表者</Label>
+            <span>{reservation.name}</span>
+          </Field>
+          <Field>
+            <Label>電話番号</Label> 
+            <span>{reservation.phone}</span>
+          </Field>
+        </Row>
+      </Form>
+
+      <Footer>
+        <Button onClick={onClose}>閉じる</Button>
+      </Footer>
+    </Container>
   );
 };
 
-// サンプルデータを用いた使用例
-const SampleReservation: React.FC = () => {
-  const handleSubmit = (reservation: Reservation) => {
-    console.log('Submitted reservation:', reservation);
-    // ここで予約データをサーバーに送信するなどの処理を行う
-  };
-
-  return (
-    <div className="max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">予約フォーム</h1>
-      <ReservationForm onSubmit={handleSubmit} />
-    </div>
-  );
+// Usage example
+const SampleReservation: Reservation = {
+  date: new Date(),
+  adultCount: 2,
+  childCount: 1,
+  destination: '東京ディズニーランド', 
+  name: '山田太郎',
+  phone: '090-1234-5678',
 };
 
-export default SampleReservation;
+const App: React.FC = () => {
+  return (
+    <ReservationForm
+      reservation={SampleReservation}
+      onClose={() => console.log('Close button clicked')}
+    />
+  );  
+};
+
+// Styles
+const Container = styled.div`
+  background-color: #f0f0f0;
+  padding: 16px;
+  width: 400px;
+`;
+
+const Title = styled.h2`
+  margin: 0 0 8px;
+`;
+
+const DateInfo = styled.p`
+  margin: 0 0 16px;
+`;
+
+const Form = styled.div`
+  background-color: white;
+  padding: 16px;
+  margin-bottom: 16px;
+`;
+
+const Row = styled.div`
+  display: flex;
+  margin-bottom: 8px;
+`;
+
+const Field = styled.div`
+  flex: 1;
+`;
+
+const Label = styled.div`
+  font-weight: bold;
+`;
+
+const Footer = styled.div`
+  text-align: center;
+`;
+
+const Button = styled.button`
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1565c0;
+  }
+`;
+
+export default ReservationForm;
