@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
 interface MenuItem {
   label: string;
@@ -9,38 +10,71 @@ interface MenuProps {
   items: MenuItem[];
 }
 
+const MenuContainer = styled.div`
+  background-color: #f0f0f0;
+  padding: 16px;
+  border-radius: 4px;
+  width: 200px;
+  margin: 0 auto;
+`;
+
+const MenuTitle = styled.h2`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #333;
+`;
+
+const MenuList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const MenuItem = styled.li`
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
 const Menu: React.FC<MenuProps> = ({ items }) => {
   return (
-    <div className="bg-blue-500 p-4">
-      <h2 className="text-white text-lg font-bold mb-4">月例メニュー</h2>
-      <ul>
+    <MenuContainer>
+      <MenuTitle>月例メニュー</MenuTitle>
+      <MenuList>
         {items.map((item, index) => (
-          <li key={index} className="text-white hover:underline">
+          <MenuItem key={index}>
             <a href={item.link}>{item.label}</a>
-          </li>
+          </MenuItem>
         ))}
-      </ul>
-    </div>
+      </MenuList>
+    </MenuContainer>
   );
 };
 
-const SampleMenu: React.FC = () => {
-  const menuItems: MenuItem[] = [
-    { label: '消費税申告書', link: '#' },
-    { label: '決算書作成', link: '#' },
-    { label: '消費税額計算', link: '#' },
-    { label: '月次決算', link: '#' },
-    { label: '税金シミュレーション', link: '#' },
-  ];
+// サンプルデータと使用例
+const sampleMenuItems: MenuItem[] = [
+  { label: '請求明細', link: '/billing' },
+  { label: '子請求作成', link: '/create-sub-invoice' },
+  { label: '日次・月次報告', link: '/daily-monthly-report' },
+  { label: '消費税計算', link: '/consumption-tax' },
+  { label: '設定構成表入出力', link: '/settings-io' },
+];
 
-  return <Menu items={menuItems} />;
+const SampleMenuUsage: React.FC = () => {
+  return <Menu items={sampleMenuItems} />;
 };
 
-export default SampleMenu;
-
-// コンポーネントの説明:
-// - MenuPropsインターフェースでitemsプロパティを定義し、MenuItemの配列を受け取る
-// - Menuコンポーネントは、itemsプロパティからメニュー項目を動的に生成
-// - メニュー項目のラベルとリンクはMenuItemインターフェースで定義
-// - Tailwind CSSを使用してスタイリング
-// - SampleMenuコンポーネントでサンプルデータを使用して、Menuコンポーネントを表示
+export default SampleMenuUsage;
