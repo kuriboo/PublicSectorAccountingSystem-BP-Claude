@@ -1,100 +1,166 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
 interface FormData {
-  taxCategory: string;
-  taxRate: number;
-  collectionCategory: string;
-  entryCategory: string;
-  consumptionTaxFlag: boolean;
-  basicRate: string;
-  reducedRate: string;
-  departmentCode: string;
-  accountTitle: string;
-  subAccountTitle: string;
+  [key: string]: string | number | boolean;
 }
 
-interface FormProps {
+interface Props {
   formData: FormData;
-  onInputChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onSubmit: (data: FormData) => void;
 }
 
-const Form: React.FC<FormProps> = ({ formData, onInputChange }) => {
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+
+  @media (min-width: 768px) {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+`;
+
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const Input = styled.input`
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+`;
+
+const Select = styled.select`
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const MyForm: React.FC<Props> = ({ formData, onSubmit }) => {
+  // フォームの状態を管理
+  const [data, setData] = React.useState<FormData>(formData);
+
+  // フォームの入力値が変更された時の処理
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    setData(prevData => ({ ...prevData, [name]: newValue }));
+  };
+
+  // フォームが送信された時の処理
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit(data);
+  };
+
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taxCategory">
-          税区分
-        </label>
-        <div className="relative">
-          <select
-            className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-            id="taxCategory"
-            name="taxCategory"
-            value={formData.taxCategory}
-            onChange={onInputChange}
-          >
-            <option value="消費税1">消費税1</option>
-            {/* Add more tax category options */}
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-          </div>
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taxRate">
-          消費税
-        </label>
-        <div className="relative">
-          <input
-            className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            id="taxRate"
-            name="taxRate"
-            type="number"
-            value={formData.taxRate}
-            onChange={onInputChange}
-          />
-          <div className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-            %
-          </div>
-        </div>
-      </div>
-      {/* Implement other form fields similarly */}
-      <div className="flex items-center justify-between">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-          事業科目
-        </button>
-      </div>
+    <Form onSubmit={handleSubmit}>
+      <Label>
+        税区分:
+        <Select name="taxType" value={data.taxType as string} onChange={handleChange}>
+          <option value="課税1">課税1</option>
+          <option value="非課税">非課税</option>
+        </Select>
+      </Label>
+
+      <Label>
+        消費税:
+        <Input type="number" name="taxRate" value={data.taxRate as number} onChange={handleChange} /> %
+      </Label>
+
+      <Label>
+        源泉区分:
+        <Select name="withholdingTaxType" value={data.withholdingTaxType as string} onChange={handleChange}>
+          <option value=""></option>
+          <option value="65">65</option>
+        </Select>  
+      </Label>
+
+      <Label>
+        監督区分:
+        <Select name="supervisionType" value={data.supervisionType as string} onChange={handleChange}>
+          <option value="2">2 臨常</option>
+        </Select>
+      </Label>
+
+      <Label>
+        *機械加減:
+        <Input type="text" name="machineryAdjustment" value={data.machineryAdjustment as string} onChange={handleChange} />
+      </Label>
+
+      <Label>
+        *対象手加:
+        <Input type="text" name="targetAdjustment" value={data.targetAdjustment as string} onChange={handleChange} />
+      </Label>
+
+      <Label>
+        単価性質:
+        <Input type="text" name="unitPriceNature" value={data.unitPriceNature as string} onChange={handleChange} />
+      </Label>
+
+      <Label>
+        予算:
+        <Input type="text" name="budget" value={data.budget as string} onChange={handleChange} />
+      </Label>
+
+      <Label>
+        積算基礎:
+        <Input type="checkbox" name="estimateBasis" checked={data.estimateBasis as boolean} onChange={handleChange} />
+        税込
+        <Input type="checkbox" name="estimateBasis" checked={data.estimateBasis as boolean} onChange={handleChange} />
+        税込
+      </Label>
+
+      <Button type="submit">事業科目</Button>
+    </Form>
+  );
+};
+
+// サンプルデータ
+const sampleData: FormData = {
+  taxType: '課税1',
+  taxRate: 8,
+  withholdingTaxType: '',
+  supervisionType: '2',
+  machineryAdjustment: '062050101/0001001',
+  targetAdjustment: '062',
+  unitPriceNature: '',
+  budget: '',
+  estimateBasis: false,
+};
+
+// 使用例
+const App: React.FC = () => {
+  const handleSubmit = (data: FormData) => {
+    console.log(data);
+  };
+
+  return (
+    <div>
+      <h1>MyForm Component</h1>
+      <MyForm formData={sampleData} onSubmit={handleSubmit} />
     </div>
   );
 };
 
-// Sample usage
-const SampleFormData: FormData = {
-  taxCategory: '消費税1',
-  taxRate: 10,
-  collectionCategory: '2',
-  entryCategory: '経常',
-  consumptionTaxFlag: false,
-  basicRate: '0000001',
-  reducedRate: '0000001',
-  departmentCode: '',
-  accountTitle: '',
-  subAccountTitle: '',
-};
-
-const SampleForm: React.FC = () => {
-  const [formData, setFormData] = React.useState<FormData>(SampleFormData);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  return <Form formData={formData} onInputChange={handleInputChange} />;
-};
-
-export default SampleForm;
+export default App;
