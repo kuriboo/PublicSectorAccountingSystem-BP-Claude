@@ -1,119 +1,111 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
-type Item = {
-  code: string;
-  name: string;
-  unitPrice: number;
-  quantity: number;
+type OutgoingTransferData = {
+  id: string;
+  date: string;
+  time: string;
   amount: number;
-  tax: number;
-};
-
-type InvoiceProps = {
-  invoiceNumber: string;
-  issueDate: string;
-  dueDate: string;
-  items: Item[];
-  subtotal: number;
-  taxRate: number;
-  taxAmount: number;
+  fee: number;
   total: number;
+  purpose: string;
+  sender: string;
+  receiver: string;
 };
 
-const Invoice: React.FC<InvoiceProps> = ({
-  invoiceNumber,
-  issueDate,
-  dueDate,
-  items,
-  subtotal,
-  taxRate,
-  taxAmount,
-  total,
-}) => {
+type Props = {
+  data: OutgoingTransferData;
+};
+
+const Container = styled.div`
+  font-family: Arial, sans-serif;
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+
+  @media (min-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
+`;
+
+const DataField = styled.div`
+  margin-bottom: 0.5rem;
+
+  @media (min-width: 768px) {
+    margin-bottom: 0;
+  }
+`;
+
+const Label = styled.span`
+  font-weight: bold;
+`;
+
+const OutgoingTransfer: React.FC<Props> = ({ data }) => {
+  // 例外処理: データが存在しない場合はエラーメッセージを表示
+  if (!data) {
+    return <div>データが見つかりませんでした。</div>;
+  }
+
   return (
-    <div className="bg-white p-6 rounded shadow">
-      {/* Invoice header */}
-      <div className="flex justify-between mb-6">
-        <div>
-          <h2 className="text-2xl font-bold">請求書</h2>
-          <p className="text-gray-600">{invoiceNumber}</p>
-        </div>
-        <div className="text-right">
-          <p>発行日: {issueDate}</p>
-          <p>期限: {dueDate}</p>
-        </div>
-      </div>
+    <Container>
+      <DataField>
+        <Label>ID: </Label>
+        {data.id}
+      </DataField>
+      <DataField>
+        <Label>日付: </Label>
+        {data.date}
+      </DataField>
+      <DataField>
+        <Label>時間: </Label>
+        {data.time}
+      </DataField>
+      <DataField>
+        <Label>金額: </Label>
+        {data.amount}
+      </DataField>
+      <DataField>
+        <Label>手数料: </Label>
+        {data.fee}
+      </DataField>
+      <DataField>
+        <Label>合計: </Label>
+        {data.total}
+      </DataField>
+      <DataField>
+        <Label>振込依頼人: </Label>
+        {data.sender}
+      </DataField>
+      <DataField>
+        <Label>受取人: </Label>
+        {data.receiver}
+      </DataField>
+    </Container>
+  );
+};
 
-      {/* Invoice items table */}
-      <table className="w-full mb-6">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2 text-left">商品コード</th>
-            <th className="px-4 py-2 text-left">商品名</th>
-            <th className="px-4 py-2 text-right">単価</th>
-            <th className="px-4 py-2 text-right">数量</th>
-            <th className="px-4 py-2 text-right">金額</th>
-            <th className="px-4 py-2 text-right">消費税</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <tr key={index} className="border-b">
-              <td className="px-4 py-2">{item.code}</td>
-              <td className="px-4 py-2">{item.name}</td>
-              <td className="px-4 py-2 text-right">{item.unitPrice}</td>
-              <td className="px-4 py-2 text-right">{item.quantity}</td>
-              <td className="px-4 py-2 text-right">{item.amount}</td>
-              <td className="px-4 py-2 text-right">{item.tax}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+// サンプルデータを用いたOutgoingTransferコンポーネントの使用例
+const SampleUsage: React.FC = () => {
+  const sampleData: OutgoingTransferData = {
+    id: '00201013836002010118',
+    date: '2016/3/24',
+    time: '15:32',
+    amount: 1000,
+    fee: 0,
+    total: 1000,
+    purpose: 'お支払い',
+    sender: 'テスト　太郎',
+    receiver: '山田　花子',
+  };
 
-      {/* Invoice summary */}
-      <div className="flex justify-end space-x-4">
-        <div className="text-right">
-          <p>小計: {subtotal}</p>
-          <p>消費税率: {taxRate}%</p>
-          <p>消費税: {taxAmount}</p>
-          <p className="text-xl font-bold">合計: {total}</p>
-        </div>
-      </div>
+  return (
+    <div>
+      <h2>振込明細</h2>
+      <OutgoingTransfer data={sampleData} />
     </div>
   );
 };
 
-// Sample usage
-const sampleData: InvoiceProps = {
-  invoiceNumber: '0020101155',
-  issueDate: '2016/3/24',
-  dueDate: '2016/3/25',
-  items: [
-    {
-      code: '450',
-      name: 'パソコン',
-      unitPrice: 98000,
-      quantity: 1,
-      amount: 1000,
-      tax: 8,
-    },
-    {
-      code: '42',
-      name: 'ケーブル',
-      unitPrice: 450,
-      quantity: 1,
-      amount: 1000,
-      tax: 8,
-    },
-  ],
-  subtotal: 291553781,
-  taxRate: 0.08,
-  taxAmount: 93696984,
-  total: 291553781,
-};
-
-const InvoiceSample: React.FC = () => {
-  return <Invoice {...sampleData} />;
-};
-
-export default InvoiceSample;
+export default OutgoingTransfer;
