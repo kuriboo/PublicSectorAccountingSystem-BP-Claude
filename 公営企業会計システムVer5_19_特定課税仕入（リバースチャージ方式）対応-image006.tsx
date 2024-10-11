@@ -1,157 +1,173 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
 interface TaxWithholdingFormProps {
-  onSubmit: (data: TaxWithholdingData) => void;
+  /**
+   * 年度
+   */
+  year: number;
+  /**
+   * 所得税の支払予算額
+   */
+  incomeTaxBudget: number;
+  /**
+   * 住民税の支払予算額
+   */
+  residentTaxBudget: number;
+  /**
+   * 源泉徴収指定番号
+   */
+  taxWithholdingNumber?: string;
+  /**
+   * フォーム送信時のイベントハンドラ
+   */
+  onSubmit: (params: { year: number, incomeTaxBudget: number, residentTaxBudget: number, taxWithholdingNumber?: string  }) => void;
 }
 
-interface TaxWithholdingData {
-  taisyoku: 'kotei' | 'nensyu' | 'kyuyo';
-  startDate: string;
-  endDate: string;
-  excludeBonus: boolean;
-  incomeTaxAmount: number;
-  residentTaxAmount: number;
-  totalWithholdingAmount: number;
-}
-
-const TaxWithholdingForm: React.FC<TaxWithholdingFormProps> = ({ onSubmit }) => {
-  const [formData, setFormData] = React.useState<TaxWithholdingData>({
-    taisyoku: 'kotei',
-    startDate: '',
-    endDate: '',
-    excludeBonus: false,
-    incomeTaxAmount: 0,
-    residentTaxAmount: 0,
-    totalWithholdingAmount: 0,
-  });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = event.target;
-    const newValue = type === 'checkbox' ? checked : value;
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      [name]: newValue,
-    }));
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit(formData);
+const TaxWithholdingForm: React.FC<TaxWithholdingFormProps> = ({
+  year,
+  incomeTaxBudget,
+  residentTaxBudget,
+  taxWithholdingNumber,
+  onSubmit,
+}) => {
+  // フォーム送信ハンドラ
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit({
+      year,
+      incomeTaxBudget,
+      residentTaxBudget, 
+      taxWithholdingNumber,
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* 退職区分 */}
-      <div>
-        <label>
-          <input
-            type="radio"
-            name="taisyoku"
-            value="kotei"
-            checked={formData.taisyoku === 'kotei'}
-            onChange={handleChange}
-          />
-          定額
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="taisyoku"
-            value="nensyu"
-            checked={formData.taisyoku === 'nensyu'}
-            onChange={handleChange}
-          />
-          年度
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="taisyoku"
-            value="kyuyo"
-            checked={formData.taisyoku === 'kyuyo'}
-            onChange={handleChange}
-          />
-          給与
-        </label>
-      </div>
-
-      {/* 検索 */}
-      <div>
-        <label>
-          伝票日付
-          <input
-            type="date"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
-          />
-          ～
-          <input
-            type="date"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="excludeBonus"
-            checked={formData.excludeBonus}
-            onChange={handleChange}
-          />
-          課税の支出予算科目から税額対の伝票のみ抽出
-        </label>
-      </div>
-
-      {/* 編集 */}
-      <div>
-        <label>
-          所得税額
-          <input
-            type="number"
-            name="incomeTaxAmount"
-            value={formData.incomeTaxAmount}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          住民税額
-          <input
-            type="number"
-            name="residentTaxAmount"
-            value={formData.residentTaxAmount}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-
-      {/* 集計結果 */}
-      <div>
-        税込金額: {formData.incomeTaxAmount + formData.residentTaxAmount}
-        税抜金額: {formData.incomeTaxAmount + formData.residentTaxAmount}
-        消費税額: {formData.totalWithholdingAmount}
-      </div>
-
-      <button type="submit">OK</button>
-      <button type="reset">クリア</button>
-      <button type="button">キャンセル</button>
-    </form>
+    <Form onSubmit={handleSubmit}>
+      <FormHeader>
+        <Label>特定課税仕入伝票管理入力</Label>
+        <TaxOffice>行政市事業会計</TaxOffice>
+        <Date>平成28年03月27日</Date>
+      </FormHeader>
+      <FormContent>
+        <FormField>
+          <Label>伝票日付</Label>
+          <DateInput type="date" defaultValue={`${year}-03-01`} min={`${year}-03-01`} max={`${year}-03-31`} required />
+          <Label>伝票番号</Label>
+          <Input type="text" defaultValue={taxWithholdingNumber} />
+        </FormField>
+        <FormField>
+          <Label>税控除額</Label>
+          <Input type="number" defaultValue={incomeTaxBudget} required />
+          <Label>税抜金額</Label>
+          <Input type="number" defaultValue={residentTaxBudget} required />
+        </FormField>
+        <FormField>
+          <Label>摘要</Label>
+          <Input type="text" />
+        </FormField>
+      </FormContent>
+      <FormFooter>
+        <Button type="button">OK</Button>
+        <Button type="button">クリア</Button>
+        <SubmitButton type="submit">キャンセル</SubmitButton>
+      </FormFooter>
+    </Form>
   );
 };
 
-// Usage example
-const App: React.FC = () => {
-  const handleSubmit = (data: TaxWithholdingData) => {
-    console.log(data);
+export default TaxWithholdingForm;
+
+// サンプルデータを使用したコンポーネントの利用例
+const SampleUsage: React.FC = () => {
+  const handleSubmit = (params: { year: number, incomeTaxBudget: number, residentTaxBudget: number, taxWithholdingNumber?: string  }) => {
+    console.log(params);
+    // 送信処理を実装
   };
 
   return (
-    <div>
-      <h1>特定課税仕入伝票管理入力</h1>
-      <TaxWithholdingForm onSubmit={handleSubmit} />
-    </div>
-  );
+    <TaxWithholdingForm 
+      year={2016}
+      incomeTaxBudget={80000}
+      residentTaxBudget={80000}
+      taxWithholdingNumber="1234"
+      onSubmit={handleSubmit}
+    />
+  );  
 };
 
-export default App;
+// スタイリング
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+`;
+
+const FormHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const FormContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const FormField = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+
+  & > * {
+    margin-right: 10px;
+  }
+`;
+
+const Label = styled.label`
+  font-weight: bold;
+`;
+
+const Input = styled.input`
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+`;
+
+const DateInput = styled(Input)`
+  width: 150px;
+`;
+
+const TaxOffice = styled.div`
+  font-size: 14px;
+`;
+
+const Date = styled.div`
+  font-size: 14px;
+`;
+
+const FormFooter = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 20px;
+`;
+
+const Button = styled.button`
+  padding: 5px 15px;
+  margin-left: 10px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+`;
+
+const SubmitButton = styled(Button)`
+  background-color: #2196f3;
+  color: #fff;
+  border-color: #2196f3;
+`;
