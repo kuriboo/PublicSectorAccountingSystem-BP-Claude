@@ -1,80 +1,77 @@
 import React from 'react';
+import styled from 'styled-components';
 
-// Define the props type for the TaxSummary component
-type TaxSummaryProps = {
-  year: number;
-  month: number;
-  day: number;
-  incomeTax: number;
-  inhabitantTax: number;
-  enterpriseTax: number;
+type ConsumptionTaxReportProps = {
+  date: string;
+  taxAmount: number;
+  taxFreeAmount: number;
+  nonTaxableAmount: number;
 };
 
-// Create the TaxSummary component
-const TaxSummary: React.FC<TaxSummaryProps> = ({
-  year,
-  month,
-  day,
-  incomeTax,
-  inhabitantTax,
-  enterpriseTax,
+const Container = styled.div`
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+`;
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
+const Label = styled.div`
+  font-weight: bold;
+`;
+
+const Value = styled.div`
+  text-align: right;
+`;
+
+const ConsumptionTaxReport: React.FC<ConsumptionTaxReportProps> = ({
+  date,
+  taxAmount,
+  taxFreeAmount,
+  nonTaxableAmount,
 }) => {
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-lg font-bold mb-2">消費税は税伝票選択</h2>
-      <div className="mb-4">
-        <span className="mr-2">伝票日付</span>
-        <span>
-          {year}年{month}月{day}日
-        </span>
-      </div>
-      <div className="grid grid-cols-3 gap-4">
-        <div>
-          <label className="block font-bold">税込金額</label>
-          <span>{incomeTax}</span>
-        </div>
-        <div>
-          <label className="block font-bold">税抜金額</label>
-          <span>{inhabitantTax}</span>
-        </div>
-        <div>
-          <label className="block font-bold">消費税額</label>
-          <span>{enterpriseTax}</span>
-        </div>
-      </div>
-      <div className="mt-4 flex justify-end">
-        <button className="px-4 py-2 bg-blue-500 text-white rounded mr-2">
-          OK
-        </button>
-        <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded mr-2">
-          クリア
-        </button>
-        <button className="px-4 py-2 bg-green-500 text-white rounded">
-          キャンセル
-        </button>
-      </div>
-    </div>
+    <Container>
+      <Row>
+        <Label>年月日</Label>
+        <Value>{date}</Value>
+      </Row>
+      <Row>
+        <Label>税込金額</Label>
+        <Value>{taxAmount}</Value>
+      </Row>
+      <Row>  
+        <Label>税抜金額</Label>
+        <Value>{taxFreeAmount}</Value>
+      </Row>
+      <Row>
+        <Label>消費税額</Label>
+        <Value>{nonTaxableAmount}</Value>
+      </Row>
+    </Container>
   );
 };
 
-// Sample data for demonstration
-const sampleData: TaxSummaryProps = {
-  year: 2023,
-  month: 5,
-  day: 27,
-  incomeTax: 0,
-  inhabitantTax: 0,
-  enterpriseTax: 0,
+// Usage example
+const SampleData: ConsumptionTaxReportProps = {
+  date: '年_月_日',
+  taxAmount: 0,
+  taxFreeAmount: 0,
+  nonTaxableAmount: 0,
 };
 
-// Example usage of the TaxSummary component
-const TaxSummaryExample: React.FC = () => {
+const App: React.FC = () => {
   return (
     <div>
-      <h1>Tax Summary Example</h1>
-      <TaxSummary {...sampleData} />
+      <h1>消費税申告情報</h1>
+      <ConsumptionTaxReport {...SampleData} />
     </div>
-  );
+  );  
 };
 
-export default TaxSummaryExample;
+export default App;
