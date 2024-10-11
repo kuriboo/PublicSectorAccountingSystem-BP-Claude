@@ -1,70 +1,76 @@
+// InspectionScheduleTable.tsx
 import React from 'react';
+import styled from '@emotion/styled';
 
 // 検査項目の型定義
-type Inspection = {
+type InspectionItem = {
   id: string;
   name: string;
-  result: string;
+  time: string;
 };
 
-// コンポーネントのプロパティの型定義
-type InspectionResultTableProps = {
-  inspections: Inspection[];
+// コンポーネントのProps型定義
+type Props = {
+  inspectionItems: InspectionItem[];
 };
 
-// 検査結果一覧テーブルコンポーネント
-const InspectionResultTable: React.FC<InspectionResultTableProps> = ({ inspections }) => {
+// テーブルのスタイル定義
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f0f0f0;
+  }
+`;
+
+// 検査項目テーブルコンポーネント
+const InspectionScheduleTable: React.FC<Props> = ({ inspectionItems }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              検査項目
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              検査結果
-            </th>
+    <Table>
+      <thead>
+        <tr>
+          <th>検査項目</th>
+          <th>検査結果</th>
+        </tr>
+      </thead>
+      <tbody>
+        {inspectionItems.map((item) => (
+          <tr key={item.id}>
+            <td>{item.name}</td>
+            <td>{item.time}</td>
           </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {inspections.map((inspection) => (
-            <tr key={inspection.id}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {inspection.name}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {inspection.result}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </Table>
   );
 };
 
-// サンプルデータ
-const sampleInspections: Inspection[] = [
-  { id: '001', name: '水漏', result: '01:なし' },
-  { id: '002', name: '漏電', result: '01:なし' },
-  { id: '003', name: '障害', result: '02:やや有り' },
-  { id: '004', name: 'ひび割れ', result: '01:なし' },
-  { id: '005', name: 'アスベスト', result: '01:なし' },
-  { id: '006', name: '通路リサイクル法', result: '03:適用外' },
-  { id: '007', name: '総合評価', result: '02:B' },
-  { id: '008', name: '修繕要否', result: '02:経過観察' },
-  { id: '010', name: '改修', result: '02:不要' },
-];
+export default InspectionScheduleTable;
 
 // 使用例
-const App: React.FC = () => {
+const SampleInspectionSchedule: React.FC = () => {
+  // サンプルデータ
+  const sampleData: InspectionItem[] = [
+    { id: '001', name: '水漏', time: '01:なし' },
+    { id: '002', name: '漏電', time: '01:なし' },
+    { id: '003', name: '障害', time: '02:やや有り' },
+    { id: '004', name: 'ひび割れ', time: '01:なし' },
+    { id: '005', name: 'クラック', time: '01:なし' },
+    { id: '006', name: '連結リサイクル法', time: '03:適用外' },
+    { id: '007', name: '総合評価', time: '02:B' },
+    { id: '008', name: '修繕要否', time: '02:経過観察' },
+    { id: '010', name: '備考', time: '03:不要' },
+  ];
+
   return (
-    <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold mb-4">検査結果一覧</h1>
-      <InspectionResultTable inspections={sampleInspections} />
+    <div>
+      <h2>検査項目一覧</h2>
+      <InspectionScheduleTable inspectionItems={sampleData} />
     </div>
   );
 };
-
-export default App;
