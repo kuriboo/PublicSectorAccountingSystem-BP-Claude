@@ -1,99 +1,117 @@
-以下は、指定された画像を元に作成したNext.js + TypeScriptのコンポーネントです。
-
-// 税計算書コンポーネント
 import React from 'react';
+import styled from 'styled-components';
 
-// 税計算書のプロパティの型定義
-interface TaxStatementProps {
-  data: {
-    title: string;
-    date: string;
-    fields: string[];
-    rows: {
-      category: string;
-      valueA?: number;
-      valueB?: number;
-      valueC?: number;
-      formula?: string;
-    }[];
-  };
+// Define types for component props
+interface TableData {
+  col1: string;
+  col2: number;
+  col3: number;
+  col4: number;
+  col5: number;
 }
 
-const TaxStatement: React.FC<TaxStatementProps> = ({ data }) => {
-  const { title, date, fields, rows } = data;
+interface TableProps {
+  data: TableData[];
+}
+
+// Define styled components
+const TableContainer = styled.div`
+  overflow-x: auto;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: right;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 12px;
+  }
+`;
+
+// Define main component
+const FinancialTable: React.FC<TableProps> = ({ data }) => {
+  // Calculate totals for each column
+  const totals = data.reduce((acc, curr) => {
+    return {
+      col2: acc.col2 + curr.col2,
+      col3: acc.col3 + curr.col3, 
+      col4: acc.col4 + curr.col4,
+      col5: acc.col5 + curr.col5,
+    };
+  }, { col2: 0, col3: 0, col4: 0, col5: 0 });
 
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-xl font-bold mb-4">{title}</h2>
-      <p className="text-gray-600 mb-4">{date}</p>
-      <table className="w-full border-collapse">
+    <TableContainer>
+      <Table>
         <thead>
           <tr>
-            <th className="border px-4 py-2"></th>
-            {fields.map((field, index) => (
-              <th key={index} className="border px-4 py-2">
-                {field}
-              </th>
-            ))}
-            <th className="border px-4 py-2">計算式</th>
+            <th>項目</th>
+            <th>税率3%運用分</th>
+            <th>税率4%運用分</th>
+            <th>税率6.3%運用分</th>
+            <th>合計(A+B+C)</th>
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, index) => (
+          {data.map((row, index) => (
             <tr key={index}>
-              <td className="border px-4 py-2">{row.category}</td>
-              <td className="border px-4 py-2 text-right">
-                {row.valueA?.toLocaleString() || '-'}
-              </td>
-              <td className="border px-4 py-2 text-right">
-                {row.valueB?.toLocaleString() || '-'}
-              </td>
-              <td className="border px-4 py-2 text-right">
-                {row.valueC?.toLocaleString() || '-'}
-              </td>
-              <td className="border px-4 py-2">{row.formula || '-'}</td>
+              <td>{row.col1}</td>
+              <td>{row.col2.toLocaleString()}</td>
+              <td>{row.col3.toLocaleString()}</td>
+              <td>{row.col4.toLocaleString()}</td>
+              <td>{row.col5.toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
-      </table>
+        <tfoot>
+          <tr>
+            <td>合計</td>
+            <td>{totals.col2.toLocaleString()}</td>
+            <td>{totals.col3.toLocaleString()}</td>
+            <td>{totals.col4.toLocaleString()}</td>
+            <td>{totals.col5.toLocaleString()}</td>
+          </tr>
+        </tfoot>
+      </Table>
+    </TableContainer>
+  );
+};
+
+// Example usage with sample data
+const sampleData: TableData[] = [
+  { col1: '税率別運用額', col2: 1000000, col3: 196000, col4: 6464295000, col5: 6465491000 },
+  { col1: '基礎年金拠出金', col3: 7828, col4: 407182917, col5: 407190745 },
+  { col1: '基礎年金交付金', col5: 80000 },
+  { col1: '特別保険料 ', col2: 30000, col5: 30000 },
+  { col1: '保険料収入額', col2: 1000000, col3: 196114, col4: 6464215062, col5: 6465411176 },
+  { col1: '運用収入額', col2: 20000, col4: 295878468, col5: 295898468 },
+  { col1: '年金給付金', col3: 1820557, col4: 295295327, col5: 297115884 },
+  { col1: '年金管理費', col5: 1512 },
+  { col1: '支払利息', col5: 1512 },
+];
+
+const SampleUsage: React.FC = () => {
+  return (
+    <div>
+      <h2>財政状態表</h2>
+      <FinancialTable data={sampleData} />
     </div>
   );
 };
 
-// サンプルデータ
-const sampleData = {
-  title: '第4-②付表式',
-  date: '付表1-2 税率別消費税額計算表 兼 地方消費税の課税標準となる消費税額計算表',
-  fields: ['税率3%課税分', '税率4%課税分', '税率6.3%課税分'],
-  rows: [
-    {
-      category: '①課税資産の譲渡等の対価の額',
-      valueA: 1000000,
-      valueB: 196000,
-      valueC: 6464295000,
-      formula: '(A+B+C)',
-    },
-    {
-      category: '②連法第28条第1項に規定する棚卸資産の対価の額',
-      valueA: 1000000,
-      valueB: 196114,
-      valueC: 6464215052,
-      formula: '',
-    },
-    {
-      category: '③課税貨物に係る消費税額',
-      valueA: 30000,
-      valueB: 7828,
-      valueC: 407182917,
-      formula: '',
-    },
-    // 以下、データの一部を省略
-  ],
-};
-
-// 使用例
-const TaxStatementExample = () => {
-  return <TaxStatement data={sampleData} />;
-};
-
-export default TaxStatementExample;
+export default SampleUsage;
