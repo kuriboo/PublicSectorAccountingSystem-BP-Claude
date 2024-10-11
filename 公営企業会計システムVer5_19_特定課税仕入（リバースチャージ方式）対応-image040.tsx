@@ -1,75 +1,143 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
-interface Course {
-  name: string;
-  dayOfWeek: string;
-  instructor: string;
-  startTime: string;
-  endTime: string;
-  absenceDates: string;
-  lateDates: string;
-  note: string;
-}
+type TaxDeductionInputProps = {
+  onSubmit: (data: { taxDeduction: boolean; basisDate: string; endDate: string; }) => void;
+};
 
-interface CourseTableProps {
-  courses: Course[];
-}
+const TaxDeductionInput: React.FC<TaxDeductionInputProps> = ({ onSubmit }) => {
+  const [taxDeduction, setTaxDeduction] = React.useState(true);
+  const [basisDate, setBasisDate] = React.useState('');
+  const [endDate, setEndDate] = React.useState('');
 
-const CourseTable: React.FC<CourseTableProps> = ({ courses }) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit({ taxDeduction, basisDate, endDate });
+  };
+
   return (
-    <table className="table-auto border-collapse border border-gray-400">
-      <thead>
-        <tr>
-          <th className="border border-gray-400 px-4 py-2">科目</th>
-          <th className="border border-gray-400 px-4 py-2">曜日</th>
-          <th className="border border-gray-400 px-4 py-2">講師</th>
-          <th className="border border-gray-400 px-4 py-2">開始時間</th>
-          <th className="border border-gray-400 px-4 py-2">終了時間</th>
-          <th className="border border-gray-400 px-4 py-2">欠席日</th>
-          <th className="border border-gray-400 px-4 py-2">遅刻日</th>
-          <th className="border border-gray-400 px-4 py-2">備考</th>
-        </tr>
-      </thead>
-      <tbody>
-        {courses.map((course, index) => (
-          <tr key={index}>
-            <td className="border border-gray-400 px-4 py-2">{course.name || '-'}</td>
-            <td className="border border-gray-400 px-4 py-2">{course.dayOfWeek || '-'}</td>
-            <td className="border border-gray-400 px-4 py-2">{course.instructor || '-'}</td>
-            <td className="border border-gray-400 px-4 py-2">{course.startTime || '-'}</td>
-            <td className="border border-gray-400 px-4 py-2">{course.endTime || '-'}</td>
-            <td className="border border-gray-400 px-4 py-2">{course.absenceDates || '-'}</td>
-            <td className="border border-gray-400 px-4 py-2">{course.lateDates || '-'}</td>
-            <td className="border border-gray-400 px-4 py-2">{course.note || '-'}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <Form onSubmit={handleSubmit}>
+      <Title>特定課税仕入税等控除入力</Title>
+      <DateInputWrapper>
+        <Label>
+          税率
+          <TaxRateSelect value={taxDeduction ? '課税' : '非課税'} onChange={() => setTaxDeduction(!taxDeduction)}>
+            <option value="課税">課税</option>
+            <option value="非課税">非課税</option>
+          </TaxRateSelect>
+        </Label>
+        <Label>
+          年度
+          <YearInput type="number" min="28" max="99" defaultValue="28" />年度
+        </Label>
+      </DateInputWrapper>
+      
+      <DateRangeWrapper>
+        <Label>
+          伝票日付
+          <DateInput type="date" value={basisDate} onChange={e => setBasisDate(e.target.value)} />
+          ~
+          <DateInput type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
+        </Label>
+        <CheckboxLabel>
+          <input type="checkbox" defaultChecked />
+          課税の支出予算科目から税額中の伝票のみ抽出
+        </CheckboxLabel>
+      </DateRangeWrapper>
+
+      <SubmitButton type="submit">検索</SubmitButton>
+      <CancelButton type="reset">クリア</CancelButton>
+      <ExecuteButton type="button">実行</ExecuteButton>
+    </Form>
   );
 };
 
-// Usage example
-const courses: Course[] = [
-  {
-    name: '英語',
-    dayOfWeek: '月曜日',
-    instructor: '鈴木先生',
-    startTime: '10:00',
-    endTime: '12:00',
-    absenceDates: '2010/03/27',
-    lateDates: '',
-    note: '教科書持参',
-  },
-  // Add more courses as needed
-];
+// Sample usage
+const App: React.FC = () => {
+  const handleSubmit = (data: { taxDeduction: boolean; basisDate: string; endDate: string; }) => {
+    console.log(data);
+  };
 
-const CourseTableExample: React.FC = () => {
   return (
     <div>
-      <h2>Course Table Example</h2>
-      <CourseTable courses={courses} />
+      <h1>Tax Deduction Input Example</h1>
+      <TaxDeductionInput onSubmit={handleSubmit} />
     </div>
   );
 };
 
-export default CourseTableExample;
+export default App;
+
+// Styles
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+`;
+
+const Title = styled.h2`
+  margin: 0;
+`;
+
+const DateInputWrapper = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
+
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const TaxRateSelect = styled.select`
+  padding: 0.25rem;
+`;
+
+const YearInput = styled.input`
+  width: 4rem;
+  padding: 0.25rem;
+`;
+
+const DateRangeWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const DateInput = styled.input`
+  padding: 0.25rem;
+`;
+
+const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const SubmitButton = styled.button`
+  padding: 0.5rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+`;
+
+const CancelButton = styled.button`
+  padding: 0.5rem;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+`;
+
+const ExecuteButton = styled.button`
+  padding: 0.5rem;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+`;
