@@ -1,73 +1,108 @@
 import React from 'react';
+import styled from 'styled-components';
 
-type ConsumptionTaxReportProps = {
-  data: {
-    date: string;
-    taxRate: number;
-    taxableBase: number;
-    consumptionTax: number;
-    localConsumptionTax: number;
-    totalConsumptionTax: number;
-    totalAmount: number;
-  }[];
+// 消費税計算明細書のデータ型定義
+type TaxStatementData = {
+  date: string;
+  taxRate5: number;
+  taxRate8: number;
+  taxAmount5: number;
+  taxAmount8: number;
+  totalSales: number;
+  totalTaxAmount: number;
 };
 
-const ConsumptionTaxReport: React.FC<ConsumptionTaxReportProps> = ({ data }) => {
-  if (!data || data.length === 0) {
-    return <div>No data available</div>;
+// 消費税計算明細書コンポーネントのプロパティ型定義
+type TaxStatementProps = {
+  data: TaxStatementData;
+};
+
+// テーブルのスタイル定義
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: right;
   }
 
+  th {
+    background-color: #f0f0f0;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 12px;
+  }
+`;
+
+// 小計行のスタイル定義
+const SubtotalRow = styled.tr`
+  background-color: #f9f9f9;
+  font-weight: bold;
+`;
+
+// 消費税計算明細書コンポーネント
+const TaxStatement: React.FC<TaxStatementProps> = ({ data }) => {
+  // 税抜金額の計算
+  const calcTaxExcludedAmount = (amount: number, taxRate: number) => {
+    return Math.round(amount / (1 + taxRate / 100));
+  };
+
   return (
-    <table className="table-auto border-collapse border border-gray-400">
+    <Table>
       <thead>
-        <tr className="bg-gray-200">
-          <th className="border border-gray-400 px-4 py-2">日付</th>
-          <th className="border border-gray-400 px-4 py-2">税率</th>
-          <th className="border border-gray-400 px-4 py-2">課税標準額</th>
-          <th className="border border-gray-400 px-4 py-2">消費税額</th>
-          <th className="border border-gray-400 px-4 py-2">地方消費税額</th>
-          <th className="border border-gray-400 px-4 py-2">消費税額合計</th>
-          <th className="border border-gray-400 px-4 py-2">合計金額</th>
+        <tr>
+          <th>日付</th>
+          <th>税率5%対象売上</th>
+          <th>税率8%対象売上</th>
+          <th>5%税額</th>
+          <th>8%税額</th>
+          <th>総売上金額</th>
+          <th>総税額</th>
         </tr>
       </thead>
       <tbody>
-        {data.map((row, index) => (
-          <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
-            <td className="border border-gray-400 px-4 py-2">{row.date}</td>
-            <td className="border border-gray-400 px-4 py-2">{row.taxRate}</td>
-            <td className="border border-gray-400 px-4 py-2">{row.taxableBase.toLocaleString()}</td>
-            <td className="border border-gray-400 px-4 py-2">{row.consumptionTax.toLocaleString()}</td>
-            <td className="border border-gray-400 px-4 py-2">{row.localConsumptionTax.toLocaleString()}</td>
-            <td className="border border-gray-400 px-4 py-2">{row.totalConsumptionTax.toLocaleString()}</td>
-            <td className="border border-gray-400 px-4 py-2">{row.totalAmount.toLocaleString()}</td>
-          </tr>
-        ))}
+        <tr>
+          <td>{data.date}</td>
+          <td>{data.taxRate5.toLocaleString()}</td>
+          <td>{data.taxRate8.toLocaleString()}</td>
+          <td>{data.taxAmount5.toLocaleString()}</td>
+          <td>{data.taxAmount8.toLocaleString()}</td>
+          <td>{data.totalSales.toLocaleString()}</td>
+          <td>{data.totalTaxAmount.toLocaleString()}</td>
+        </tr>
+        <SubtotalRow>
+          <td>税抜小計</td>
+          <td>{calcTaxExcludedAmount(data.taxRate5, 5).toLocaleString()}</td>
+          <td>{calcTaxExcludedAmount(data.taxRate8, 8).toLocaleString()}</td>
+          <td colSpan={4}></td>
+        </SubtotalRow>
       </tbody>
-    </table>
+    </Table>
   );
 };
 
-// Sample data for demonstration
-const sampleData = [
-  {
+// サンプルデータを用いた表示用コンポーネント
+const TaxStatementSample: React.FC = () => {
+  const sampleData: TaxStatementData = {
     date: '2016/03/25',
-    taxRate: 8,
-    taxableBase: 2030111070,
-    consumptionTax: 93006043,
-    localConsumptionTax: 1937104127,
-    totalConsumptionTax: 291553751,
-    totalAmount: 2321664821,
-  },
-  // Add more sample data as needed
-];
+    taxRate5: 93006043,
+    taxRate8: 2030115070,
+    taxAmount5: 0,
+    taxAmount8: 85,
+    totalSales: 2123121127,
+    totalTaxAmount: 291553793,
+  };
 
-const ConsumptionTaxReportDemo: React.FC = () => {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">消費税計算明細書</h2>
-      <ConsumptionTaxReport data={sampleData} />
+      <h2>消費税計算明細書</h2>
+      <TaxStatement data={sampleData} />
     </div>
   );
 };
 
-export default ConsumptionTaxReportDemo;
+export default TaxStatement;
