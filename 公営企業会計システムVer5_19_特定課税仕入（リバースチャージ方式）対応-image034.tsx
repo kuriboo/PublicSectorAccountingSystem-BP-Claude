@@ -1,80 +1,91 @@
+// ResultTable.tsx
 import React from 'react';
-
-type ResultItem = {
-  no: number;
-  itemName: string;
-  itemNameKana: string;
-  salesTaxClass: string;
-  priceExcludingTax: number;
-  tax: number;
-  priceIncludingTax: number;
-};
+import styled from 'styled-components';
 
 type ResultTableProps = {
-  data: ResultItem[];
+  data: {
+    [key: string]: string | number;
+  }[];
 };
 
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
 const ResultTable: React.FC<ResultTableProps> = ({ data }) => {
+  if (!data || data.length === 0) {
+    return <p>No data available.</p>;
+  }
+
+  const headers = Object.keys(data[0]);
+
   return (
-    <table className="table-auto border-collapse border border-gray-400">
+    <Table>
       <thead>
         <tr>
-          <th className="border border-gray-400 px-4 py-2">No.</th>
-          <th className="border border-gray-400 px-4 py-2">Item Name</th>
-          <th className="border border-gray-400 px-4 py-2">Item Name (Kana)</th>
-          <th className="border border-gray-400 px-4 py-2">Sales Tax Class</th>
-          <th className="border border-gray-400 px-4 py-2">Price (Excluding Tax)</th>
-          <th className="border border-gray-400 px-4 py-2">Tax</th>
-          <th className="border border-gray-400 px-4 py-2">Price (Including Tax)</th>
+          {headers.map((header, index) => (
+            <th key={index}>{header}</th>
+          ))}
         </tr>
       </thead>
       <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            <td className="border border-gray-400 px-4 py-2">{item.no}</td>
-            <td className="border border-gray-400 px-4 py-2">{item.itemName}</td>
-            <td className="border border-gray-400 px-4 py-2">{item.itemNameKana}</td>
-            <td className="border border-gray-400 px-4 py-2">{item.salesTaxClass}</td>
-            <td className="border border-gray-400 px-4 py-2">{item.priceExcludingTax}</td>
-            <td className="border border-gray-400 px-4 py-2">{item.tax}</td>
-            <td className="border border-gray-400 px-4 py-2">{item.priceIncludingTax}</td>
+        {data.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {headers.map((header, cellIndex) => (
+              <td key={cellIndex}>{row[header]}</td>
+            ))}
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   );
 };
 
-const ResultTableWrapper: React.FC = () => {
-  // サンプルデータ
-  const sampleData: ResultItem[] = [
-    {
-      no: 550,
-      itemName: '支出',
-      itemNameKana: 'シシュツ',
-      salesTaxClass: '不課税',
-      priceExcludingTax: 213000,
-      tax: 0,
-      priceIncludingTax: 213000,
-    },
-    {
-      no: 551,
-      itemName: '支出',
-      itemNameKana: 'シシュツ',
-      salesTaxClass: '不課税',
-      priceExcludingTax: 1357566,
-      tax: 0,
-      priceIncludingTax: 1357566,
-    },
-    // 残りのサンプルデータ...
-  ];
+// Sample data for demonstration
+const sampleData = [
+  {
+    支出: '550',
+    不課税支出: '不課税支出',
+    収益的支出: '収益的支出',
+    '3': '3',
+    不課税: '不課税',
+    '1137466': '1137466',
+  },
+  {
+    支出: '551',
+    不課税支出: '不課税支出',
+    収益的支出: '収益的支出',
+    '3': '3',
+    不課税: '不課税',
+    '21300c': '21300c',
+  },
+  // Add more sample data objects as needed
+];
 
+const App: React.FC = () => {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Result Table</h2>
+      <h1>Result Table</h1>
       <ResultTable data={sampleData} />
     </div>
   );
 };
 
-export default ResultTableWrapper;
+export default App;
