@@ -1,178 +1,161 @@
 import React from 'react';
-import classNames from 'classnames';
+import styled from 'styled-components';
 
-type InvestmentDetailProps = {
-  investmentAmount: number;
-  accruedInterest: number;
-  deferredIncome: number;
-  totalInvestment: number;
-  investmentDate: string;
-  dueDate: string;
-  creditRating: string;
-  investmentHistory: {
-    investmentDate: string;
-    debitAmount: number;
-    accruedInterest: number;
-    deferredIncome: number;
-    investmentAmount: number;
-    redemptionAmount: number;
-    balance: number;
-  }[];
-};
+// 借方情報の型定義
+interface DebitInfo {
+  accrualDate: string;
+  debit: number;
+  credit: number;
+  creditBalance: number;
+  debitBalance: number;
+}
 
-const InvestmentDetail: React.FC<InvestmentDetailProps> = ({
-  investmentAmount,
-  accruedInterest,
-  deferredIncome,
-  totalInvestment,
-  investmentDate,
-  dueDate,
-  creditRating,
-  investmentHistory,
+// 信用障壁照会コンポーネントのプロパティ型定義
+interface CreditInquiryProps {
+  investorNumber: string;
+  investorName: string;
+  receivableDate: string;
+  creditLimit: number;
+  debitInfo: DebitInfo[];
+}
+
+// スタイル定義
+const Container = styled.div`
+  font-family: Arial, sans-serif;
+  padding: 1rem;
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+`;
+
+const Th = styled.th`
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+`;
+
+const Td = styled.td`
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: right;
+`;
+
+const TotalRow = styled.tr`
+  font-weight: bold;
+`;
+
+// 信用障壁照会コンポーネント
+const CreditInquiry: React.FC<CreditInquiryProps> = ({
+  investorNumber,
+  investorName,
+  receivableDate,
+  creditLimit,
+  debitInfo,
 }) => {
+  // 合計値の計算
+  const totalCredit = debitInfo.reduce((sum, item) => sum + item.credit, 0);
+  const totalDebit = debitInfo.reduce((sum, item) => sum + item.debit, 0);
+  const totalCreditBalance = debitInfo.reduce((sum, item) => sum + item.creditBalance, 0);
+  const totalDebitBalance = debitInfo.reduce((sum, item) => sum + item.debitBalance, 0);
+
   return (
-    <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-      <div className="px-4 py-5 sm:px-6">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">投資詳細情報</h3>
-      </div>
-      <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
-        <dl className="sm:divide-y sm:divide-gray-200">
-          <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">資産番号</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">8002500</dd>
-          </div>
-          <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">資産名称</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">都水管改良工事</dd>
-          </div>
-          <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">取得年月日</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">平成29年09月12日</dd>
-          </div>
-          <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">信用方法</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">信用貸</dd>
-          </div>
-          <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">取得価額</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">7,000,000</dd>
-          </div>
-          <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">
-              <div>前期末残高</div>
-              <div>当年度増加</div>
-              <div>当年度減少</div>
-              <div>差引額</div>
-            </dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <div>{investmentAmount.toLocaleString()}</div>
-              <div>{accruedInterest.toLocaleString()}</div>
-              <div>{deferredIncome.toLocaleString()}</div>
-              <div>{totalInvestment.toLocaleString()}</div>
-            </dd>
-          </div>
-          <div className="py-4 sm:py-5 sm:px-6">
-            <h4 className="text-md leading-6 font-medium text-gray-900">異動年月日</h4>
-            <div className="mt-2 flex flex-col">
-              <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                  <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            異動年月日
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            異動区分
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            異動摘要
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            異動額
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            増減額
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            残高
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {investmentHistory.map((history, historyIdx) => (
-                          <tr key={historyIdx} className={classNames(historyIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50')}>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {history.investmentDate}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{history.debitAmount > 0 ? '取得' : '償還'}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{history.debitAmount > 0 ? '取得' : '償還'}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{history.investmentAmount.toLocaleString()}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{history.redemptionAmount.toLocaleString()}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{history.balance.toLocaleString()}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </dl>
-      </div>
-    </div>
+    <Container>
+      <h2>信用障壁照会</h2>
+      <p>資産番号: {investorNumber}</p>
+      <p>資産名称: {investorName}</p>
+      <p>取得年月日: {receivableDate}</p>
+      <p>信用方法: 定額法</p>
+      <p>取得価額: {creditLimit.toLocaleString()}</p>
+
+      <Table>
+        <thead>
+          <tr>
+            <Th>前期末残</Th>
+            <Th>当年度増加</Th>
+            <Th>当年度減少</Th>
+            <Th>差引額</Th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <Td>0</Td>
+            <Td>{creditLimit.toLocaleString()}</Td>
+            <Td>0</Td>
+            <Td>{creditLimit.toLocaleString()}</Td>
+          </tr>
+        </tbody>
+      </Table>
+
+      <Table>
+        <thead>
+          <tr>
+            <Th>異動年月日</Th>
+            <Th>異動区分</Th>
+            <Th>異動内容</Th>
+            <Th>異正額</Th>
+            <Th>増減額</Th>
+            <Th>累計額</Th>
+            <Th>減価償却額</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {debitInfo.map((item, index) => (
+            <tr key={index}>
+              <Td>{item.accrualDate}</Td>
+              <Td>取得</Td>
+              <Td>取得</Td>
+              <Td>{item.debit.toLocaleString()}</Td>
+              <Td>{item.credit.toLocaleString()}</Td>
+              <Td>{item.creditBalance.toLocaleString()}</Td>
+              <Td>0</Td>
+            </tr>
+          ))}
+          <TotalRow>
+            <Td colSpan={3}>合計</Td>
+            <Td>{totalDebit.toLocaleString()}</Td>
+            <Td>{totalCredit.toLocaleString()}</Td>
+            <Td>{totalCreditBalance.toLocaleString()}</Td>
+            <Td>{totalDebitBalance.toLocaleString()}</Td>
+          </TotalRow>
+        </tbody>
+      </Table>
+    </Container>
   );
 };
 
-export default InvestmentDetail;
+// サンプルデータ
+const sampleData: CreditInquiryProps = {
+  investorNumber: '8002500',
+  investorName: '訳水管改良工事',
+  receivableDate: '平成29年09月12日',
+  creditLimit: 7000000,
+  debitInfo: [
+    {
+      accrualDate: '2017-08-12',
+      debit: 7000000,
+      credit: 0,
+      creditBalance: 7000000,
+      debitBalance: 0,
+    },
+  ],
+};
 
-// Example usage
-const App = () => {
-  const investmentDetailProps = {
-    investmentAmount: 7000000,
-    accruedInterest: 0, 
-    deferredIncome: 0,
-    totalInvestment: 7000000,
-    investmentDate: "平成29年08月12日",
-    dueDate: "",
-    creditRating: "信用貸",
-    investmentHistory: [
-      {
-        investmentDate: "2017-08-12",
-        debitAmount: 7000000,
-        accruedInterest: 0,
-        deferredIncome: 0, 
-        investmentAmount: 7000000,
-        redemptionAmount: 0,
-        balance: 7000000
-      }
-    ]
-  };
-
+// 使用例
+const App: React.FC = () => {
   return (
     <div>
-      <h1>Investment Detail Example</h1>
-      <InvestmentDetail {...investmentDetailProps} />
+      <h1>信用障壁照会</h1>
+      <CreditInquiry {...sampleData} />
     </div>
   );
 };
+
+export default App;
