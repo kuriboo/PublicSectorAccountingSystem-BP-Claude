@@ -1,154 +1,155 @@
 import React from 'react';
+import styled from 'styled-components';
 
-type Reservation = {
+// 予約情報を表すインターフェース
+interface Reservation {
   date: string;
   time: string;
   adultCount: number;
   childCount: number;
-  adultPrice: number;
-  childPrice: number;
-};
+  infantCount: number;
+  seatClass: string;
+  smoking: boolean;
+}
 
-type ReservationFormProps = {
+// コンポーネントのプロパティを定義するインターフェース
+interface ReservationFormProps {
   onSubmit: (reservation: Reservation) => void;
-};
+}
 
+// スタイル付きコンポーネントを定義
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+`;
+
+const FormRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  width: 100%;
+  
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+const FormLabel = styled.label`
+  margin-right: 10px;
+`;
+
+const FormInput = styled.input`
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+`;
+
+const FormSelect = styled.select`
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+`;
+
+const SubmitButton = styled.button`
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+// 予約フォームコンポーネント
 const ReservationForm: React.FC<ReservationFormProps> = ({ onSubmit }) => {
-  // State for form fields
-  const [date, setDate] = React.useState('');
-  const [time, setTime] = React.useState('');
-  const [adultCount, setAdultCount] = React.useState(0);
-  const [childCount, setChildCount] = React.useState(0);
-  const [adultPrice, setAdultPrice] = React.useState(0);
-  const [childPrice, setChildPrice] = React.useState(0);
+  // フォームの状態を管理
+  const [reservation, setReservation] = React.useState<Reservation>({
+    date: '',
+    time: '',
+    adultCount: 0,
+    childCount: 0,
+    infantCount: 0,
+    seatClass: '',
+    smoking: false,
+  });
 
-  // Handle form submission
+  // フォームの入力が変更されたときの処理
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type, checked } = e.target;
+    const inputValue = type === 'checkbox' ? checked : value;
+    setReservation(prevState => ({
+      ...prevState,
+      [name]: inputValue,
+    }));
+  };
+
+  // フォームが送信されたときの処理
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Create reservation object
-    const reservation: Reservation = {
-      date,
-      time,
-      adultCount,
-      childCount,
-      adultPrice,
-      childPrice,
-    };
-
-    // Call onSubmit callback with reservation data
     onSubmit(reservation);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="date">
-          予約日
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="date"
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="time">
-          時間
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="time"
-          type="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="adultCount">
-          大人
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="adultCount"
-          type="number"
-          min={0}
-          value={adultCount}
-          onChange={(e) => setAdultCount(Number(e.target.value))}
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="childCount">
-          子供
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="childCount"
-          type="number"
-          min={0}
-          value={childCount}
-          onChange={(e) => setChildCount(Number(e.target.value))}
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="adultPrice">
-          大人料金
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="adultPrice"
-          type="number"
-          min={0}
-          value={adultPrice}
-          onChange={(e) => setAdultPrice(Number(e.target.value))}
-          required
-        />
-      </div>
-      <div className="mb-6">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="childPrice">
-          子供料金
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          id="childPrice"
-          type="number"
-          min={0}
-          value={childPrice}
-          onChange={(e) => setChildPrice(Number(e.target.value))}
-          required
-        />
-      </div>
-      <div className="flex items-center justify-between">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="submit"
-        >
-          予約する
-        </button>
-      </div>
-    </form>
+    <FormWrapper>
+      <form onSubmit={handleSubmit}>
+        <FormRow>
+          <FormLabel>予約日:</FormLabel>
+          <FormInput type="date" name="date" value={reservation.date} onChange={handleChange} required />
+        </FormRow>
+        <FormRow>
+          <FormLabel>予約時間:</FormLabel>
+          <FormInput type="time" name="time" value={reservation.time} onChange={handleChange} required />
+        </FormRow>
+        <FormRow>
+          <FormLabel>大人:</FormLabel>
+          <FormInput type="number" name="adultCount" value={reservation.adultCount} onChange={handleChange} min={0} required />
+        </FormRow>
+        <FormRow>
+          <FormLabel>子供:</FormLabel>
+          <FormInput type="number" name="childCount" value={reservation.childCount} onChange={handleChange} min={0} required />
+        </FormRow>
+        <FormRow>
+          <FormLabel>幼児:</FormLabel>
+          <FormInput type="number" name="infantCount" value={reservation.infantCount} onChange={handleChange} min={0} required />
+        </FormRow>
+        <FormRow>
+          <FormLabel>座席クラス:</FormLabel>
+          <FormSelect name="seatClass" value={reservation.seatClass} onChange={handleChange} required>
+            <option value="">選択してください</option>
+            <option value="economy">エコノミー</option>
+            <option value="business">ビジネス</option>
+          </FormSelect>
+        </FormRow>
+        <FormRow>
+          <FormLabel>喫煙席:</FormLabel>
+          <FormInput type="checkbox" name="smoking" checked={reservation.smoking} onChange={handleChange} />
+        </FormRow>
+        <SubmitButton type="submit">予約する</SubmitButton>
+      </form>
+    </FormWrapper>
   );
 };
 
-// Sample usage
-const SampleReservationForm = () => {
+// 使用例
+const App: React.FC = () => {
   const handleReservationSubmit = (reservation: Reservation) => {
-    console.log('Reservation submitted:', reservation);
-    // TODO: Handle reservation submission (e.g., send to server)
+    // フォームの送信処理を行う
+    console.log(reservation);
   };
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">予約フォーム</h1>
+      <h1>予約フォーム</h1>
       <ReservationForm onSubmit={handleReservationSubmit} />
     </div>
   );
 };
 
-export default SampleReservationForm;
+export default App;
