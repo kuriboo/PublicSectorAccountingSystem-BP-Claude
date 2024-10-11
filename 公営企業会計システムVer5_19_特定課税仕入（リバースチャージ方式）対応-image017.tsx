@@ -1,170 +1,179 @@
 import React from 'react';
+import styled from 'styled-components';
 
-interface TaxCalculatorProps {
-  startDate: string;
-  endDate: string;
-  taxRate: number;
-  deductionRate: number;
-  bankHolidaysIncluded: boolean;
-}
-
-interface TaxItem {
+// 型定義
+type TaxWithholdingEntry = {
   date: string;
-  dayOfWeek: string;
-  isBankHoliday: boolean;
-  isHalfDay: boolean;
-  amount: number;
-  deductedAmount: number;
-  totalAmount: number;
-}
+  incomeAmount: number;
+  withholdingTaxAmount: number;
+  insurancePremiumAmount: number;
+  takeHomePay: number;
+};
 
-const TaxCalculator: React.FC<TaxCalculatorProps> = ({
-  startDate,
-  endDate,
-  taxRate,
-  deductionRate,
-  bankHolidaysIncluded,
-}) => {
-  // 税金計算用の日付配列を生成
-  const taxItems: TaxItem[] = generateTaxItems(
-    startDate,
-    endDate,
-    taxRate,
-    deductionRate,
-    bankHolidaysIncluded
-  );
+type TaxWithholdingFormProps = {
+  entries: TaxWithholdingEntry[];
+  onSubmit: (data: TaxWithholdingEntry) => void;
+};
 
-  // 合計金額を計算
-  const totalAmount = taxItems.reduce((sum, item) => sum + item.totalAmount, 0);
+// スタイリング
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+`;
+
+const Table = styled.table`
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px;
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+`;
+
+const Input = styled.input`
+  padding: 4px;
+  margin: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100px;
+`;
+
+const Button = styled.button`
+  padding: 8px 16px;
+  margin: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+// コンポーネント
+const TaxWithholdingForm: React.FC<TaxWithholdingFormProps> = ({ entries, onSubmit }) => {
+  const [date, setDate] = React.useState('');
+  const [incomeAmount, setIncomeAmount] = React.useState(0);
+  const [withholdingTaxAmount, setWithholdingTaxAmount] = React.useState(0);
+  const [insurancePremiumAmount, setInsurancePremiumAmount] = React.useState(0);
+
+  // 手取り額計算
+  const calculateTakeHomePay = () => {
+    return incomeAmount - withholdingTaxAmount - insurancePremiumAmount;
+  };
+
+  // 登録ハンドラ
+  const handleSubmit = () => {
+    const newEntry: TaxWithholdingEntry = {
+      date,
+      incomeAmount,
+      withholdingTaxAmount,
+      insurancePremiumAmount,
+      takeHomePay: calculateTakeHomePay(),
+    };
+
+    onSubmit(newEntry);
+
+    // フォームクリア
+    setDate('');
+    setIncomeAmount(0);
+    setWithholdingTaxAmount(0);
+    setInsurancePremiumAmount(0);
+  };
 
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <h2 className="text-2xl font-bold mb-4">特定課税仕入調書</h2>
-      <div className="mb-4">
-        <span>対象期間：</span>
-        <span>{startDate}</span>
-        <span> 〜 </span>
-        <span>{endDate}</span>
-      </div>
-      <table className="table-auto w-full text-left whitespace-no-wrap">
+    <Container>
+      <h2>特定課税仕入伝票管理入力</h2>
+      <Table>
         <thead>
           <tr>
-            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">日付</th>
-            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">曜日</th>
-            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">税抜金額</th>
-            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">税額</th>
-            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">消費税額</th>
+            <th>搬送日</th>
+            <th>振替年月</th>
+            <th>伝票日付</th>
+            <th>摘要</th>
+            <th>稲妻</th>
+            <th>税込額</th>
+            <th>消費税額</th>
           </tr>
         </thead>
         <tbody>
-          {taxItems.map((item, index) => (
+          {/* エントリ表示 */}
+          {entries.map((entry, index) => (
             <tr key={index}>
-              <td className="px-4 py-3">{item.date}</td>
-              <td className="px-4 py-3">{item.dayOfWeek}</td>
-              <td className="px-4 py-3">{item.amount.toLocaleString()}</td>
-              <td className="px-4 py-3">{item.deductedAmount.toLocaleString()}</td>
-              <td className="px-4 py-3">{item.totalAmount.toLocaleString()}</td>
+              <td>{entry.date}</td>
+              <td>{entry.incomeAmount}</td>
+              <td>{entry.withholdingTaxAmount}</td>
+              <td>{entry.insurancePremiumAmount}</td>
+              <td>{entry.takeHomePay}</td>
             </tr>
           ))}
+          {/* 入力フォーム */}
+          <tr>
+            <td>
+              <Input type="text" value={date} onChange={(e) => setDate(e.target.value)} />
+            </td>
+            <td>
+              <Input
+                type="number"
+                value={incomeAmount}
+                onChange={(e) => setIncomeAmount(Number(e.target.value))}
+              />
+            </td>
+            <td>
+              <Input
+                type="number"
+                value={withholdingTaxAmount}
+                onChange={(e) => setWithholdingTaxAmount(Number(e.target.value))}
+              />
+            </td>
+            <td>
+              <Input
+                type="number"
+                value={insurancePremiumAmount}
+                onChange={(e) => setInsurancePremiumAmount(Number(e.target.value))}
+              />
+            </td>
+            <td>{calculateTakeHomePay()}</td>
+          </tr>
         </tbody>
-      </table>
-      <div className="mt-4 text-right">
-        <span className="text-xl font-bold">合計金額：</span>
-        <span>{totalAmount.toLocaleString()}</span>
-      </div>
-    </div>
+      </Table>
+      <Button onClick={handleSubmit}>登録</Button>
+    </Container>
   );
 };
 
-// 指定期間の税金計算用配列を生成する関数
-const generateTaxItems = (
-  startDate: string,
-  endDate: string,
-  taxRate: number,
-  deductionRate: number,
-  bankHolidaysIncluded: boolean
-): TaxItem[] => {
-  const items: TaxItem[] = [];
-  let currentDate = new Date(startDate);
-  const lastDate = new Date(endDate);
+// サンプルデータと使用例
+const sampleData: TaxWithholdingEntry[] = [
+  {
+    date: '2023/03/27',
+    incomeAmount: 80000,
+    withholdingTaxAmount: 90000,
+    insurancePremiumAmount: 0,
+    takeHomePay: 90000,
+  },
+];
 
-  while (currentDate <= lastDate) {
-    const isBankHoliday = isBankHolidayFunc(currentDate);
-    const isHalfDay = isHalfDayFunc(currentDate);
-    
-    // 銀行休日を含めない場合はスキップ
-    if (!bankHolidaysIncluded && isBankHoliday) {
-      currentDate.setDate(currentDate.getDate() + 1);
-      continue;
-    }
-    
-    const amount = 90000; // 仮の税抜金額
-    const deductedAmount = Math.floor(amount * deductionRate);
-    const totalAmount = amount - deductedAmount;
-    
-    const item: TaxItem = {
-      date: formatDate(currentDate),
-      dayOfWeek: getDayOfWeek(currentDate),
-      isBankHoliday,
-      isHalfDay,
-      amount,
-      deductedAmount,
-      totalAmount,
-    };
+const App: React.FC = () => {
+  const [entries, setEntries] = React.useState(sampleData);
 
-    items.push(item);
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
+  const handleSubmit = (newEntry: TaxWithholdingEntry) => {
+    setEntries([...entries, newEntry]);
+  };
 
-  return items;
+  return <TaxWithholdingForm entries={entries} onSubmit={handleSubmit} />;
 };
 
-// 日付をyyyy/MM/dd形式でフォーマット
-const formatDate = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}/${month}/${day}`;
-};
-
-// 曜日を取得
-const getDayOfWeek = (date: Date): string => {
-  const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
-  return daysOfWeek[date.getDay()];
-};
-
-// 銀行休日判定の仮実装
-const isBankHolidayFunc = (date: Date): boolean => {
-  // 銀行休日の判定ロジックを実装
-  // 例: 土日は休日とする
-  const dayOfWeek = date.getDay();
-  return dayOfWeek === 0 || dayOfWeek === 6;
-};
-
-// 半日判定の仮実装
-const isHalfDayFunc = (date: Date): boolean => {
-  // 半日の判定ロジックを実装
-  // 例: 15日は半日とする
-  return date.getDate() === 15;
-};
-
-// サンプルデータを使用した表示用のコンポーネント
-const SampleTaxCalculator: React.FC = () => {
-  const startDate = '2016/03/27';
-  const endDate = '2016/03/27';
-  const taxRate = 0.1;
-  const deductionRate = 0.1;
-  const bankHolidaysIncluded = true;
-
-  return (
-    <TaxCalculator
-      startDate={startDate}
-      endDate={endDate}
-      taxRate={taxRate}
-      deductionRate={deductionRate}
-      bankHolidaysIncluded={bankHolidaysIncluded}
-    />
-  );
-};
-
-export default SampleTaxCalculator;
+export default App;
