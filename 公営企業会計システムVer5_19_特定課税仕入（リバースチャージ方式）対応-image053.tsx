@@ -1,102 +1,99 @@
 import React from 'react';
-
-type TaxInputProps = {
-  label: string;
-  value: number;
-  onChange: (value: number) => void;
-  className?: string;
-};
-
-const TaxInput: React.FC<TaxInputProps> = ({ label, value, onChange, className }) => {
-  return (
-    <div className={`flex items-center ${className}`}>
-      <span className="mr-2">{label}</span>
-      <input
-        type="number"
-        value={value}
-        onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="border border-gray-300 rounded px-2 py-1"
-      />
-    </div>
-  );
-};
-
-type TaxRowProps = {
-  label: string;
-  taxRate: number;
-  amount: number;
-  className?: string;
-};
-
-const TaxRow: React.FC<TaxRowProps> = ({ label, taxRate, amount, className }) => {
-  return (
-    <div className={`flex items-center justify-between ${className}`}>
-      <span>{label}</span>
-      <span>{taxRate}%</span>
-      <span>{amount.toLocaleString()}</span>
-    </div>
-  );
-};
+import styled from 'styled-components';
 
 type TaxCalculatorProps = {
-  salesAmount: number;
-  taxAmount: number;
-  consumptionTaxRate: number;
-  localConsumptionTaxRate?: number;
+  price: number;
+  taxRate: number;
+  serviceCharge?: number;
+  otherCharge?: number;
 };
 
 const TaxCalculator: React.FC<TaxCalculatorProps> = ({
-  salesAmount,
-  taxAmount,
-  consumptionTaxRate,
-  localConsumptionTaxRate = 0,
+  price,
+  taxRate,
+  serviceCharge = 0,
+  otherCharge = 0,
 }) => {
-  // 消費税額の計算
-  const calculatedTaxAmount = salesAmount * (consumptionTaxRate / 100);
-
-  // 地方消費税額の計算
-  const calculatedLocalTaxAmount = salesAmount * (localConsumptionTaxRate / 100);
+  // 消費税額を計算
+  const taxAmount = Math.floor(price * (taxRate / 100));
 
   return (
-    <div className="p-4 border border-gray-300 rounded">
-      <TaxInput
-        label="決定額"
-        value={salesAmount}
-        onChange={(value) => console.log('Sales amount changed:', value)}
-        className="mb-2"
-      />
-      <TaxInput
-        label="税抜額"
-        value={taxAmount}
-        onChange={(value) => console.log('Tax amount changed:', value)}
-        className="mb-4"
-      />
-      <TaxRow label="消費税率" taxRate={consumptionTaxRate} amount={calculatedTaxAmount} className="mb-2" />
-      {localConsumptionTaxRate > 0 && (
-        <TaxRow
-          label="地税額"
-          taxRate={localConsumptionTaxRate}
-          amount={calculatedLocalTaxAmount}
-          className="mb-2"
-        />
-      )}
-      <div className="mt-4">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded">確定</button>
-      </div>
+    <TaxCalculatorWrapper>
+      <Row>
+        <Label>決定額</Label>
+        <Value>{price.toLocaleString()}</Value>
+      </Row>
+      <Row>
+        <Label>税抜額</Label>
+        <Value>{price.toLocaleString()}</Value>
+      </Row>
+      <Row>
+        <Label>消費税率</Label>
+        <Value>{taxRate}%</Value>
+      </Row>
+      <Row>
+        <Label>消費税額</Label>
+        <Value>{taxAmount.toLocaleString()}</Value>
+      </Row>
+      <Row>
+        <Label>他税率</Label>
+        <Value>{otherCharge}%</Value>
+      </Row>
+      <Row>
+        <Label>他税額</Label>
+        <Value>{otherCharge.toLocaleString()}</Value>
+      </Row>
+      <SubmitButton>摘要</SubmitButton>
+    </TaxCalculatorWrapper>
+  );
+};
+
+// スタイリング
+const TaxCalculatorWrapper = styled.div`
+  background-color: #f0f0f0;
+  padding: 16px;
+  border-radius: 4px;
+  width: 300px;
+  margin: 0 auto;
+`;
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
+const Label = styled.div`
+  font-weight: bold;
+`;
+
+const Value = styled.div``;
+
+const SubmitButton = styled.button`
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+`;
+
+// サンプルデータを使用した表示用コンポーネント
+const TaxCalculatorExample: React.FC = () => {
+  const sampleData = {
+    price: 1000000,
+    taxRate: 10,
+    serviceCharge: 0,
+    otherCharge: 0,
+  };
+
+  return (
+    <div>
+      <h2>Tax Calculator Example</h2>
+      <TaxCalculator {...sampleData} />
     </div>
   );
 };
 
-// サンプルデータを使用した表示用コンポーネント
-const TaxCalculatorSample: React.FC = () => {
-  return (
-    <TaxCalculator
-      salesAmount={1000000}
-      taxAmount={1000000}
-      consumptionTaxRate={10}
-      localConsumptionTaxRate={0}
-    />
-  );
-};
-
-export default TaxCalculatorSample;
+export default TaxCalculatorExample;
