@@ -1,90 +1,129 @@
 import React from 'react';
+import styled from 'styled-components';
 
-type ConsumptionTaxReportProps = {
-  title: string;
-  data: {
-    date: string;
-    salesAmount: number;
-    taxAmount: number;
-    totalAmount: number;
-    accountItems: {
-      name: string;
-      salesAmount: number;
-      taxAmount: number;
-      totalAmount: number;
-    }[];
-  }[];
+// 明細データの型定義
+type MeisaiData = {
+  date: string;
+  kubun: string;
+  bango: string;
+  tenmei: string;
+  shiten: string;
+  yokin: number;
+  shukkin: number;
+  zandaka: number;
+  tekiyou: string;
 };
 
-const ConsumptionTaxReport: React.FC<ConsumptionTaxReportProps> = ({ title, data }) => {
+// 明細テーブルのプロパティ型定義
+type MeisaiTableProps = {
+  data: MeisaiData[];
+};
+
+// 明細テーブルコンポーネント
+const MeisaiTable: React.FC<MeisaiTableProps> = ({ data }) => {
   return (
-    <div className="overflow-x-auto">
-      <h2 className="text-lg font-bold mb-4">{title}</h2>
-      <table className="table-auto border-collapse border border-gray-400">
+    <TableContainer>
+      <Table>
         <thead>
           <tr>
-            <th className="border border-gray-400 px-4 py-2">年月日</th>
-            <th className="border border-gray-400 px-4 py-2">事業所・部門</th>
-            <th className="border border-gray-400 px-4 py-2">品目</th>
-            <th className="border border-gray-400 px-4 py-2">金額</th>
-            <th className="border border-gray-400 px-4 py-2">税率</th>
-            <th className="border border-gray-400 px-4 py-2">消費税</th>
-            <th className="border border-gray-400 px-4 py-2">合計金額</th>
+            <Th>年月日</Th>
+            <Th>区分</Th>
+            <Th>番号/明細</Th>
+            <Th>店名</Th>
+            <Th>支店</Th>
+            <Th>預金</Th>
+            <Th>出金</Th>
+            <Th>残高</Th>
+            <Th>摘要</Th>
           </tr>
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <React.Fragment key={index}>
-              <tr>
-                <td className="border border-gray-400 px-4 py-2" rowSpan={item.accountItems.length + 1}>
-                  {item.date}
-                </td>
-                {/* Render other columns */}
-              </tr>
-              {item.accountItems.map((accountItem, accountIndex) => (
-                <tr key={accountIndex}>
-                  <td className="border border-gray-400 px-4 py-2">{accountItem.name}</td>
-                  <td className="border border-gray-400 px-4 py-2 text-right">{accountItem.salesAmount.toLocaleString()}</td>
-                  <td className="border border-gray-400 px-4 py-2 text-right">{accountItem.taxAmount.toLocaleString()}</td>
-                  <td className="border border-gray-400 px-4 py-2 text-right">{accountItem.totalAmount.toLocaleString()}</td>
-                </tr>
-              ))}
-              {/* 総合計行 */}
-              {index === data.length - 1 && (
-                <tr>
-                  <td className="border border-gray-400 px-4 py-2 font-bold" colSpan={3}>総合計</td>
-                  <td className="border border-gray-400 px-4 py-2 text-right font-bold">{item.salesAmount.toLocaleString()}</td>
-                  <td className="border border-gray-400 px-4 py-2 text-right font-bold">{item.taxAmount.toLocaleString()}</td>
-                  <td className="border border-gray-400 px-4 py-2 text-right font-bold">{item.totalAmount.toLocaleString()}</td>
-                </tr>
-              )}
-            </React.Fragment>
+            <tr key={index}>
+              <Td>{item.date}</Td>
+              <Td>{item.kubun}</Td>
+              <Td>{item.bango}</Td>
+              <Td>{item.tenmei}</Td>
+              <Td>{item.shiten}</Td>
+              <Td>{item.yokin.toLocaleString()}</Td>
+              <Td>{item.shukkin.toLocaleString()}</Td>
+              <Td>{item.zandaka.toLocaleString()}</Td>
+              <Td>{item.tekiyou}</Td>
+            </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
+    </TableContainer>
+  );
+};
+
+// スタイリング
+const TableContainer = styled.div`
+  overflow-x: auto;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+`;
+
+const Th = styled.th`
+  background-color: #f0f0f0;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+`;
+
+const Td = styled.td`
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: right;
+
+  &:first-child {
+    text-align: center;
+  }
+`;
+
+// サンプルデータ
+const sampleData: MeisaiData[] = [
+  {
+    date: '2016/03/25',
+    kubun: '普通',
+    bango: '1234567',
+    tenmei: 'ABC銀行',
+    shiten: '本店',
+    yokin: 1000,
+    shukkin: 0,
+    zandaka: 2000,
+    tekiyou: '入金',
+  },
+  {
+    date: '2016/03/26',
+    kubun: '普通',
+    bango: '1234567',
+    tenmei: 'ABC銀行',
+    shiten: '本店',
+    yokin: 0,
+    shukkin: 500,
+    zandaka: 1500,
+    tekiyou: '出金',
+  },
+];
+
+// サンプル表示用コンポーネント
+const SampleMeisaiTable: React.FC = () => {
+  return (
+    <div>
+      <h2>明細テーブル</h2>
+      <MeisaiTable data={sampleData} />
     </div>
   );
 };
 
-// サンプルデータ
-const sampleData = [
-  {
-    date: '2023/01/01',
-    salesAmount: 2030111070,
-    taxAmount: 93006943,
-    totalAmount: 1937104127,
-    accountItems: [
-      { name: '非課税売上', salesAmount: 38107, taxAmount: 0, totalAmount: 38107 },
-      { name: '特定課税仕入', salesAmount: 0, taxAmount: 0, totalAmount: 0 },
-      // ...
-    ],
-  },
-  // ...
-];
-
-// 使用例
-const ConsumptionTaxReportSample: React.FC = () => {
-  return <ConsumptionTaxReport title="消費税計算明細書" data={sampleData} />;
-};
-
-export default ConsumptionTaxReport;
+export default SampleMeisaiTable;
