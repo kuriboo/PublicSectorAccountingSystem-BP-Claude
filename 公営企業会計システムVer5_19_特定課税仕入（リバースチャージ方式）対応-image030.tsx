@@ -1,78 +1,92 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
-type RowData = {
-  constructionCosts: number;
-  siteCosts: number;
-  designCosts: number;
-  generalAffairsCosts: number;
-  contingencyCosts: number;
-  totalCosts: number;
+// 表の1行を表すコンポーネントの型定義
+type RowProps = {
+  data: (string | number)[];
 };
 
+// 表の1セルを表すコンポーネントの型定義
+type CellProps = {
+  children: React.ReactNode;
+  isHeader?: boolean;
+  align?: string;
+};
+
+// 表のコンポーネントの型定義
 type TableProps = {
-  data: RowData[];
+  data: (string | number)[][];
+  headerRow?: string[];
 };
 
-const Table: React.FC<TableProps> = ({ data }) => {
-  if (!data || data.length === 0) {
-    return <div>No data available</div>;
-  }
+// 表の1セルを表すコンポーネント
+const Cell = styled.td<CellProps>`
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: ${({ align }) => align || 'left'};
+  font-weight: ${({ isHeader }) => (isHeader ? 'bold' : 'normal')};
+`;
 
-  return (
-    <table className="w-full border-collapse">
-      <thead>
-        <tr className="bg-gray-100">
-          <th className="border px-4 py-2">建設費</th>
-          <th className="border px-4 py-2">用地費</th>
-          <th className="border px-4 py-2">設計費</th>
-          <th className="border px-4 py-2">庁舎費</th>
-          <th className="border px-4 py-2">予備費</th>
-          <th className="border px-4 py-2">総事業費</th>
-        </tr>
-      </thead>
+// 表の1行を表すコンポーネント
+const Row: React.FC<RowProps> = ({ data }) => (
+  <tr>
+    {data.map((cell, index) => (
+      <Cell key={index}>{cell}</Cell>
+    ))}
+  </tr>
+);
+
+// 表のコンポーネント
+const Table: React.FC<TableProps> = ({ data, headerRow }) => (
+  <TableWrapper>
+    <StyledTable>
+      {headerRow && (
+        <thead>
+          <Row data={headerRow} />
+        </thead>
+      )}
       <tbody>
-        {data.map((row, index) => (
-          <tr key={index} className="hover:bg-gray-50">
-            <td className="border px-4 py-2">{row.constructionCosts.toLocaleString()}</td>
-            <td className="border px-4 py-2">{row.siteCosts.toLocaleString()}</td>
-            <td className="border px-4 py-2">{row.designCosts.toLocaleString()}</td>
-            <td className="border px-4 py-2">{row.generalAffairsCosts.toLocaleString()}</td>
-            <td className="border px-4 py-2">{row.contingencyCosts.toLocaleString()}</td>
-            <td className="border px-4 py-2">{row.totalCosts.toLocaleString()}</td>
-          </tr>
+        {data.map((row, rowIndex) => (
+          <Row key={rowIndex} data={row} />
         ))}
       </tbody>
-    </table>
-  );
-};
+    </StyledTable>
+  </TableWrapper>
+);
 
-// Example usage
-const sampleData: RowData[] = [
-  {
-    constructionCosts: 2100000,
-    siteCosts: 2100000,
-    designCosts: 2000000, 
-    generalAffairsCosts: 2000000,
-    contingencyCosts: 100000,
-    totalCosts: 2100000,
-  },
-  {
-    constructionCosts: 2100000,
-    siteCosts: 2000000,
-    designCosts: 2000000,
-    generalAffairsCosts: 2000000,
-    contingencyCosts: 0,
-    totalCosts: 0,
-  },
+// 表のスタイリング
+const TableWrapper = styled.div`
+  overflow-x: auto;
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+`;
+
+// サンプルデータ
+const sampleData = [
+  ['', '', '', '', '', '', '適応値使用', '2100000', '0', '2100000', '0', '2000000', '100000'],
+  ['', '', '', '', '', '', '通知配備率', '2100000', '0', '2100000', '0', '2000000', '100000'],
+  ['', '', '', '1', '', '1', '給与率', '2000000', '0', '2000000', '0', '2000000', '0'],
+  ['', '', '', '1', '1', '1', '所得率', '2000000', '0', '2000000', '0', '2000000', '0'],
+  ['', '', '', '1', '3', '1', '源泉率', '100000', '0', '100000', '0', '0', '100000'],
+  ['', '', '', '', '', '', '総消費配付', '100000', '0', '100000', '0', '', '100000'],
+  ['2', '', '', '', '', '', '特定課税仕入', '', '', '', '', '', ''],
+  ['2', '1', '', '', '', '', '事業専用', '1000', '0', '1000', '1000', '0', '0'],
+  ['2', '1', '1', '13', '', '', '共通', '1000', '0', '1000', '1000', '0', '0'],
+  ['2', '1', '1', '13', '1', '', '印刷製本費', '1000', '0', '1000', '1000', '0', '0'],
+  ['2', '1', '1', '13', '1', '1', '電子帳簿', '1000', '0', '1000', '1000', '0', '0'],
+  ['', '', '', '', '', '', '（租円すた消費税額）', '80', '', '', '', '', ''],
 ];
 
-const ExampleTableComponent: React.FC = () => {
-  return (
-    <div>
-      <h2>Sample Table</h2>
-      <Table data={sampleData} />
-    </div>
-  );
-};
+const headerRow = ['', '', '', '', '', '', '', '金額', '', '課税標準額', '消費税額', '地方消費税額', '不課税'];
 
-export default ExampleTableComponent;
+// サンプルデータを使用して表示
+const SampleTable: React.FC = () => <Table data={sampleData} headerRow={headerRow} />;
+
+export default SampleTable;
