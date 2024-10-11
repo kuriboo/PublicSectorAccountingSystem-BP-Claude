@@ -1,87 +1,100 @@
 import React from 'react';
+import styled from 'styled-components';
 
-type RowData = {
+// 予算区分の型定義
+type BudgetCategory = {
   id: number;
   name: string;
-  value1: number;
-  value2: number;
-  value3: number;
-  value4: number;
-  value5: number;
-  total: number;
+  lastYearResult?: number;
+  currentYearBudget?: number;
+  currentYearExpected?: number;
+  nextYearBudget?: number;
+  yearAfterNextBudget?: number;
+  finalYearBudget?: number;
 };
 
-type TableProps = {
-  data: RowData[];
-};
+// テーブルのセル用コンポーネント
+const TableCell = styled.td<{ align?: 'left' | 'right' }>`
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: ${({ align }) => align || 'right'};
+`;
 
-const Table: React.FC<TableProps> = ({ data }) => {
+// テーブルのヘッダー用コンポーネント
+const TableHeader = styled.th<{ align?: 'left' | 'right' }>`
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: ${({ align }) => align || 'left'};
+  background-color: #f2f2f2;
+  font-weight: bold;
+`;
+
+// 予算区分テーブルコンポーネント
+const BudgetTable: React.FC<{ data: BudgetCategory[] }> = ({ data }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="table-auto w-full text-sm text-left text-gray-500">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-          <tr>
-            <th className="px-6 py-3">予算区分</th>
-            <th className="px-6 py-3">項目</th>
-            <th className="px-6 py-3">課税対象0%適用分 税抜</th>
-            <th className="px-6 py-3">課税対象30%適用分 税抜</th>
-            <th className="px-6 py-3">課税対象40%適用分 税抜</th>
-            <th className="px-6 py-3">課税対象60%適用分 税抜</th>
-            <th className="px-6 py-3">課税対象90%適用分 税抜</th>
-            <th className="px-6 py-3">合計金額</th>
+    <table>
+      <thead>
+        <tr>
+          <TableHeader>予算区分</TableHeader>
+          <TableHeader>項目</TableHeader>
+          <TableHeader>前年度実績</TableHeader>
+          <TableHeader>当年度予算</TableHeader>
+          <TableHeader>当年度予想</TableHeader>
+          <TableHeader>翌年度予算</TableHeader>
+          <TableHeader>翌々年度予算</TableHeader>
+          <TableHeader>最終年度予算</TableHeader>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((category) => (
+          <tr key={category.id}>
+            <TableCell align="left">{category.name}</TableCell>
+            <TableCell>{category.lastYearResult || '-'}</TableCell>
+            <TableCell>{category.currentYearBudget || 0}</TableCell>
+            <TableCell>{category.currentYearExpected || 0}</TableCell>
+            <TableCell>{category.nextYearBudget || 0}</TableCell>
+            <TableCell>{category.yearAfterNextBudget || 0}</TableCell>
+            <TableCell>{category.finalYearBudget || 0}</TableCell>
           </tr>
-        </thead>
-        <tbody>
-          {data.map((row) => (
-            <tr key={row.id} className="bg-white border-b">
-              <td className="px-6 py-4">{row.name}</td>
-              <td className="px-6 py-4">{row.value1 === 0 ? '-' : row.value1.toLocaleString()}</td>
-              <td className="px-6 py-4">{row.value2 === 0 ? '-' : row.value2.toLocaleString()}</td>
-              <td className="px-6 py-4">{row.value3 === 0 ? '-' : row.value3.toLocaleString()}</td>
-              <td className="px-6 py-4">{row.value4 === 0 ? '-' : row.value4.toLocaleString()}</td>
-              <td className="px-6 py-4">{row.value5 === 0 ? '-' : row.value5.toLocaleString()}</td>
-              <td className="px-6 py-4">{row.total.toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   );
 };
 
 // サンプルデータ
-const sampleData: RowData[] = [
+const sampleData: BudgetCategory[] = [
   {
     id: 1,
-    name: '課税売上',
-    value1: 1000000,
-    value2: 30000,
-    value3: 0,
-    value4: 196114,
-    value5: 9786,
-    total: 6315863815,
+    name: '3条特別販売費',
+    lastYearResult: 196114,
+    currentYearBudget: 0,
+    currentYearExpected: 0,
+    nextYearBudget: 9786,
+    yearAfterNextBudget: 0,
+    finalYearBudget: 6315383815,
   },
   {
     id: 2,
-    name: '特定課税仕入返還',
-    value1: 0,
-    value2: 0,
-    value3: 0,
-    value4: 0,
-    value5: 24000,
-    total: 24000,
+    name: '4条特別販売費',
+    lastYearResult: 148231247,
+    currentYearBudget: 0,
+    currentYearExpected: 0,
+    nextYearBudget: 0,
+    yearAfterNextBudget: 0,
+    finalYearBudget: 148231247,
   },
-  // ...他のサンプルデータ
+  // ... その他のデータ
 ];
 
-// 使用例
-const TableExample: React.FC = () => {
+// 表示用コンポーネント
+const App: React.FC = () => {
   return (
     <div>
-      <h2>課税売上集計表</h2>
-      <Table data={sampleData} />
+      <h2>予算区分・項目別表</h2>
+      <BudgetTable data={sampleData} />
     </div>
   );
 };
 
-export default TableExample;
+export default App;
