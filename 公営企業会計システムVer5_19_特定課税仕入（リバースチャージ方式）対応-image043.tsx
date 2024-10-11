@@ -1,49 +1,69 @@
 import React from 'react';
+import styled from 'styled-components';
 
-// Define the types for the component props
-interface CardProps {
+// Define the interface for the component props
+interface HeaderProps {
   title: string;
-  subtitle?: string;
-  description: string;
-  price: number;
-  onButtonClick?: () => void;
+  description?: string;
 }
 
-// Card component
-const Card: React.FC<CardProps> = ({ title, subtitle, description, price, onButtonClick }) => {
+// Create a styled component for the header container
+const HeaderContainer = styled.header`
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+
+  @media (max-width: 600px) {
+    padding: 10px;
+  }
+`;
+
+// Create a styled component for the title
+const Title = styled.h1`
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+
+  @media (max-width: 600px) {
+    font-size: 20px;
+  }
+`;
+
+// Create a styled component for the description
+const Description = styled.p`
+  color: #666;
+  font-size: 16px;
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
+`;
+
+// Define the Header component
+const Header: React.FC<HeaderProps> = ({ title, description }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-2">{title}</h2>
-      {subtitle && <p className="text-gray-600 mb-4">{subtitle}</p>}
-      <p className="text-gray-700 mb-4">{description}</p>
-      <p className="text-lg font-bold mb-4">${price.toFixed(2)}</p>
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        onClick={onButtonClick}
-      >
-        Add to Cart
-      </button>
+    <HeaderContainer>
+      <Title>{title}</Title>
+      {description && <Description>{description}</Description>}
+    </HeaderContainer>
+  );
+};
+
+// Define a sample data object
+const sampleData: HeaderProps = {
+  title: 'Welcome to My Website',
+  description: 'This is a sample header component.',
+};
+
+// Create a sample usage of the Header component
+const App: React.FC = () => {
+  return (
+    <div>
+      <Header {...sampleData} />
+      {/* Other content */}
     </div>
   );
 };
 
-// Example usage of the Card component
-const ExampleCard: React.FC = () => {
-  const handleButtonClick = () => {
-    console.log('Button clicked!');
-  };
-
-  return (
-    <div className="max-w-sm mx-auto">
-      <Card
-        title="Sample Product"
-        subtitle="Limited Edition"
-        description="This is a sample product description."
-        price={19.99}
-        onButtonClick={handleButtonClick}
-      />
-    </div>
-  );
-};
-
-export default ExampleCard;
+export default App;
