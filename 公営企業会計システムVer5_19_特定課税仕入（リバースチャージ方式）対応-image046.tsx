@@ -1,85 +1,79 @@
-// DateDisplay.tsx
 import React from 'react';
+import styled from '@emotion/styled';
 
-type DateDisplayProps = {
-  /** 次年度 */
-  nextYear: string;
-  /** 月 */
-  month: string;
-  /** 日 */
-  day: string;
-  /** 節 */
-  season: string;
-  /** 細節 */
-  subSeason: string;
-  /** 明細 */
-  detail: string;
+type DateItem = {
+  value: string;
+  unit: string;
 };
 
-const DateDisplay: React.FC<DateDisplayProps> = ({
-  nextYear,
-  month,
-  day,
-  season,
-  subSeason,
-  detail,
-}) => {
+type DateDisplayProps = {
+  items: DateItem[];
+};
+
+const DateDisplayWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+`;
+
+const DateItemWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px;
+
+  @media (max-width: 600px) {
+    margin: 0 5px;
+  }
+`;
+
+const DateValue = styled.div`
+  font-size: 48px;
+  font-weight: bold;
+
+  @media (max-width: 600px) {
+    font-size: 32px;
+  }
+`;
+
+const DateUnit = styled.div`
+  font-size: 16px;
+  color: #666;
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+`;
+
+const DateDisplay: React.FC<DateDisplayProps> = ({ items }) => {
   return (
-    <div className="flex space-x-4">
-      {/* 次年度 */}
-      <div className="text-center">
-        <div className="text-sm font-bold">次年度</div>
-        <div className="text-lg">{nextYear || '---'}</div>
-      </div>
-
-      {/* 月 */}
-      <div className="text-center">
-        <div className="text-sm font-bold">月</div>
-        <div className="text-lg">{month || '---'}</div>
-      </div>
-
-      {/* 日 */}
-      <div className="text-center">
-        <div className="text-sm font-bold">日</div>
-        <div className="text-lg">{day || '---'}</div>
-      </div>
-
-      {/* 節 */}
-      <div className="text-center">
-        <div className="text-sm font-bold">節</div>
-        <div className="text-lg">{season || '---'}</div>
-      </div>
-
-      {/* 細節 */}
-      <div className="text-center">
-        <div className="text-sm font-bold">細節</div>
-        <div className="text-lg">{subSeason || '---'}</div>
-      </div>
-
-      {/* 明細 */}
-      <div className="text-center">
-        <div className="text-sm font-bold">明細</div>
-        <div className="text-lg">{detail || '---'}</div>
-      </div>
-    </div>
+    <DateDisplayWrapper>
+      {items.map((item, index) => (
+        <DateItemWrapper key={index}>
+          <DateValue>{item.value || '00'}</DateValue>
+          <DateUnit>{item.unit}</DateUnit>
+        </DateItemWrapper>
+      ))}
+    </DateDisplayWrapper>
   );
 };
 
 // サンプルデータを用いた使用例
 const SampleUsage: React.FC = () => {
-  const sampleData: DateDisplayProps = {
-    nextYear: '002',
-    month: '01',
-    day: '01',
-    season: '13',
-    subSeason: '0001',
-    detail: '0001',
-  };
+  const sampleData: DateItem[] = [
+    { value: '002', unit: '次年度' },
+    { value: '01', unit: '歓' },
+    { value: '01', unit: '日' },
+    { value: '13', unit: '時' },
+    { value: '001', unit: '細流' },
+    { value: '0001', unit: '夕日' },
+  ];
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">日付表示サンプル</h2>
-      <DateDisplay {...sampleData} />
+      <h2>Date Display Sample</h2>
+      <DateDisplay items={sampleData} />
     </div>
   );
 };
