@@ -1,108 +1,182 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
-// Define the interface for the component's props
-interface TaxCalculatorProps {
-  from: string;
-  to: string;
-  taxRate: number;
-  exemptionAmount: number;
-  onCalculate: (result: number) => void;
-}
+type TaxWithholdingInputProps = {
+  onSubmit: (data: {
+    date: string;
+    branch: string;
+    section: string;
+    deduction: string;
+  }) => void;
+};
 
-// Define the interface for the component's state
-interface TaxCalculatorState {
-  income: number;
-  deduction: number;
-}
+const TaxWithholdingInput: React.FC<TaxWithholdingInputProps> = ({ onSubmit }) => {
+  const [date, setDate] = React.useState('');
+  const [branch, setBranch] = React.useState('');
+  const [section, setSection] = React.useState('');
+  const [deduction, setDeduction] = React.useState('');
 
-// Define the main component
-const TaxCalculator: React.FC<TaxCalculatorProps> = ({ 
-  from,
-  to,
-  taxRate,
-  exemptionAmount,
-  onCalculate
-}) => {
-  // Initialize the component's state
-  const [state, setState] = React.useState<TaxCalculatorState>({
-    income: 0,
-    deduction: 0
-  });
-
-  // Event handler for when the income or deduction changes
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setState(prevState => ({
-      ...prevState,
-      [name]: parseFloat(value)
-    }));
-  };
-
-  // Event handler for when the form is submitted
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const { income, deduction } = state;
-    const taxableIncome = Math.max(income - deduction - exemptionAmount, 0);
-    const taxAmount = taxableIncome * (taxRate / 100);
-    onCalculate(taxAmount);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit({ date, branch, section, deduction });
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-lg font-bold mb-4">Tax Calculator</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="from" className="block font-bold mb-1">From:</label>
-          <input type="date" id="from" name="from" value={from} readOnly className="w-full px-3 py-2 border rounded" />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="to" className="block font-bold mb-1">To:</label>
-          <input type="date" id="to" name="to" value={to} readOnly className="w-full px-3 py-2 border rounded" />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="income" className="block font-bold mb-1">Income:</label>
-          <input 
-            type="number"
-            id="income"
-            name="income"
-            value={state.income}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
+    <Form onSubmit={handleSubmit}>
+      <FormHeader>
+        <Title>特定課税仕入伝票管理入力</Title>
+        <SubmitButton type="submit">検索</SubmitButton>
+      </FormHeader>
+      
+      <FormBody>
+        <FormGroup>
+          <Label>検索</Label>
+          <DateInput
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             required
           />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="deduction" className="block font-bold mb-1">Deduction:</label>
-          <input
-            type="number"
-            id="deduction" 
-            name="deduction"
-            value={state.deduction}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
+        </FormGroup>
+
+        <FormGroup>
+          <Label>借方科目</Label>
+          <Input
+            type="text"
+            value={deduction}
+            onChange={(e) => setDeduction(e.target.value)}
+            required  
           />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Calculate</button>
-      </form>
-    </div>
+        </FormGroup>
+
+        <FormGroup>
+          <Label>種別</Label>
+          <RadioGroup>
+            <RadioInput
+              type="radio"
+              id="tax"
+              name="type"
+              value="tax"
+              defaultChecked
+            />
+            <RadioLabel htmlFor="tax">課税</RadioLabel>
+
+            <RadioInput type="radio" id="taxExempt" name="type" value="taxExempt" />
+            <RadioLabel htmlFor="taxExempt">非課</RadioLabel>
+            
+            <RadioInput type="radio" id="other" name="type" value="other" />  
+            <RadioLabel htmlFor="other">その他</RadioLabel>
+          </RadioGroup>
+        </FormGroup>
+        
+        <FormGroup>
+          <Label>借方部門</Label>
+          <Input
+            type="text"
+            value={branch}
+            onChange={(e) => setBranch(e.target.value)}
+            required
+          />
+        </FormGroup>
+
+        <FormGroup>  
+          <Label>貸方科目</Label>
+          <Input
+            type="text"
+            value={section}
+            onChange={(e) => setSection(e.target.value)}
+            required
+          />
+        </FormGroup>
+
+      </FormBody>
+    </Form>
   );
 };
 
-// Example usage of the component
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+`;
+
+const FormHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+`;
+
+const Title = styled.h2`
+  margin: 0;
+`;
+
+const SubmitButton = styled.button`
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+`;
+
+const FormBody = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  margin-bottom: 0.5rem;
+`;
+
+const DateInput = styled.input`
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const Input = styled.input`
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const RadioGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const RadioInput = styled.input`
+  margin-right: 0.5rem;
+`;
+
+const RadioLabel = styled.label`
+  display: flex;
+  align-items: center;
+`;
+
+// Usage example
 const App: React.FC = () => {
-  const handleCalculate = (taxAmount: number) => {
-    alert(`The calculated tax amount is: ${taxAmount}`);
+  const handleSubmit = (data: {
+    date: string;
+    branch: string;
+    section: string;
+    deduction: string;
+  }) => {
+    console.log(data);
   };
 
   return (
-    <div className="max-w-sm mx-auto mt-8">
-      <TaxCalculator
-        from="2016-03-27"
-        to="2016-03-27"
-        taxRate={10}
-        exemptionAmount={1000000}
-        onCalculate={handleCalculate}
-      />
+    <div>
+      <TaxWithholdingInput onSubmit={handleSubmit} />
     </div>
   );
 };
