@@ -1,137 +1,208 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
-// 振替入力フォームのプロパティ型定義
-type TransferFormProps = {
+// 振替入力コンポーネントの型定義
+type TransferInputProps = {
   date: string;
-  transferDate: string;
-  note: string;
-  debitAccount: string;
-  debitSubAccount: string;
-  creditAccount: string;
-  creditSubAccount: string;
-  tax: number;
-  taxAmount: number;
-  amount: number;
-  onSubmit: (data: TransferFormData) => void;
+  accountCode: string;
+  summary: string;
+  amountBefore: number;
+  amountAfter: number;
+  taxRate: number;
+  taxAmountBefore: number;
+  taxAmountAfter: number;
+  onInputChange: (field: string, value: string | number) => void;
 };
 
-// 振替入力フォームの入力データ型定義
-type TransferFormData = {
-  date: string;
-  transferDate: string;
-  note: string;
-  debitAccount: string;
-  debitSubAccount: string;
-  creditAccount: string;
-  creditSubAccount: string;
-  tax: number;
-  taxAmount: number;
-  amount: number;
-};
-
-// 振替入力フォームコンポーネント
-const TransferForm: React.FC<TransferFormProps> = ({
+// 振替入力コンポーネント
+const TransferInput: React.FC<TransferInputProps> = ({
   date,
-  transferDate,
-  note,
-  debitAccount,
-  debitSubAccount,
-  creditAccount,
-  creditSubAccount,
-  tax,
-  taxAmount,
-  amount,
-  onSubmit,
+  accountCode,
+  summary,
+  amountBefore,
+  amountAfter,
+  taxRate,
+  taxAmountBefore, 
+  taxAmountAfter,
+  onInputChange,
 }) => {
-  // フォーム送信ハンドラ
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data: TransferFormData = {
-      date,
-      transferDate,
-      note,
-      debitAccount,
-      debitSubAccount,
-      creditAccount,
-      creditSubAccount,
-      tax,
-      taxAmount,
-      amount,
-    };
-    onSubmit(data);
+  // 入力変更時のハンドラ
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    onInputChange(name, value);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow">
-      <div className="mb-4">
-        <label htmlFor="date" className="block mb-1 font-bold">日付</label>
-        <input type="date" id="date" value={date} className="w-full px-2 py-1 border rounded" readOnly />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="transferDate" className="block mb-1 font-bold">振替日付</label>
-        <input type="date" id="transferDate" value={transferDate} className="w-full px-2 py-1 border rounded" required />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="note" className="block mb-1 font-bold">摘要</label>
-        <input type="text" id="note" value={note} className="w-full px-2 py-1 border rounded" />
-      </div>
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <label htmlFor="debitAccount" className="block mb-1 font-bold">借方科目</label>
-          <input type="text" id="debitAccount" value={debitAccount} className="w-full px-2 py-1 border rounded" required />
-        </div>
-        <div>
-          <label htmlFor="debitSubAccount" className="block mb-1 font-bold">借方補助科目</label>
-          <input type="text" id="debitSubAccount" value={debitSubAccount} className="w-full px-2 py-1 border rounded" required />
-        </div>
-        <div>
-          <label htmlFor="creditAccount" className="block mb-1 font-bold">貸方科目</label>
-          <input type="text" id="creditAccount" value={creditAccount} className="w-full px-2 py-1 border rounded" required />
-        </div>
-        <div>
-          <label htmlFor="creditSubAccount" className="block mb-1 font-bold">貸方補助科目</label>
-          <input type="text" id="creditSubAccount" value={creditSubAccount} className="w-full px-2 py-1 border rounded" required />
-        </div>
-      </div>
-      <div className="mb-4">
-        <label htmlFor="tax" className="block mb-1 font-bold">消費税率</label>
-        <input type="number" id="tax" value={tax} min="0" className="w-full px-2 py-1 border rounded" required />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="taxAmount" className="block mb-1 font-bold">税抜金額</label>
-        <input type="number" id="taxAmount" value={taxAmount} min="0" className="w-full px-2 py-1 border rounded" required />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="amount" className="block mb-1 font-bold">振替金額</label>
-        <input type="number" id="amount" value={amount} min="0" className="w-full px-2 py-1 border rounded" required />
-      </div>
-      <button type="submit" className="px-4 py-2 text-white bg-blue-500 rounded">OK</button>
-    </form>
+    <Container>
+      <Title>振替入力</Title>
+      <DateInput
+        type="date"
+        name="date"
+        value={date}
+        onChange={handleInputChange}
+      />
+      <Row>
+        <Label>借方科目</Label>
+        <Input
+          type="text"
+          name="accountCodeBefore"
+          value={accountCode}
+          onChange={handleInputChange}
+        />
+        <Label>貸方科目</Label>
+        <Input
+          type="text"
+          name="accountCodeAfter"
+          value={accountCode}
+          onChange={handleInputChange}
+        />
+      </Row>
+      <Label>摘要</Label>
+      <Input
+        type="text"
+        name="summary"
+        value={summary}
+        onChange={handleInputChange}
+      />
+      <Row>
+        <Column>
+          <Label>税区分</Label>
+          <Select name="taxType" onChange={handleInputChange}>
+            <option value="taxable">課税</option>
+            <option value="taxExempt">非課税</option>
+          </Select>
+        </Column>
+        <Column>
+          <Label>税率</Label>
+          <Input
+            type="number"
+            name="taxRate"
+            value={taxRate}
+            onChange={handleInputChange}
+          />
+          <span>%</span>
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          <Label>税込金額</Label>
+          <Input
+            type="number"
+            name="amountIncludingTaxBefore"
+            value={amountBefore}
+            onChange={handleInputChange}
+          />
+        </Column>
+        <Column>
+          <Label>税抜金額</Label>
+          <Input
+            type="number"
+            name="amountExcludingTaxBefore"
+            value={amountBefore / (1 + taxRate / 100)}
+            onChange={handleInputChange}
+          />
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          <Label>税込金額</Label>
+          <Input
+            type="number"
+            name="amountIncludingTaxAfter"
+            value={amountAfter}
+            onChange={handleInputChange}
+          />
+        </Column>
+        <Column>
+          <Label>税抜金額</Label>
+          <Input
+            type="number"
+            name="amountExcludingTaxAfter"
+            value={amountAfter / (1 + taxRate / 100)}
+            onChange={handleInputChange}
+          />
+        </Column>
+      </Row>
+    </Container>
   );
 };
 
-// 使用例
-const TransferFormExample: React.FC = () => {
-  const handleSubmit = (data: TransferFormData) => {
-    console.log(data);
-    // ここで送信されたデータを処理する
+// 振替入力コンポーネントのサンプルデータ
+const sampleData = {
+  date: '2023-03-27',
+  accountCode: '500',
+  summary: '通信費',
+  amountBefore: 80000,
+  amountAfter: 80000, 
+  taxRate: 0,
+  taxAmountBefore: 0,
+  taxAmountAfter: 0,
+};
+
+// 振替入力コンポーネントの使用例
+const TransferInputSample = () => {
+  const [formData, setFormData] = React.useState(sampleData);
+
+  const handleInputChange = (field: string, value: string | number) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
   };
 
-  return (
-    <TransferForm
-      date="2023-03-27"
-      transferDate="2023-03-28"
-      note="備考サンプル"
-      debitAccount="現金"
-      debitSubAccount="現金1"
-      creditAccount="売掛金"
-      creditSubAccount="売掛金A"
-      tax={10}
-      taxAmount={8000}
-      amount={8800}
-      onSubmit={handleSubmit}
-    />
-  );
+  return <TransferInput {...formData} onInputChange={handleInputChange} />;
 };
 
-export default TransferForm;
+// スタイリング
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background-color: #f0f0f0;
+`;
+
+const Title = styled.h2`
+  font-size: 20px;
+  margin: 0;
+`;
+
+const Row = styled.div`
+  display: flex;
+  gap: 16px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+const Column = styled.div`
+  flex: 1;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 4px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const DateInput = styled(Input)`
+  width: auto;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+export default TransferInputSample;
