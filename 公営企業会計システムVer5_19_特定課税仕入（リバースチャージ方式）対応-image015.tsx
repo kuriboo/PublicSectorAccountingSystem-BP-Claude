@@ -1,99 +1,172 @@
-// SearchConditionComponent.tsx
 import React from 'react';
+import styled from '@emotion/styled';
 
-type Props = {
-  fiscalYear: number;
-  onFiscalYearChange: (fiscalYear: number) => void;
-  onSubmit: () => void;
+type DeductionConditionProps = {
+  deductionCode: string;
+  deductionYear: number;
+  startDate: string;
+  endDate: string;
+  deductionType: 'percentage' | 'fixedAmount';
+  calculationMethod: 'everyMonth' | 'lastMonth';
+  amount: number;
+  memo: string;
 };
 
-const SearchConditionComponent: React.FC<Props> = ({ fiscalYear, onFiscalYearChange, onSubmit }) => {
-  return (
-    <div className="p-4 bg-white">
-      <div className="mb-4">
-        <label htmlFor="fiscalYear" className="block text-gray-700 font-bold mb-2">年度</label>
-        <input
-          type="number"
-          id="fiscalYear"
-          value={fiscalYear}
-          onChange={(e) => onFiscalYearChange(Number(e.target.value))}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2">振替範囲</label>
-        <div className="flex items-center mb-2">
-          <input type="radio" id="transferAll" name="transferRange" className="mr-2" />
-          <label htmlFor="transferAll">予算科目</label>
-        </div>
-        <div className="flex items-center">
-          <input type="radio" id="transferSpecific" name="transferRange" className="mr-2" />
-          <label htmlFor="transferSpecific">仕訳科目</label>
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2">振替日付</label>
-        <div className="flex items-center mb-2">
-          <input type="date" className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2" />
-          <span>〜</span>
-          <input type="date" className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ml-2" />
-        </div>
-        <div className="flex items-center">
-          <input type="radio" id="sundayTransfer" name="transferTiming" className="mr-2" />
-          <label htmlFor="sundayTransfer">日曜振替</label>
-          <input type="radio" id="monthEndTransfer" name="transferTiming" className="mr-2 ml-4" />
-          <label htmlFor="monthEndTransfer">月末振替</label>
-        </div>
-      </div>
-      <div className="mb-4">
-        <label htmlFor="transferAmount" className="block text-gray-700 font-bold mb-2">振替金額</label>
-        <div className="flex items-center">
-          <input
-            type="number"
-            id="transferAmount"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-          <span className="ml-2">〜</span>
-          <input
-            type="number"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ml-2"
-          />
-        </div>
-      </div>
-      <div>
-        <label htmlFor="remarks" className="block text-gray-700 font-bold mb-2">摘要</label>
-        <input
-          type="text"
-          id="remarks"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-      </div>
-      <button
-        type="button"
-        onClick={onSubmit}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-      >
-        表示
-      </button>
-    </div>
-  );
+type DeductionHistoryProps = {
+  date: string;
+  deductionAmount: number;
+  memo: string;
+}[];
+
+type DeductionFormProps = {
+  deductionCondition: DeductionConditionProps;
+  deductionHistory: DeductionHistoryProps;
 };
 
-// Usage example
-const SearchConditionExample: React.FC = () => {
-  const [fiscalYear, setFiscalYear] = React.useState(2023);
+const Container = styled.div`
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 
-  const handleSubmit = () => {
-    // Handle form submission
+  @media (max-width: 600px) {
+    padding: 10px;
+  }
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+`;
+
+const DeductionForm: React.FC<DeductionFormProps> = ({ deductionCondition, deductionHistory }) => {
+  // 控除条件のデフォルト値
+  const defaultDeductionCondition: DeductionConditionProps = {
+    deductionCode: '',
+    deductionYear: new Date().getFullYear(),
+    startDate: '',
+    endDate: '',
+    deductionType: 'percentage',
+    calculationMethod: 'everyMonth',
+    amount: 0,
+    memo: '',
   };
 
+  // 控除条件が未指定の場合はデフォルト値を使用
+  const condition = deductionCondition || defaultDeductionCondition;
+
   return (
-    <SearchConditionComponent
-      fiscalYear={fiscalYear}
-      onFiscalYearChange={setFiscalYear}
-      onSubmit={handleSubmit}
-    />
+    <Container>
+      <h2>控除条件設定</h2>
+      <FormGroup>
+        <Label>控除条件コード</Label>
+        <Input type="text" value={condition.deductionCode} readOnly />
+      </FormGroup>
+      <FormGroup>
+        <Label>年度</Label>
+        <Input type="number" value={condition.deductionYear} readOnly />
+      </FormGroup>
+      <FormGroup>
+        <Label>振替期間</Label>
+        <Input type="text" value={`${condition.startDate} 〜 ${condition.endDate}`} readOnly />
+      </FormGroup>
+      <FormGroup>
+        <Label>控除種別</Label>
+        <Select value={condition.deductionType} disabled>
+          <option value="percentage">予算科目</option>
+          <option value="fixedAmount">仕訳科目</option>
+        </Select>
+      </FormGroup>
+      <FormGroup>
+        <Label>摘要</Label>
+        <Input type="text" value={condition.memo} readOnly />
+      </FormGroup>
+      <FormGroup>
+        <Label>控除金額</Label>
+        <Input type="text" value={condition.amount.toLocaleString()} readOnly />
+      </FormGroup>
+
+      <h2>振替履歴</h2>
+      <Table>
+        <thead>
+          <tr>
+            <th>振替日</th>
+            <th>振替金額</th>
+            <th>摘要</th>
+          </tr>
+        </thead>
+        <tbody>
+          {deductionHistory.map((history, index) => (
+            <tr key={index}>
+              <td>{history.date}</td>
+              <td>{history.deductionAmount.toLocaleString()}</td>
+              <td>{history.memo}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </Container>
   );
 };
 
-export default SearchConditionComponent;
+// サンプルデータ
+const sampleDeductionCondition: DeductionConditionProps = {
+  deductionCode: 'D001',
+  deductionYear: 2023,
+  startDate: '2023-01-01',
+  endDate: '2023-12-31',
+  deductionType: 'percentage',
+  calculationMethod: 'everyMonth',
+  amount: 10000,
+  memo: '家賃補助',
+};
+
+const sampleDeductionHistory: DeductionHistoryProps = [
+  { date: '2023-01-25', deductionAmount: 10000, memo: '1月分家賃補助' },
+  { date: '2023-02-25', deductionAmount: 10000, memo: '2月分家賃補助' },
+  { date: '2023-03-25', deductionAmount: 10000, memo: '3月分家賃補助' },
+];
+
+// コンポーネントの使用例
+const SampleUsage: React.FC = () => {
+  return <DeductionForm deductionCondition={sampleDeductionCondition} deductionHistory={sampleDeductionHistory} />;
+};
+
+export default DeductionForm;
