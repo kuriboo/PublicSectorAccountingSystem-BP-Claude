@@ -1,108 +1,128 @@
 import React from 'react';
+import styled from 'styled-components';
 
-interface TaxReportFormProps {
-  onSubmit: (data: { fiscalYear: string; taxPaid: number; taxUnpaid: number; totalTax: number; }) => void;
+interface ConsumptionTaxProps {
+  date?: string;
+  taxRate?: number;
+  taxAmount?: number;
+  taxIncludedAmount?: number;
+  consumptionTaxAmount?: number;
 }
 
-const TaxReportForm: React.FC<TaxReportFormProps> = ({ onSubmit }) => {
-  const [fiscalYear, setFiscalYear] = React.useState('');
-  const [taxPaid, setTaxPaid] = React.useState(0);
-  const [taxUnpaid, setTaxUnpaid] = React.useState(0);
-  const [totalTax, setTotalTax] = React.useState(0);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({ fiscalYear, taxPaid, taxUnpaid, totalTax });
-  };
-
+const ConsumptionTax: React.FC<ConsumptionTaxProps> = ({
+  date = '',
+  taxRate = 0,
+  taxAmount = 0,
+  taxIncludedAmount = 0,
+  consumptionTaxAmount = 0,
+}) => {
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fiscalYear">
-          会計年度
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="fiscalYear"
-          type="text"
-          placeholder="年_月_日"
-          value={fiscalYear}
-          onChange={(e) => setFiscalYear(e.target.value)}
-        />
-      </div>
-      <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taxPaid">
-          納税金額
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          id="taxPaid"
-          type="number"
-          value={taxPaid}
-          onChange={(e) => setTaxPaid(Number(e.target.value))}
-        />
-      </div>
-      <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taxUnpaid">
-          税務未納
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          id="taxUnpaid"
-          type="number"
-          value={taxUnpaid}
-          onChange={(e) => setTaxUnpaid(Number(e.target.value))}
-        />
-      </div>
-      <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="totalTax">
-          消費税額
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          id="totalTax"
-          type="number"
-          value={totalTax}
-          onChange={(e) => setTotalTax(Number(e.target.value))}
-        />
-      </div>
-      <div className="flex items-center justify-between">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="submit"
-        >
-          OK
-        </button>
-        <button
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="button"
-        >
-          クリア
-        </button>
-        <button
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="button"
-        >
-          キャンセル
-        </button>
-      </div>
-    </form>
+    <Container>
+      <Title>消費税計算伝票根拠</Title>
+      <DateWrapper>
+        <DateLabel>伝票日付</DateLabel>
+        <DateValue>{date}</DateValue>
+      </DateWrapper>
+      <AmountGrid>
+        <AmountItem>
+          <AmountLabel>税込金額</AmountLabel>
+          <AmountValue>{taxIncludedAmount}</AmountValue>
+        </AmountItem>
+        <AmountItem>
+          <AmountLabel>税抜金額</AmountLabel>
+          <AmountValue>{taxAmount}</AmountValue>
+        </AmountItem>
+        <AmountItem>
+          <AmountLabel>消費税額</AmountLabel>
+          <AmountValue>{consumptionTaxAmount}</AmountValue>
+        </AmountItem>
+      </AmountGrid>
+      <ButtonWrapper>
+        <Button>OK</Button>
+        <Button>クリア</Button>
+        <Button>キャンセル</Button>
+      </ButtonWrapper>
+    </Container>
   );
 };
 
-// Example usage
-const TaxReportPage: React.FC = () => {
-  const handleSubmit = (data: { fiscalYear: string; taxPaid: number; taxUnpaid: number; totalTax: number; }) => {
-    console.log(data);
-    // Handle form submission, e.g., send data to server
-  };
+// Styling
+const Container = styled.div`
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 300px;
+  margin: 0 auto;
+`;
 
+const Title = styled.h2`
+  margin: 0 0 20px;
+  text-align: center;
+`;
+
+const DateWrapper = styled.div`
+  margin-bottom: 20px;
+`;
+
+const DateLabel = styled.span`
+  font-weight: bold;
+`;
+
+const DateValue = styled.span`
+  margin-left: 10px;
+`;
+
+const AmountGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const AmountItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const AmountLabel = styled.span`
+  font-weight: bold;
+`;
+
+const AmountValue = styled.span`
+  margin-top: 5px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Button = styled.button`
+  padding: 5px 10px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+// Usage example
+const ConsumptionTaxExample: React.FC = () => {
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">消費税申告書</h1>
-      <TaxReportForm onSubmit={handleSubmit} />
-    </div>
+    <ConsumptionTax
+      date="年 月 日"
+      taxRate={10}
+      taxAmount={1000}
+      taxIncludedAmount={1100}
+      consumptionTaxAmount={100}
+    />
   );
 };
 
-export default TaxReportPage;
+export default ConsumptionTax;
