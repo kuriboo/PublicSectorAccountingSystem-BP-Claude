@@ -1,140 +1,216 @@
 import React from 'react';
+import styled from 'styled-components';
 
-// 住所検索コンポーネントの型定義
-interface AddressSearchProps {
-  defaultPrefecture?: string;
-  defaultCity?: string;
-  defaultTown?: string;
-  onAddressChange?: (prefecture: string, city: string, town: string) => void;
-}
+// 仕訳区分のプロパティ型定義
+type EntryTypeProps = {
+  deposit: boolean;
+  withdrawal: boolean;
+};
 
-// 住所検索コンポーネント
-const AddressSearch: React.FC<AddressSearchProps> = ({
-  defaultPrefecture = '',
-  defaultCity = '',
-  defaultTown = '',
-  onAddressChange,
-}) => {
-  const [prefecture, setPrefecture] = React.useState(defaultPrefecture);
-  const [city, setCity] = React.useState(defaultCity);
-  const [town, setTown] = React.useState(defaultTown);
-
-  // 住所変更時のハンドラ
-  const handleAddressChange = () => {
-    onAddressChange?.(prefecture, city, town);
-  };
-
+// 仕訳区分コンポーネント
+const EntryType: React.FC<EntryTypeProps> = ({ deposit, withdrawal }) => {
   return (
-    <div className="flex space-x-4">
-      <div>
-        <label htmlFor="prefecture">都道府県</label>
-        <input
-          id="prefecture"
-          type="text"
-          value={prefecture}
-          onChange={(e) => setPrefecture(e.target.value)}
-          onBlur={handleAddressChange}
-          className="border border-gray-300 rounded px-2 py-1"
-        />
-      </div>
-      <div>
-        <label htmlFor="city">市区町村</label>
-        <input
-          id="city"
-          type="text"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          onBlur={handleAddressChange}
-          className="border border-gray-300 rounded px-2 py-1"
-        />
-      </div>
-      <div>
-        <label htmlFor="town">町名番地</label>
-        <input
-          id="town"
-          type="text"
-          value={town}
-          onChange={(e) => setTown(e.target.value)}
-          onBlur={handleAddressChange}
-          className="border border-gray-300 rounded px-2 py-1"
-        />
-      </div>
-    </div>
+    <EntryTypeWrapper>
+      <Label>貸借区分</Label>
+      <RadioGroup>
+        <RadioItem>
+          <input type="radio" id="deposit" checked={deposit} readOnly />
+          <label htmlFor="deposit">借方</label>
+        </RadioItem>
+        <RadioItem>
+          <input type="radio" id="withdrawal" checked={withdrawal} readOnly />
+          <label htmlFor="withdrawal">貸方</label>
+        </RadioItem>
+      </RadioGroup>
+    </EntryTypeWrapper>
   );
 };
 
-// 仕入先目区分の型定義
-type SupplierCategory = '仕入先目区分' | '細節決裁区分' | '未払計上';
+// 仕訳区分のスタイリング
+const EntryTypeWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+`;
 
-// 仕入先目区分コンポーネントの型定義
-interface SupplierCategoryProps {
-  value?: SupplierCategory;
-  onChange?: (value: SupplierCategory) => void;
-}
+const Label = styled.label`
+  margin-right: 8px;
+`;
 
-// 仕入先目区分コンポーネント
-const SupplierCategorySelect: React.FC<SupplierCategoryProps> = ({ value, onChange }) => {
-  const options: SupplierCategory[] = ['仕入先目区分', '細節決裁区分', '未払計上'];
+const RadioGroup = styled.div`
+  display: flex;
+`;
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange?.(e.target.value as SupplierCategory);
-  };
+const RadioItem = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
 
+  input[type='radio'] {
+    margin-right: 4px;
+  }
+`;
+
+// 仕訳日付のプロパティ型定義
+type EntryDateProps = {
+  date: string;
+};
+
+// 仕訳日付コンポーネント
+const EntryDate: React.FC<EntryDateProps> = ({ date }) => {
   return (
-    <select value={value} onChange={handleChange} className="border border-gray-300 rounded px-2 py-1">
-      {options.map((option) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
+    <EntryDateWrapper>
+      <Label>仕訳日付分</Label>
+      <Input type="text" value={date} readOnly />
+    </EntryDateWrapper>
   );
 };
+
+// 仕訳日付のスタイリング
+const EntryDateWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+`;
+
+const Input = styled.input`
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+// 未払計上日のプロパティ型定義
+type AccrualDateProps = {
+  date: string;
+};
+
+// 未払計上日コンポーネント
+const AccrualDate: React.FC<AccrualDateProps> = ({ date }) => {
+  return (
+    <AccrualDateWrapper>
+      <Label>未払計上日</Label>
+      <Input type="text" value={date} readOnly />
+    </AccrualDateWrapper>
+  );
+};
+
+// 未払計上日のスタイリング
+const AccrualDateWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+`;
+
+// 勘定科目のプロパティ型定義
+type AccountTitleProps = {
+  options: string[];
+  selectedOption: string;
+};
+
+// 勘定科目コンポーネント
+const AccountTitle: React.FC<AccountTitleProps> = ({ options, selectedOption }) => {
+  return (
+    <AccountTitleWrapper>
+      <Label>勘定科目</Label>
+      <Select value={selectedOption}>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </Select>
+    </AccountTitleWrapper>
+  );
+};
+
+// 勘定科目のスタイリング
+const AccountTitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+`;
+
+const Select = styled.select`
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+// 税務区分のプロパティ型定義
+type TaxCategoryProps = {
+  taxRate: number;
+  deductibleAmount: number;
+};
+
+// 税務区分コンポーネント
+const TaxCategory: React.FC<TaxCategoryProps> = ({ taxRate, deductibleAmount }) => {
+  return (
+    <TaxCategoryWrapper>
+      <TaxRateWrapper>
+        <Label>税務区分</Label>
+        <Input type="number" value={taxRate} readOnly />
+      </TaxRateWrapper>
+      <DeductibleAmountWrapper>
+        <Label>BS科目課税額</Label>
+        <Input type="number" value={deductibleAmount} readOnly />
+      </DeductibleAmountWrapper>
+    </TaxCategoryWrapper>
+  );
+};
+
+// 税務区分のスタイリング
+const TaxCategoryWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TaxRateWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+`;
+
+const DeductibleAmountWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 // サンプルデータ
 const sampleData = {
-  defaultPrefecture: '東京都',
-  defaultCity: '新宿区',
-  defaultTown: '西新宿1-1-1',
-  supplierCategory: '仕入先目区分' as SupplierCategory,
+  entryType: {
+    deposit: true,
+    withdrawal: false,
+  },
+  entryDate: '2023-06-01',
+  accrualDate: '2023-06-30',
+  accountTitleOptions: ['売掛金', '買掛金', '現金'],
+  selectedAccountTitle: '売掛金',
+  taxCategory: {
+    taxRate: 10,
+    deductibleAmount: 0,
+  },
 };
 
-// 表示用コンポーネント
-const SampleComponent: React.FC = () => {
-  const [supplierCategory, setSupplierCategory] = React.useState(sampleData.supplierCategory);
-  const [bs4Date, setBs4Date] = React.useState('');
-
-  const handleAddressChange = (prefecture: string, city: string, town: string) => {
-    console.log('住所変更:', prefecture, city, town);
-  };
-
+// 使用例コンポーネント
+const UsageExample: React.FC = () => {
   return (
     <div>
-      <h2>住所検索</h2>
-      <AddressSearch
-        defaultPrefecture={sampleData.defaultPrefecture}
-        defaultCity={sampleData.defaultCity}
-        defaultTown={sampleData.defaultTown}
-        onAddressChange={handleAddressChange}
+      <EntryType
+        deposit={sampleData.entryType.deposit}
+        withdrawal={sampleData.entryType.withdrawal}
       />
-
-      <h2>仕入先目区分</h2>
-      <SupplierCategorySelect value={supplierCategory} onChange={setSupplierCategory} />
-
-      <h2>未払計上</h2>
-      <div>
-        <label htmlFor="bs4Date">補助科目設定</label>
-        <input
-          id="bs4Date"
-          type="text"
-          value={bs4Date}
-          onChange={(e) => setBs4Date(e.target.value)}
-          className="border border-gray-300 rounded px-2 py-1"
-        />
-      </div>
-      <div>BS科目締起算日: {bs4Date || 0}</div>
+      <EntryDate date={sampleData.entryDate} />
+      <AccrualDate date={sampleData.accrualDate} />
+      <AccountTitle
+        options={sampleData.accountTitleOptions}
+        selectedOption={sampleData.selectedAccountTitle}
+      />
+      <TaxCategory
+        taxRate={sampleData.taxCategory.taxRate}
+        deductibleAmount={sampleData.taxCategory.deductibleAmount}
+      />
     </div>
   );
 };
 
-export default SampleComponent;
+export default UsageExample;
