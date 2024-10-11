@@ -1,48 +1,88 @@
-import React from 'react';
+以下は、指定された条件に基づいて生成したNext.js + TypeScriptのコンポーネントです。
 
-// Define the types for the component props
-interface ProfileCardProps {
+import React from 'react';
+import styled from 'styled-components';
+
+// プロパティの型定義
+interface ShinjinProps {
   name: string;
-  title: string;
-  description: string;
-  avatarUrl: string;
+  role: string;
+  image: string;
 }
 
-// Profile card component
-const ProfileCard: React.FC<ProfileCardProps> = ({ name, title, description, avatarUrl }) => {
+// スタイル定義
+const ShinjinWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #ccc;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    text-align: center;
+  }
+`;
+
+const ShinjinImage = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 16px;
+
+  @media (max-width: 600px) {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+`;
+
+const ShinjinInfo = styled.div`
+  flex: 1;
+`;
+
+const ShinjinName = styled.h3`
+  margin: 0;
+  font-size: 18px;
+`;
+
+const ShinjinRole = styled.p`
+  margin: 0;
+  color: #666;
+`;
+
+// 新人紹介コンポーネント
+const Shinjin: React.FC<ShinjinProps> = ({ name, role, image }) => {
+  // 必須プロパティのチェック
+  if (!name || !role || !image) {
+    console.warn('Shinjin component is missing required props');
+    return null;
+  }
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
-      {/* Display the avatar image */}
-      <img src={avatarUrl} alt={`${name}'s avatar`} className="w-24 h-24 rounded-full mx-auto mb-4" />
-      
-      {/* Display the name */}
-      <h2 className="text-2xl font-bold text-center">{name}</h2>
-      
-      {/* Display the title if provided */}
-      {title && <p className="text-gray-600 text-center">{title}</p>}
-      
-      {/* Display the description if provided */}
-      {description && <p className="text-gray-500 mt-4">{description}</p>}
-    </div>
+    <ShinjinWrapper>
+      <ShinjinImage src={image} alt={name} />
+      <ShinjinInfo>
+        <ShinjinName>{name}</ShinjinName>
+        <ShinjinRole>{role}</ShinjinRole>
+      </ShinjinInfo>
+    </ShinjinWrapper>
   );
 };
 
-// Sample data for the profile card
-const sampleData: ProfileCardProps = {
-  name: '仕事科目',
-  title: '',
-  description: '',
-  avatarUrl: 'path/to/avatar.jpg',
-};
+// 使用例
+const ShinjinList: React.FC = () => {
+  const shinjinData = [
+    { name: '山田太郎', role: 'エンジニア', image: '/images/yamada.jpg' },
+    { name: '鈴木花子', role: 'デザイナー', image: '/images/suzuki.jpg' },
+  ];
 
-// Example usage of the profile card component
-const ProfileCardExample: React.FC = () => {
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-4">Profile Card Example</h1>
-      <ProfileCard {...sampleData} />
+      <h2>新人紹介</h2>
+      {shinjinData.map((shinjin, index) => (
+        <Shinjin key={index} {...shinjin} />
+      ))}
     </div>
   );
 };
 
-export default ProfileCardExample;
+export default ShinjinList;
