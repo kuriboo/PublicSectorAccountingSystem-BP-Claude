@@ -1,81 +1,120 @@
+以下は、画像の表データを元に作成したNext.js + TypeScriptのコンポーネントです。
+
 import React from 'react';
+import styled from 'styled-components';
 
-type ResultItem = {
-  id: number;
+type TaxItem = {
   name: string;
-  income: number;
-  expense: number;
-  profit: number;
+  type: string;
+  calculation: string;
   taxRate: number;
-  tax: number;
-  netIncome: number;
+  isSpecialTax: boolean;
+  amount: number;
 };
 
-type ResultTableProps = {
-  data: ResultItem[];
+type TaxTableProps = {
+  items: TaxItem[];
 };
 
-const ResultTable: React.FC<ResultTableProps> = ({ data }) => {
+const TaxTable: React.FC<TaxTableProps> = ({ items }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="table-auto w-full text-sm text-left text-gray-500">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+    <TableWrapper>
+      <Table>
+        <thead>
           <tr>
-            <th scope="col" className="px-6 py-3">ID</th>
-            <th scope="col" className="px-6 py-3">名前</th>
-            <th scope="col" className="px-6 py-3">収益</th>
-            <th scope="col" className="px-6 py-3">支出</th>
-            <th scope="col" className="px-6 py-3">利益</th>
-            <th scope="col" className="px-6 py-3">税率</th>
-            <th scope="col" className="px-6 py-3">税額</th>
-            <th scope="col" className="px-6 py-3">税引後利益</th>
+            <Th>支出</Th>
+            <Th>不課税支出</Th>
+            <Th>収益的支出</Th>
+            <Th>不課税</Th>
+            <Th>税率</Th>
+            <Th>金額</Th>
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
-            <tr key={item.id} className="bg-white border-b">
-              <td className="px-6 py-4">{item.id}</td>
-              <td className="px-6 py-4">{item.name}</td>
-              <td className="px-6 py-4">{item.income}</td>
-              <td className="px-6 py-4">{item.expense}</td>
-              <td className="px-6 py-4">{item.profit}</td>
-              <td className="px-6 py-4">{item.taxRate}</td>
-              <td className="px-6 py-4">{item.tax}</td>
-              <td className="px-6 py-4">{item.netIncome}</td>
+          {items.map((item, index) => (
+            <tr key={index}>
+              <Td>{item.name}</Td>
+              <Td>{item.type}</Td>
+              <Td>{item.calculation}</Td>
+              <Td>{item.isSpecialTax ? '不課税' : ''}</Td>
+              <Td>{item.taxRate}</Td>
+              <Td>{item.amount.toLocaleString()}</Td>
             </tr>
           ))}
         </tbody>
-      </table>
-    </div>
+      </Table>
+    </TableWrapper>
   );
 };
+
+// スタイリング
+const TableWrapper = styled.div`
+  overflow-x: auto;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  @media screen and (max-width: 600px) {
+    th, td {
+      display: block;
+      width: 100%;
+    }
+
+    th {
+      text-align: center;
+    }
+  }
+`;
+
+const Th = styled.th`
+  font-weight: bold;
+`;
+
+const Td = styled.td`
+  white-space: nowrap;
+`;
 
 // サンプルデータ
-const sampleData: ResultItem[] = [
+const sampleData: TaxItem[] = [
   {
-    id: 550,
     name: '支出',
-    income: 1137468,
-    expense: 21300,
-    profit: 1137468,
-    taxRate: 0.3,
-    tax: 341240,
-    netIncome: 1137468,
+    type: '不課税支出',
+    calculation: '収益的支出', 
+    taxRate: 3,
+    isSpecialTax: false,
+    amount: 1137468
   },
-  // ...他のサンプルデータ
+  {
+    name: '支出',
+    type: '不課税支出',
+    calculation: '収益的支出',
+    taxRate: 3,
+    isSpecialTax: false, 
+    amount: 21300
+  },
+  // ... 他のデータ
 ];
 
-const SampleResultTable: React.FC = () => {
+// 使用例
+const TaxTableExample: React.FC = () => {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">結果テーブル</h2>
-      {sampleData.length > 0 ? (
-        <ResultTable data={sampleData} />
-      ) : (
-        <p>データがありません。</p>
-      )}
+      <h2>税金表</h2>
+      <TaxTable items={sampleData} />
     </div>
   );
 };
 
-export default SampleResultTable;
+export default TaxTableExample;
