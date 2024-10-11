@@ -1,36 +1,80 @@
 import React from 'react';
-import { FaGlobe } from 'react-icons/fa';
+import styled from '@emotion/styled';
 
-type CompanyInfoProps = {
-  companyName: string;
-  dataSystemDepartment: string;
-};
+// データシステム事業部のプロパティ型定義
+interface DataSystemProps {
+  title?: string;
+  description?: string;
+}
 
-const CompanyInfo: React.FC<CompanyInfoProps> = ({
-  companyName,
-  dataSystemDepartment,
-}) => {
+// データシステム事業部のコンポーネント
+const DataSystem: React.FC<DataSystemProps> = ({ title = '株式会社ぎょうせい', description = 'データ・システム事業部' }) => {
   return (
-    <div className="flex items-center space-x-2">
-      <FaGlobe className="text-2xl" />
-      <div>
-        <div className="text-lg font-bold">{companyName || 'Company Name'}</div>
-        <div className="text-sm">{dataSystemDepartment || 'Data System Department'}</div>
-      </div>
-    </div>
+    <DataSystemWrapper>
+      <Logo />
+      <Title>{title}</Title>
+      <Description>{description}</Description>
+    </DataSystemWrapper>
   );
 };
 
-const SampleUsage: React.FC = () => {
+// データシステム事業部のスタイル定義
+const DataSystemWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
+  }
+`;
+
+const Logo = styled.div`
+  width: 50px;
+  height: 50px;
+  background-color: #333;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  
+  @media (min-width: 768px) {
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+`;
+
+const Description = styled.p`
+  font-size: 16px;
+  color: #666;
+  margin: 5px 0 0;
+  
+  @media (min-width: 768px) {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+`;
+
+// サンプルデータを使用した表示用のコンポーネント
+const App: React.FC = () => {
   return (
     <div>
-      <h2>With Sample Data:</h2>
-      <CompanyInfo companyName="ABC Corporation" dataSystemDepartment="Data System Division" />
-      
-      <h2>Without Data:</h2>
-      <CompanyInfo companyName="" dataSystemDepartment="" />
+      <DataSystem />
+      <DataSystem title="株式会社ABC" description="XYZ事業部" />
     </div>
   );
 };
 
-export default CompanyInfo;
+export default App;
