@@ -1,169 +1,176 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-type DentalTreatmentStatementProps = {
-  patientName: string;
-  patientBirthDate: string;
-  insuranceType: string;
-  treatments: {
-    date: string;
-    name: string;
-    points: number;
-    copayment: number;
-  }[];
-  totalPoints: number;
-  totalCopayment: number;
-  doctorName: string;
-  doctorLicenseNumber: string;
-};
+// 型定義
+type FormInputType = '10加入負担率' | '口径変数';
+type PriceListType = {
+  diameter: number;
+  length: string;
+  price: number;
+}[];
 
-const DentalTreatmentStatement: React.FC<DentalTreatmentStatementProps> = ({
-  patientName,
-  patientBirthDate,
-  insuranceType,
-  treatments,
-  totalPoints,
-  totalCopayment,
-  doctorName,
-  doctorLicenseNumber,
-}) => {
-  return (
-    <StatementContainer>
-      <StatementHeader>振替伝票（単票）</StatementHeader>
-      <PatientInfo>
-        <PatientName>{patientName || '-'}</PatientName>
-        <PatientBirthDate>{patientBirthDate || '-'}</PatientBirthDate>
-        <InsuranceType>{insuranceType || '-'}</InsuranceType>
-      </PatientInfo>
-      <TreatmentTable>
-        <thead>
-          <tr>
-            <StatementHeaderCell>診療年月日</StatementHeaderCell>
-            <StatementHeaderCell>傷病名称</StatementHeaderCell>
-            <StatementHeaderCell>点数</StatementHeaderCell>
-            <StatementHeaderCell>一部負担金</StatementHeaderCell>
-          </tr>
-        </thead>
-        <tbody>
-          {treatments.map((treatment, index) => (
-            <tr key={index}>
-              <StatementBodyCell>{treatment.date}</StatementBodyCell>
-              <StatementBodyCell>{treatment.name}</StatementBodyCell>
-              <StatementBodyCell>{treatment.points}</StatementBodyCell>
-              <StatementBodyCell>{treatment.copayment}</StatementBodyCell>
-            </tr>
-          ))}
-        </tbody>
-      </TreatmentTable>
-      <TotalRow>
-        <TotalLabel>金額</TotalLabel>
-        <TotalPoints>{totalPoints || '-'}</TotalPoints>
-        <TotalCopayment>{totalCopayment || '-'}</TotalCopayment>
-      </TotalRow>
-      <DoctorInfo>
-        <DoctorName>{doctorName || '-'}</DoctorName>
-        <DoctorLicenseNumber>{doctorLicenseNumber || '-'}</DoctorLicenseNumber>
-      </DoctorInfo>
-    </StatementContainer>
-  );
-};
-
-// Sample data for demonstration
-const sampleData: DentalTreatmentStatementProps = {
-  patientName: '田中太郎',
-  patientBirthDate: '平成元年8月27日生',
-  insuranceType: '社会保険 国民健康保険',
-  treatments: [
-    { date: '2/10', name: '処置', points: 200, copayment: 600 },
-    { date: '2/17', name: '補綴', points: 500, copayment: 1500 },
-  ],
-  totalPoints: 1000000,
-  totalCopayment: 1000000,
-  doctorName: '山田花子',
-  doctorLicenseNumber: '1234567890',
-};
-
-const SampleDentalTreatmentStatement: React.FC = () => {
-  return <DentalTreatmentStatement {...sampleData} />;
-};
-
-// Styled components
-const StatementContainer = styled.div`
+// スタイル定義
+const Container = styled.div`
   font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
-
-  @media (max-width: 600px) {
-    padding: 10px;
-  }
+  background-color: #f0f0f0;
+  border-radius: 5px;
 `;
 
-const StatementHeader = styled.h2`
-  text-align: center;
-  margin-bottom: 20px;
+const InputGroup = styled.div`
+  margin-bottom: 10px;
 `;
 
-const PatientInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-  }
+const Label = styled.label`
+  display: inline-block;
+  width: 100px;
 `;
 
-const PatientName = styled.div``;
+const Select = styled.select`
+  width: 200px;
+  padding: 5px;
+`;
 
-const PatientBirthDate = styled.div``;
+const Input = styled.input`
+  width: 100px;
+  padding: 5px;
+`;
 
-const InsuranceType = styled.div``;
-
-const TreatmentTable = styled.table`
+const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
-
-  th,
-  td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-  }
-
-  th {
-    background-color: #f2f2f2;
-  }
+  margin-bottom: 10px;
 `;
 
-const StatementHeaderCell = styled.th``;
-
-const StatementBodyCell = styled.td``;
-
-const TotalRow = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
+const TableHeader = styled.th`
+  border: 1px solid #ccc;
+  padding: 5px;
+  text-align: center;
 `;
 
-const TotalLabel = styled.div`
-  margin-right: 10px;
-`;
-
-const TotalPoints = styled.div`
-  margin-right: 10px;
-`;
-
-const TotalCopayment = styled.div``;
-
-const DoctorInfo = styled.div`
+const TableCell = styled.td`
+  border: 1px solid #ccc;
+  padding: 5px;
   text-align: right;
 `;
 
-const DoctorName = styled.div``;
+const Result = styled.div`
+  text-align: right;
+  margin-bottom: 10px;
+`;
 
-const DoctorLicenseNumber = styled.div``;
+const ButtonGroup = styled.div`
+  text-align: center;
+`;
 
-export default SampleDentalTreatmentStatement;
+const Button = styled.button`
+  margin: 0 5px;
+  padding: 5px 10px;
+`;
+
+// メインコンポーネント
+const PriceCalculator: React.FC = () => {
+  // 状態管理
+  const [formInputType, setFormInputType] = React.useState<FormInputType>('10加入負担率');
+  const [pipeChangeType, setPipeChangeType] = React.useState<string>('30給水管口径変更工事');
+  const [priceList, setPriceList] = React.useState<PriceListType>([
+    { diameter: 13, length: '13mm', price: 157500 },
+    { diameter: 20, length: '20mm', price: 210000 },
+    { diameter: 25, length: '25mm', price: 420000 },
+    { diameter: 30, length: '30mm', price: 525000 },
+    { diameter: 40, length: '40mm', price: 1050000 },
+    { diameter: 50, length: '50mm', price: 1575000 },
+  ]);
+  const [selectedDiameter, setSelectedDiameter] = React.useState<number>(50);
+  const [count, setCount] = React.useState<number>(1);
+  const [discountRate, setDiscountRate] = React.useState<number>(0);
+
+  // 選択された口径の単価を取得
+  const selectedPrice = priceList.find((item) => item.diameter === selectedDiameter)?.price ?? 0;
+
+  // 消費税計算
+  const taxRate = 0.1;
+  const taxAmount = Math.round(selectedPrice * count * (1 - discountRate / 100) * taxRate);
+
+  // 合計金額計算
+  const totalPrice = selectedPrice * count * (1 - discountRate / 100) + taxAmount;
+
+  return (
+    <Container>
+      <InputGroup>
+        <Label>納付方式</Label>
+        <Select value={formInputType} onChange={(e) => setFormInputType(e.target.value as FormInputType)}>
+          <option value="10加入負担率">10加入負担率</option>
+          <option value="口径変数">口径変数</option>
+        </Select>
+      </InputGroup>
+      <InputGroup>
+        <Label>口径選択</Label>
+        <Select value={pipeChangeType} onChange={(e) => setPipeChangeType(e.target.value)}>
+          <option value="30給水管口径変更工事">30給水管口径変更工事</option>
+        </Select>
+      </InputGroup>
+      <Table>
+        <thead>
+          <tr>
+            <TableHeader>形状コード</TableHeader>
+            <TableHeader>形状名称</TableHeader>
+            <TableHeader>単価</TableHeader>
+          </tr>
+        </thead>
+        <tbody>
+          {priceList.map((item) => (
+            <tr key={item.diameter}>
+              <TableCell>{item.diameter}</TableCell>
+              <TableCell>{item.length}</TableCell>
+              <TableCell>{item.price.toLocaleString()}</TableCell>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      <InputGroup>
+        <Label>形状</Label>
+        <Input
+          type="number"
+          value={selectedDiameter}
+          onChange={(e) => setSelectedDiameter(Number(e.target.value))}
+        />
+      </InputGroup>
+      <InputGroup>
+        <Label>数量</Label>
+        <Input type="number" value={count} onChange={(e) => setCount(Number(e.target.value))} />
+      </InputGroup>
+      <InputGroup>
+        <Label>金額</Label>
+        <Input type="number" value={selectedPrice * count} readOnly />
+      </InputGroup>
+      <InputGroup>
+        <Label>消費税率</Label>
+        <Input type="number" value={taxRate * 100} readOnly />
+      </InputGroup>
+      <InputGroup>
+        <Label>%</Label>
+        <Input
+          type="number"
+          value={discountRate}
+          onChange={(e) => setDiscountRate(Number(e.target.value))}
+        />
+      </InputGroup>
+      <Result>
+        <Label>消費税額</Label>
+        <span>{taxAmount.toLocaleString()}</span>
+      </Result>
+      <Result>
+        <Label>税込</Label>
+        <span>{totalPrice.toLocaleString()}</span>
+      </Result>
+      <ButtonGroup>
+        <Button>OK</Button>
+        <Button>クリア</Button>
+        <Button>キャンセル</Button>
+      </ButtonGroup>
+    </Container>
+  );
+};
+
+export default PriceCalculator;
