@@ -1,95 +1,104 @@
-// Profile.tsx
 import React from 'react';
 import styled from '@emotion/styled';
 
-interface ProfileProps {
+// コンポーネントのプロパティの型定義
+type ProfileCardProps = {
+  profileImage?: string;
   name: string;
-  role: string;
+  title: string;
   description: string;
-}
+};
 
-const ProfileContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`;
-
-const ProfileImage = styled.div`
-  width: 80px;
-  height: 80px;
+// プロフィール画像のスタイル
+const ProfileImage = styled.img`
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  background-color: #ddd;
-  margin-right: 16px;
-  
-  @media (max-width: 600px) {
-    margin-right: 0;
-    margin-bottom: 16px;
+  object-fit: cover;
+  margin-bottom: 16px;
+
+  @media (min-width: 768px) {
+    width: 150px;
+    height: 150px;
   }
 `;
 
-const ProfileInfo = styled.div`
-  flex: 1;
+// プロフィールカードのスタイル
+const ProfileCardWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  @media (min-width: 768px) {
+    padding: 32px;
+  }
 `;
 
+// 名前のスタイル
 const Name = styled.h2`
   font-size: 24px;
+  font-weight: bold;
   margin-bottom: 8px;
+
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
 `;
 
-const Role = styled.p`
+// 役職のスタイル
+const Title = styled.p`
   font-size: 16px;
   color: #666;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
+
+  @media (min-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
+// 説明文のスタイル
 const Description = styled.p`
   font-size: 14px;
+  line-height: 1.5;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
-const Profile: React.FC<ProfileProps> = ({ name, role, description }) => {
+// プロフィールカードコンポーネント
+const ProfileCard: React.FC<ProfileCardProps> = ({ profileImage, name, title, description }) => {
   return (
-    <ProfileContainer>
-      <ProfileImage />
-      <ProfileInfo>
-        {/* Display name if provided, otherwise show a default message */}
-        <Name>{name || 'Name not provided'}</Name>
-        
-        {/* Display role if provided */}
-        {role && <Role>{role}</Role>}
-        
-        {/* Display description if provided */}
-        {description && <Description>{description}</Description>}
-      </ProfileInfo>
-    </ProfileContainer>
+    <ProfileCardWrapper>
+      {profileImage && <ProfileImage src={profileImage} alt={name} />}
+      <Name>{name}</Name>
+      <Title>{title}</Title>
+      <Description>{description}</Description>
+    </ProfileCardWrapper>
   );
 };
 
-// Example usage
-const ProfileExample: React.FC = () => {
+// サンプルデータ
+const sampleData: ProfileCardProps = {
+  profileImage: 'https://example.com/profile.jpg',
+  name: 'John Doe',
+  title: 'Software Engineer',
+  description: 'Experienced software engineer with a passion for building scalable and maintainable applications.',
+};
+
+// 使用例コンポーネント
+const ProfileCardExample: React.FC = () => {
   return (
     <div>
-      <h1>Profile Examples</h1>
-      <Profile
-        name="John Doe"
-        role="Software Engineer"
-        description="Experienced software engineer with expertise in web development."
-      />
-      <Profile
-        name="Jane Smith"
-        role="UI Designer"
-        description="Creative UI designer with a passion for user experience."
-      />
-      <Profile name="Alice" role="Data Analyst" description="" />
-      <Profile name="" role="Manager" description="Experienced manager leading high-performing teams." />
+      <h1>Profile Card Example</h1>
+      <ProfileCard {...sampleData} />
     </div>
   );
 };
 
-export default ProfileExample;
+export default ProfileCardExample;
