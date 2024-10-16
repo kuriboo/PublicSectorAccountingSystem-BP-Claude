@@ -1,168 +1,125 @@
-以下は、指定された要件に基づいて生成したNext.js + TypeScriptのコンポーネントです。
-
-// 予測管理マスタコンポーネント
 import React from 'react';
 import styled from '@emotion/styled';
 
-// 予測管理マスタの型定義
-type ForecastManagementMasterProps = {
-  testingFrequency: 'hourly' | 'everyday' | 'other';
-  testingDate: string;
-  stopTimeRatio: number;
-  startTimeAdjustment: number;
-  defectPrediction: 'disable' | 'enable';
-  monthlyDefectPrediction: 'disable' | 'enable';
-  predictionLevel: 'basic' | 'middle' | 'high';
-  defectDetectionCode: string[];
-  detectSameDefect: 'disable' | 'enable';
-  forecastDataRetentionPeriod: string;
-  forecastingStartDate: string;
-  reviseForecastingResults: boolean;
-  displayForecastingResult: 'disable' | 'enable';
-  reflectDefectPrediction: 'disable' | 'enable';
+// 型定義
+type GroupMasterProps = {
+  groupCodes: string[];
+  groupNames: string[];
+  onSubmit: (groupCode: string) => void;
 };
 
-const FormContainer = styled.div`
+// スタイル定義
+const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 600px;
-  padding: 2rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-
-  @media (max-width: 600px) {
-    max-width: 100%;
+  align-items: center;
+  padding: 16px;
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
   }
 `;
 
-const FormField = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const TextInput = styled.input`
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+const GroupList = styled.div`
   width: 100%;
+  margin-bottom: 16px;
+  @media (min-width: 768px) {
+    width: 60%;
+    margin-bottom: 0;
+    margin-right: 16px;
+  }
 `;
 
-const Select = styled.select`
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+const GroupItem = styled.div`
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+`;
+
+const GroupCode = styled.span`
+  margin-right: 8px;
+`;
+
+const GroupName = styled.span`
+  font-weight: bold;
+`;
+
+const FormContainer = styled.div`
   width: 100%;
+  @media (min-width: 768px) {
+    width: 35%;
+  }
 `;
 
-const NumberInput = styled.input`
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+const Input = styled.input`
   width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
 `;
 
-const Checkbox = styled.input`
-  margin-right: 0.5rem;
+const Button = styled.button`
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
 `;
 
-const DateInput = styled.input`
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-`;
+// コンポーネント定義
+const GroupMaster: React.FC<GroupMasterProps> = ({ groupCodes, groupNames, onSubmit }) => {
+  const [groupCode, setGroupCode] = React.useState('');
 
-const DefectCodeInput = styled.input`
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-`;
+  // 送信処理
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit(groupCode);
+    setGroupCode('');
+  };
 
-const ForecastManagementMaster: React.FC<ForecastManagementMasterProps> = ({
-  testingFrequency = 'everyday',
-  testingDate = '',
-  stopTimeRatio = 0,
-  startTimeAdjustment = 0,
-  defectPrediction = 'disable',
-  monthlyDefectPrediction = 'disable',
-  predictionLevel = 'middle',
-  defectDetectionCode = [],
-  detectSameDefect = 'disable',
-  forecastDataRetentionPeriod = '',
-  forecastingStartDate = '',
-  reviseForecastingResults = false,
-  displayForecastingResult = 'disable',
-  reflectDefectPrediction = 'disable',
-}) => {
   return (
-    <FormContainer>
-      <h2>予測管理マスタ</h2>
-      <FormField>
-        <label>検査回数設定</label>
-        <Select
-          value={testingFrequency}
-          onChange={(e) => console.log(e.target.value)}
-        >
-          <option value="hourly">1時間</option>
-          <option value="everyday">毎日</option>
-          <option value="other">その他</option>
-        </Select>
-      </FormField>
-      {testingFrequency === 'other' && (
-        <FormField>
-          <label>検査時間設定</label>
-          <TextInput
+    <Container>
+      <GroupList>
+        {groupCodes.map((code, index) => (
+          <GroupItem key={code}>
+            <GroupCode>{code}</GroupCode>
+            <GroupName>{groupNames[index]}</GroupName>
+          </GroupItem>
+        ))}
+      </GroupList>
+      <FormContainer>
+        <form onSubmit={handleSubmit}>
+          <Input
             type="text"
-            value={testingDate}
-            onChange={(e) => console.log(e.target.value)}
+            value={groupCode}
+            onChange={(e) => setGroupCode(e.target.value)}
+            placeholder="所属コード"
           />
-        </FormField>
-      )}
-      <FormField>
-        <label>停止時の切り捨て割合</label>
-        <NumberInput
-          type="number"
-          value={stopTimeRatio}
-          onChange={(e) => console.log(Number(e.target.value))}
-        />
-        %
-      </FormField>
-      {/* 以下、同様にその他の入力項目を実装 */}
-    </FormContainer>
+          <Button type="submit">所属コード</Button>
+        </form>
+      </FormContainer>
+    </Container>
   );
 };
 
-export default ForecastManagementMaster;
+export default GroupMaster;
 
 // 使用例
-const SampleUsage = () => {
+const App: React.FC = () => {
+  const groupCodes = ['0000001', '0000002', '0000007', '0000009', '9999999'];
+  const groupNames = ['総務課', '水道用センター', '経営企画課', 'テスト', '総務課'];
+
+  const handleSubmit = (groupCode: string) => {
+    console.log(`Submitted group code: ${groupCode}`);
+    // 送信処理を実装
+  };
+
   return (
-    <ForecastManagementMaster
-      testingFrequency="everyday"
-      testingDate="2023-06-20"
-      stopTimeRatio={10}
-      startTimeAdjustment={30}
-      defectPrediction="enable"
-      monthlyDefectPrediction="disable"
-      predictionLevel="high"
-      defectDetectionCode={['800001', '800002']}
-      detectSameDefect="enable"
-      forecastDataRetentionPeriod="2023-06-15"
-      forecastingStartDate="2023-06-01"
-      reviseForecastingResults={true}
-      displayForecastingResult="enable"
-      reflectDefectPrediction="disable"
-    />
+    <div>
+      <h1>指定金融機関グループマスタ</h1>
+      <GroupMaster
+        groupCodes={groupCodes}
+        groupNames={groupNames}
+        onSubmit={handleSubmit}
+      />
+    </div>
   );
 };
-
-このコンポーネントでは、予測管理マスタの各設定項目を入力フィールドとして実装しています。各入力項目はプロパティを通じて値を受け取り、必要に応じてデフォルト値を設定しています。
-
-スタイリングにはstyled-componentsを使用し、レスポンシブデザインを考慮しています。
-
-また、使用例としてSampleUsageコンポーネントを実装し、サンプルデータを用いて予測管理マスタコンポーネントの使用方法を示しています。
-
-例外処理については、検査回数設定で「その他」を選択した場合にのみ検査時間設定の入力フィールドを表示するようにしています。その他の入力項目についても、必要に応じて例外処理を追加することができます。
