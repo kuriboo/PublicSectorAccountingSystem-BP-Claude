@@ -1,138 +1,122 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { format } from 'date-fns';
+import styled from 'styled-components';
 
-type Reservation = {
-  date: Date;
-  adultCount: number;
-  childCount: number;
-  destination: string;
-  name: string;
-  phone: string;
+// 予約検索フォームのプロパティ型定義
+type ReservationSearchFormProps = {
+  onSubmit: (formData: FormData) => void;
 };
 
-type Props = {
-  reservation: Reservation;
-  onClose: () => void;
-};
-
-const ReservationForm: React.FC<Props> = ({ reservation, onClose }) => {
-  // 現在の年月日を取得
-  const currentDate = format(new Date(), 'yyyy/MM/dd');
+// 予約検索フォームのコンポーネント
+const ReservationSearchForm: React.FC<ReservationSearchFormProps> = ({ onSubmit }) => {
+  // フォーム送信時の処理
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    onSubmit(formData);
+  };
 
   return (
-    <Container>
-      <Title>予約科目マスタ</Title>
-      <DateInfo>{currentDate}の予約</DateInfo>
-      
-      <Form>
+    <Form onSubmit={handleSubmit}>
+      <Fieldset>
+        <Legend>予約科目マスタ</Legend>
         <Row>
-          <Label>年度</Label>
-          <span>{format(reservation.date, 'yyyy')}年度</span>
+          <Label>診療科</Label>
+          <Select name="department">
+            <option value="">選択してください</option>
+            {/* 診療科の選択肢 */}
+          </Select>
         </Row>
-        
         <Row>
-          <Field>
-            <Label>大人</Label>
-            <span>{reservation.adultCount}名</span>
-          </Field>
-          <Field>
-            <Label>子供</Label>
-            <span>{reservation.childCount}名</span>
-          </Field>
+          <Label>診療日</Label>
+          <Input type="date" name="date" />
         </Row>
-
         <Row>
-          <Label>行き先</Label>
-          <span>{reservation.destination}</span>
+          <Label>時間</Label>
+          <Input type="time" name="time" />
         </Row>
-
-        <Row>
-          <Field>
-            <Label>代表者</Label>
-            <span>{reservation.name}</span>
-          </Field>
-          <Field>
-            <Label>電話番号</Label> 
-            <span>{reservation.phone}</span>
-          </Field>
-        </Row>
-      </Form>
-
-      <Footer>
-        <Button onClick={onClose}>閉じる</Button>
-      </Footer>
-    </Container>
+      </Fieldset>
+      <Row>
+        <ButtonGroup>
+          <Button type="submit">検索</Button>
+          <Button type="reset">クリア</Button>
+        </ButtonGroup>
+      </Row>
+    </Form>
   );
 };
 
-// Usage example
-const SampleReservation: Reservation = {
-  date: new Date(),
-  adultCount: 2,
-  childCount: 1,
-  destination: '東京ディズニーランド', 
-  name: '山田太郎',
-  phone: '090-1234-5678',
-};
+// スタイリング用のコンポーネント
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
 
-const App: React.FC = () => {
-  return (
-    <ReservationForm
-      reservation={SampleReservation}
-      onClose={() => console.log('Close button clicked')}
-    />
-  );  
-};
-
-// Styles
-const Container = styled.div`
-  background-color: #f0f0f0;
+const Fieldset = styled.fieldset`
+  border: 1px solid #ccc;
   padding: 16px;
-  width: 400px;
 `;
 
-const Title = styled.h2`
-  margin: 0 0 8px;
-`;
-
-const DateInfo = styled.p`
-  margin: 0 0 16px;
-`;
-
-const Form = styled.div`
-  background-color: white;
-  padding: 16px;
-  margin-bottom: 16px;
+const Legend = styled.legend`
+  font-weight: bold;
 `;
 
 const Row = styled.div`
   display: flex;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
 `;
 
-const Field = styled.div`
-  flex: 1;
+const Label = styled.label`
+  width: 80px;
 `;
 
-const Label = styled.div`
-  font-weight: bold;
+const Input = styled.input`
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 `;
 
-const Footer = styled.div`
-  text-align: center;
+const Select = styled.select`
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 8px;
 `;
 
 const Button = styled.button`
-  background-color: #1e88e5;
-  color: white;
-  border: none;
   padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
 
   &:hover {
-    background-color: #1565c0;
+    background-color: #0056b3;
   }
 `;
 
-export default ReservationForm;
+// サンプルデータを用いた使用例
+const sampleDepartments = ['内科', '外科', '小児科'];
+
+const App: React.FC = () => {
+  const handleSubmit = (formData: FormData) => {
+    // フォームデータの処理
+    console.log(formData);
+  };
+
+  return (
+    <div>
+      <h1>予約検索フォーム</h1>
+      <ReservationSearchForm onSubmit={handleSubmit} />
+    </div>
+  );
+};
+
+export default App;
