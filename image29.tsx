@@ -1,80 +1,138 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-interface MenuItem {
-  label: string;
-  link: string;
-}
+type BookingFormProps = {
+  onSubmit: (data: BookingData) => void;
+};
 
-interface MenuProps {
-  items: MenuItem[];
-}
+type BookingData = {
+  managementNumber: string;
+  fiscalYear: string;
+  startDate: string;
+  endDate: string;
+  startTime: string;
+  endTime: string;
+  overnightStayPurpose: string;
+  dayTripPurpose: string;
+  upkeepDivision: string;
+  changeCounterpart: string;
+  yearEndAdjustmentDivision: string;
+  pricePerUnit: number;
+  days: number;
+  nights: number;
+};
 
-const MenuContainer = styled.div`
-  background-color: #f0f0f0;
-  padding: 16px;
-  border-radius: 4px;
-  width: 200px;
-  margin: 0 auto;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  @media (min-width: 768px) {
+    max-width: 600px;
+    margin: 0 auto;
+  }
 `;
 
-const MenuTitle = styled.h2`
-  font-size: 18px;
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 100%;
+`;
+
+const Label = styled.label`
   font-weight: bold;
-  margin-bottom: 16px;
-  color: #333;
+  margin-bottom: 5px;
 `;
 
-const MenuList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
+const Input = styled.input`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 `;
 
-const MenuItem = styled.li`
-  margin-bottom: 8px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  a {
-    text-decoration: none;
-    color: #666;
-    font-size: 14px;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+const Select = styled.select`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 `;
 
-const Menu: React.FC<MenuProps> = ({ items }) => {
+const TextArea = styled.textarea`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const Button = styled.button`
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+const BookingForm: React.FC<BookingFormProps> = ({ onSubmit }) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Collect form data and call onSubmit prop with the data
+    const data: BookingData = {
+      managementNumber: '',
+      fiscalYear: '',
+      startDate: '',
+      endDate: '',
+      startTime: '',
+      endTime: '',
+      overnightStayPurpose: '',
+      dayTripPurpose: '',
+      upkeepDivision: '',
+      changeCounterpart: '',
+      yearEndAdjustmentDivision: '',
+      pricePerUnit: 0,
+      days: 0,
+      nights: 0,
+    };
+    onSubmit(data);
+  };
+
   return (
-    <MenuContainer>
-      <MenuTitle>月例メニュー</MenuTitle>
-      <MenuList>
-        {items.map((item, index) => (
-          <MenuItem key={index}>
-            <a href={item.link}>{item.label}</a>
-          </MenuItem>
-        ))}
-      </MenuList>
-    </MenuContainer>
+    <Container>
+      <form onSubmit={handleSubmit}>
+        <FormGroup>
+          <Label>管理マスタ</Label>
+          <Input type="text" required />
+        </FormGroup>
+        <FormGroup>
+          <Label>年度</Label>
+          <Select required>
+            <option value="">選択してください</option>
+            {/* Add options for fiscal years */}
+          </Select>
+        </FormGroup>
+        <FormGroup>
+          <Label>利用日</Label>
+          <Input type="date" required />
+        </FormGroup>
+        {/* Add more form fields */}
+        <Button type="submit">登録</Button>
+      </form>
+    </Container>
   );
 };
 
-// サンプルデータと使用例
-const sampleMenuItems: MenuItem[] = [
-  { label: '請求明細', link: '/billing' },
-  { label: '子請求作成', link: '/create-sub-invoice' },
-  { label: '日次・月次報告', link: '/daily-monthly-report' },
-  { label: '消費税計算', link: '/consumption-tax' },
-  { label: '設定構成表入出力', link: '/settings-io' },
-];
+// Usage example
+const App: React.FC = () => {
+  const handleBookingSubmit = (data: BookingData) => {
+    // Handle form submission
+    console.log(data);
+  };
 
-const SampleMenuUsage: React.FC = () => {
-  return <Menu items={sampleMenuItems} />;
+  return (
+    <div>
+      <h1>公営企業会計システム</h1>
+      <BookingForm onSubmit={handleBookingSubmit} />
+    </div>
+  );
 };
 
-export default SampleMenuUsage;
+export default App;
