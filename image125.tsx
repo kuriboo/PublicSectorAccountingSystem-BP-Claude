@@ -1,111 +1,172 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
-// 型定義
-type ConvertReportProps = {
-  data: Array<{
-    no: number;
-    convertDate: string;
-    result: string;
-    outputFile: string;
-  }>;
+type Unit = '000' | '単価';
+
+interface RowData {
+  code: string;
+  name: string;
+}
+
+interface MasterMaintenanceProps {
+  title: string;
+  data: RowData[];
+  addRowText?: string;
+  deleteRowText?: string;
+  prevButtonText?: string;
+  nextButtonText?: string;
+  okButtonText?: string;
+  cancelButtonText?: string;
+  closeButtonText?: string;
+}
+
+const MasterMaintenance: React.FC<MasterMaintenanceProps> = ({
+  title,
+  data,
+  addRowText = '行追加',
+  deleteRowText = '削除',
+  prevButtonText = '前データ',
+  nextButtonText = '次データ',
+  okButtonText = 'OK',
+  cancelButtonText = 'クリア',
+  closeButtonText = '終了',
+}) => {
+  // State to manage the selected unit
+  const [unit, setUnit] = React.useState<Unit>('000');
+
+  return (
+    <Container>
+      <Title>{title}</Title>
+      <RadioGroup>
+        <RadioButton
+          type="radio"
+          checked={unit === '000'}
+          onChange={() => setUnit('000')}
+        />
+        <RadioLabel>000</RadioLabel>
+        <RadioButton
+          type="radio"
+          checked={unit === '単価'}
+          onChange={() => setUnit('単価')}
+        />
+        <RadioLabel>単価</RadioLabel>
+      </RadioGroup>
+      <Table>
+        <thead>
+          <Row>
+            <HeaderCell>コード</HeaderCell>
+            <HeaderCell>名称</HeaderCell>
+          </Row>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <Row key={index}>
+              <Cell>{row.code}</Cell>
+              <Cell>{row.name}</Cell>
+            </Row>
+          ))}
+        </tbody>
+      </Table>
+      <ButtonGroup>
+        <Button>{addRowText}</Button>
+        <Button>{deleteRowText}</Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button>{prevButtonText}</Button>
+        <Button>{nextButtonText}</Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button primary>{okButtonText}</Button>
+        <Button>{cancelButtonText}</Button>
+      </ButtonGroup>
+      <CloseButton>{closeButtonText}</CloseButton>
+    </Container>
+  );
 };
 
-// スタイル定義
+// Sample data for demonstration
+const sampleData: RowData[] = [
+  { code: '001', name: '単価設置大分類' },
+];
+
+// Usage example
+const App: React.FC = () => {
+  return (
+    <MasterMaintenance
+      title="単価性質マスタ"
+      data={sampleData}
+    />
+  );
+};
+
+export default App;
+
+// Styled components
 const Container = styled.div`
-  background-color: #f0f0f0;
-  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
   font-family: sans-serif;
 `;
 
 const Title = styled.h2`
-  font-size: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+`;
+
+const RadioGroup = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+`;
+
+const RadioButton = styled.input`
+  margin-right: 5px;
+`;
+
+const RadioLabel = styled.label`
+  margin-right: 10px;
 `;
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  
-  th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
+  margin-bottom: 10px;
+`;
 
-  th {
+const Row = styled.tr`
+  &:nth-of-type(even) {
     background-color: #f2f2f2;
   }
 `;
 
-const Notice = styled.div`
-  margin-top: 16px;
-  font-size: 14px;
-  color: #666;
+const HeaderCell = styled.th`
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  background-color: #f2f2f2;
 `;
 
-/**
- * 固定資産コンバート取消のレポートコンポーネント
- */
-const ConvertReport: React.FC<ConvertReportProps> = ({ data }) => {
-  return (
-    <Container>
-      <Title>固定資産コンバート取消</Title>
-      <Table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>コンバート日時</th>
-            <th>変動区分</th>
-            <th>取込ファイル名</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={index}>
-              <td>{item.no}</td>
-              <td>{item.convertDate}</td>
-              <td>{item.result}</td>
-              <td>{item.outputFile}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Notice>
-        ・固定資産コンバート最終で登録した固定資産情報を削除します。<br />
-        ・コンバートを行った日時を指定して取消を行います。指定した日時にコンバートしたすべての固定資産情報が削除されます。<br />
-        ただし、コンバート後、異動が発生した固定資産がある場合は、コンバート取消を行うことはできません。<br />
-        コンバート後の異動をすべて削除してから、コンバート取消を行ってください。<br />
-        ・当年度に行ったコンバートのみ取り消すことができます。<br /> 
-        ・コンバート取消を行った場合、データを元に戻すことはできません。
-      </Notice>
-    </Container>
-  );
-};
+const Cell = styled.td`
+  border: 1px solid #ddd;
+  padding: 8px;
+`;
 
-export default ConvertReport;
+const ButtonGroup = styled.div`
+  margin-bottom: 10px;
+`;
 
-// 使用例
-const sampleData = [
-  {
-    no: 1,
-    convertDate: '平成30年06月25日 10:54:55',
-    result: '電算移行',
-    outputFile: '固定資産情報201806251054____.zip',
-  },
-  {
-    no: 2,
-    convertDate: '平成30年06月19日 15:57:28',
-    result: '電算移行', 
-    outputFile: '固定資産情報201806191457____.zip',
-  },
-];
+const Button = styled.button<{ primary?: boolean }>`
+  padding: 8px 16px;
+  margin-right: 10px;
+  background-color: ${(props) => (props.primary ? '#007bff' : '#fff')};
+  color: ${(props) => (props.primary ? '#fff' : '#333')};
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+`;
 
-const App: React.FC = () => {
-  return (
-    <div>
-      <h1>固定資産コンバート取消レポート</h1>
-      <ConvertReport data={sampleData} />
-    </div>
-  );
-};
+const CloseButton = styled(Button)`
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+`;
