@@ -1,100 +1,100 @@
 import React from 'react';
 import styled from 'styled-components';
 
-// 管理部署の型定義
-type DepartmentType = {
-  code: string;
-  name: string;
-}
+// テーブルのデータ型定義
+type TableData = {
+  id: number;
+  date: string;
+  temperature: number;
+  weather: string;
+  comment: string;
+}[];
 
-// コンポーネントのプロパティの型定義
-type Props = {
-  data: {
-    code: string;
-    name: string;
-    departments: DepartmentType[];
-  }[];
-}
+// コンポーネントのプロパティ型定義
+type TableProps = {
+  data: TableData;
+};
 
-const Table = styled.table`
+// テーブルコンポーネント
+const Table: React.FC<TableProps> = ({ data }) => {
+  return (
+    <TableWrapper>
+      <TableHeader>
+        <tr>
+          <HeaderCell>日付</HeaderCell>
+          <HeaderCell>気温</HeaderCell>
+          <HeaderCell>天気</HeaderCell>
+          <HeaderCell>備考</HeaderCell>
+        </tr>
+      </TableHeader>
+      <TableBody>
+        {data.map((row) => (
+          <TableRow key={row.id}>
+            <TableCell>{row.date}</TableCell>
+            <TableCell>{row.temperature}</TableCell>
+            <TableCell>{row.weather}</TableCell>
+            <TableCell>{row.comment}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </TableWrapper>
+  );
+};
+
+// スタイリング
+const TableWrapper = styled.table`
   width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
 
-  th, td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-  }
-
-  th {
-    background-color: #f2f2f2;
-  }
-
-  @media screen and (max-width: 600px) {
+  @media (max-width: 600px) {
     font-size: 12px;
   }
 `;
 
-const AssetManagementTable: React.FC<Props> = ({ data }) => {
-  if (!data || data.length === 0) {
-    return <div>No data available</div>;
-  }
+const TableHeader = styled.thead`
+  background-color: #f2f2f2;
+  font-weight: bold;
+`;
 
-  return (
-    <Table>
-      <thead>
-        <tr>
-          <th>アセットマネジメント項目コード</th>
-          <th>項目番号</th>
-          <th>管理部署（複数可）</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            <td>{item.code}</td>
-            <td>{item.name}</td>
-            <td>
-              {item.departments.map((dept, i) => (
-                <React.Fragment key={i}>
-                  {dept.code} {dept.name}
-                  {i < item.departments.length - 1 ? <br /> : null}
-                </React.Fragment>
-              ))}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  );
-};
+const HeaderCell = styled.th`
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+`;
+
+const TableBody = styled.tbody``;
+
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+`;
+
+const TableCell = styled.td`
+  padding: 10px;
+  border: 1px solid #ddd;
+`;
 
 // サンプルデータ
-const sampleData = [
-  {
-    code: '9113',
-    name: 'アセットマネジメント項目マスタ',
-    departments: [
-      { code: '020110', name: '区分コード' },
-      { code: '020110', name: '工種コード' },
-      { code: '020110', name: '実施年度' },
-      { code: '020110', name: '時間計画（朱全重変更コード）' },
-      { code: '020201', name: '時間計画（朱全重変更コード）' },
-      { code: '020200', name: '場所コード' },
-      // 以下省略
-    ],
-  },
-  // 以下省略
+const sampleData: TableData = [
+  { id: 1, date: '2001年3月', temperature: '最低気温-3℃', weather: '積雪データ 11cm程より冷え込み', comment: '' },
+  { id: 2, date: '2001年4月', temperature: '最高気温23℃', weather: '18時頃から5℃前後冷え込み', comment: '' },
+  { id: 3, date: '2001年5月', temperature: '最高気温23-28℃', weather: '朝から気温上昇 日中は上着がいらないほど', comment: '' },
+  { id: 4, date: '2001年6月', temperature: '最高気温32℃', weather: '梅雨入り', comment: '入梅宣言' },
+  { id: 5, date: '2001年7月', temperature: '最高気温33-34℃', weather: '梅雨明け', comment: '猛暑日が続く' },
+  { id: 6, date: '2001年8月', temperature: '最高気温35℃', weather: '', comment: '酷暑' },
+  { id: 7, date: '2001年9月以降のデータが抜けている', temperature: 0, weather: '', comment: 'データ不足のため表示できない' },
 ];
 
 // 使用例
-const App: React.FC = () => {
+const TableExample: React.FC = () => {
   return (
     <div>
-      <h1>Asset Management Table</h1>
-      <AssetManagementTable data={sampleData} />
+      <h2>気温と天気の履歴テーブル</h2>
+      <Table data={sampleData} />
     </div>
   );
 };
 
-export default App;
+export default TableExample;
