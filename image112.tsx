@@ -1,57 +1,67 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-type DataEntry = {
-  date: string;
-  location: string;
-  eventName: string;
-  eventDetail: string;
-};
+// 管理部署の型定義
+type DepartmentType = {
+  code: string;
+  name: string;
+}
 
+// コンポーネントのプロパティの型定義
 type Props = {
-  data: DataEntry[];
-};
+  data: {
+    code: string;
+    name: string;
+    departments: DepartmentType[];
+  }[];
+}
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
 
-  @media (max-width: 600px) {
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  @media screen and (max-width: 600px) {
     font-size: 12px;
   }
 `;
 
-const TableHeader = styled.th`
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  white-space: nowrap;
-`;
+const AssetManagementTable: React.FC<Props> = ({ data }) => {
+  if (!data || data.length === 0) {
+    return <div>No data available</div>;
+  }
 
-const TableCell = styled.td`
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-`;
-
-const EventList: React.FC<Props> = ({ data }) => {
   return (
     <Table>
       <thead>
         <tr>
-          <TableHeader>日付</TableHeader>
-          <TableHeader>場所</TableHeader>
-          <TableHeader>イベント名</TableHeader>
-          <TableHeader>詳細</TableHeader>
+          <th>アセットマネジメント項目コード</th>
+          <th>項目番号</th>
+          <th>管理部署（複数可）</th>
         </tr>
       </thead>
       <tbody>
-        {data.map((entry, index) => (
+        {data.map((item, index) => (
           <tr key={index}>
-            <TableCell>{entry.date}</TableCell>
-            <TableCell>{entry.location}</TableCell>
-            <TableCell>{entry.eventName}</TableCell>
-            <TableCell>{entry.eventDetail}</TableCell>
+            <td>{item.code}</td>
+            <td>{item.name}</td>
+            <td>
+              {item.departments.map((dept, i) => (
+                <React.Fragment key={i}>
+                  {dept.code} {dept.name}
+                  {i < item.departments.length - 1 ? <br /> : null}
+                </React.Fragment>
+              ))}
+            </td>
           </tr>
         ))}
       </tbody>
@@ -59,30 +69,32 @@ const EventList: React.FC<Props> = ({ data }) => {
   );
 };
 
-// サンプルデータを使用した表示用コンポーネント
-const SampleData: DataEntry[] = [
+// サンプルデータ
+const sampleData = [
   {
-    date: '2001年3月',
-    location: '福岡ブラザー',
-    eventName: '現代データ',
-    eventDetail: '2000年までのデータ',
+    code: '9113',
+    name: 'アセットマネジメント項目マスタ',
+    departments: [
+      { code: '020110', name: '区分コード' },
+      { code: '020110', name: '工種コード' },
+      { code: '020110', name: '実施年度' },
+      { code: '020110', name: '時間計画（朱全重変更コード）' },
+      { code: '020201', name: '時間計画（朱全重変更コード）' },
+      { code: '020200', name: '場所コード' },
+      // 以下省略
+    ],
   },
-  {
-    date: '2001年4月',
-    location: '福岡ブラザー',
-    eventName: '現代データ',
-    eventDetail: '2000年までのデータ',
-  },
-  // ... 他のサンプルデータ
+  // 以下省略
 ];
 
-const EventListContainer: React.FC = () => {
+// 使用例
+const App: React.FC = () => {
   return (
     <div>
-      <h2>イベント一覧</h2>
-      <EventList data={SampleData} />
+      <h1>Asset Management Table</h1>
+      <AssetManagementTable data={sampleData} />
     </div>
   );
 };
 
-export default EventListContainer;
+export default App;
