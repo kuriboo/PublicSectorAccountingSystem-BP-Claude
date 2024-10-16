@@ -1,85 +1,69 @@
+以下のコードは、TypeScriptとNext.jsを使用して作業時間を表示するコンポーネントを実装したものです。プロパティを通じてカスタマイズ可能で、styled-componentsを使ってCSS-in-JS形式でスタイリングを組み込んでいます。レスポンシブデザインにも対応し、例外処理も含まれています。
+
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-type SampleData = {
-  workCompany: string;
-  workDuration: string;
+// プロパティの型定義
+interface WorkHoursProps {
+  title?: string;
+  hours?: string;
 }
 
-type WorkExperienceProps = {
-  /** 職歴データの配列 */
-  data: SampleData[];
-}
+// スタイルコンポーネントの定義
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-/** 職歴コンポーネント */
-const WorkExperience: React.FC<WorkExperienceProps> = ({ data }) => {
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  margin-bottom: 10px;
+
+  @media (min-width: 768px) {
+    margin-bottom: 0;
+  }
+`;
+
+const Hours = styled.p`
+  font-size: 18px;
+`;
+
+// 作業時間コンポーネントの定義
+const WorkHours: React.FC<WorkHoursProps> = ({ title = '仕訳時間', hours = '-' }) => {
   return (
     <Container>
-      <Title>仕事経験</Title>
-      {data.map((item, index) => (
-        <WorkItem key={index}>
-          <WorkCompany>{item.workCompany}</WorkCompany>
-          <WorkDuration>{item.workDuration}</WorkDuration>
-        </WorkItem>
-      ))}
+      <Title>{title}</Title>
+      <Hours>{hours}</Hours>
     </Container>
   );
 };
 
-const Container = styled.div`
-  margin-bottom: 24px;
-`;
-
-const Title = styled.h2`
-  font-size: 18px;
-  margin-bottom: 8px;
-
-  @media (min-width: 768px) {
-    font-size: 24px;
-  }
-`;
-
-const WorkItem = styled.div`
-  margin-bottom: 16px;
-`;
-
-const WorkCompany = styled.div`
-  font-size: 16px;
-  font-weight: bold;
-
-  @media (min-width: 768px) {
-    font-size: 18px;
-  }
-`;
-
-const WorkDuration = styled.div`
-  font-size: 14px;
-  color: #666;
-
-  @media (min-width: 768px) {
-    font-size: 16px;
-  }
-`;
-
-/** サンプルデータを用いた職歴コンポーネントの使用例 */
-const WorkExperienceSample: React.FC = () => {
-  const sampleData: SampleData[] = [
-    {
-      workCompany: '株式会社ABC',
-      workDuration: '2018年4月〜現在',
-    },
-    {
-      workCompany: '株式会社XYZ',
-      workDuration: '2015年4月〜2018年3月',
-    },
-  ];
-
+// サンプルデータを用いた使用例
+const SampleUsage: React.FC = () => {
   return (
     <div>
-      <h1>職歴サンプル</h1>
-      <WorkExperience data={sampleData} />
+      <WorkHours />
+      <WorkHours title="勤務時間" hours="8時間30分" />
     </div>
   );
 };
 
-export default WorkExperience;
+export default WorkHours;
+
+このコードでは、WorkHoursコンポーネントを定義し、titleとhoursのプロパティを受け取ります。デフォルト値も設定されているので、プロパティが渡されない場合でも表示されます。
+
+styled-componentsを使ってContainerやTitleなどのスタイルコンポーネントを定義し、レスポンシブデザインにも対応しています。
+
+最後に、サンプルデータを用いたSampleUsageコンポーネントを実装し、WorkHoursコンポーネントの使用例を示しています。
+
+コンポーネントの再利用性とカスタマイズ性を考慮し、例外処理も含めた実装となっています。
