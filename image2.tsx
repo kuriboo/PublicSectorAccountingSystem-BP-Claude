@@ -1,72 +1,95 @@
+// Profile.tsx
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
-// MenuProps interface defines the properties for the Menu component
-interface MenuProps {
-  items: string[]; // Array of menu item labels
+interface ProfileProps {
+  name: string;
+  role: string;
+  description: string;
 }
 
-// MenuItemProps interface defines the properties for the MenuItem component
-interface MenuItemProps {
-  label: string; // Label for the menu item
-}
+const ProfileContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
 
-// MenuItem component represents a single menu item
-const MenuItem: React.FC<MenuItemProps> = ({ label }) => {
-  return <Item>{label}</Item>;
-};
+const ProfileImage = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin-right: 16px;
+  
+  @media (max-width: 600px) {
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+`;
 
-// Menu component represents the entire menu
-const Menu: React.FC<MenuProps> = ({ items }) => {
+const ProfileInfo = styled.div`
+  flex: 1;
+`;
+
+const Name = styled.h2`
+  font-size: 24px;
+  margin-bottom: 8px;
+`;
+
+const Role = styled.p`
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 8px;
+`;
+
+const Description = styled.p`
+  font-size: 14px;
+`;
+
+const Profile: React.FC<ProfileProps> = ({ name, role, description }) => {
   return (
-    <MenuContainer>
-      {items.map((item, index) => (
-        <MenuItem key={index} label={item} />
-      ))}
-    </MenuContainer>
+    <ProfileContainer>
+      <ProfileImage />
+      <ProfileInfo>
+        {/* Display name if provided, otherwise show a default message */}
+        <Name>{name || 'Name not provided'}</Name>
+        
+        {/* Display role if provided */}
+        {role && <Role>{role}</Role>}
+        
+        {/* Display description if provided */}
+        {description && <Description>{description}</Description>}
+      </ProfileInfo>
+    </ProfileContainer>
   );
 };
 
-// Example usage of the Menu component
-const App: React.FC = () => {
-  const menuItems = ['魅せようせい', '商品一覧', 'コーディネート', '店舗情報', 'ニュースブログ', 'プライバシーポリシー'];
-
+// Example usage
+const ProfileExample: React.FC = () => {
   return (
     <div>
-      <Title>株式会社ようせい</Title>
-      <Menu items={menuItems} />
+      <h1>Profile Examples</h1>
+      <Profile
+        name="John Doe"
+        role="Software Engineer"
+        description="Experienced software engineer with expertise in web development."
+      />
+      <Profile
+        name="Jane Smith"
+        role="UI Designer"
+        description="Creative UI designer with a passion for user experience."
+      />
+      <Profile name="Alice" role="Data Analyst" description="" />
+      <Profile name="" role="Manager" description="Experienced manager leading high-performing teams." />
     </div>
   );
 };
 
-export default App;
-
-// Styled components
-const MenuContainer = styled.ul`
-  display: flex;
-  justify-content: space-between;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  background-color: #333;
-  color: #fff;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const Item = styled.li`
-  padding: 10px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #555;
-  }
-`;
-
-const Title = styled.h1`
-  text-align: center;
-  font-size: 24px;
-  color: #333;
-`;
+export default ProfileExample;
