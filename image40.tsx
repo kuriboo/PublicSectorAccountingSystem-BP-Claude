@@ -1,168 +1,98 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-type PublicWorkerTaxDeductionFormProps = {
-  fromDate: string;
-  toDate: string;
-  insuranceType: '健康' | '厚生年金' | '雇用' | '介護' | '労災';
-  personalNumber: string;
-  age: number;
-  annualIncome: number;
-  employmentIncome: number;
-  deductibleExpense: number;
-  onSubmit: (data: PublicWorkerTaxDeductionFormData) => void;
+// 担当者情報の型定義
+type PersonInfo = {
+  name: string;
+  role: string;
+  image: string;
 };
 
-type PublicWorkerTaxDeductionFormData = {
-  fromDate: string;
-  toDate: string;
-  insuranceType: '健康' | '厚生年金' | '雇用' | '介護' | '労災'; 
-  personalNumber: string;
-  age: number;
-  annualIncome: number;
-  employmentIncome: number;
-  deductibleExpense: number;
+// コンポーネントのプロパティの型定義
+type PersonCardProps = {
+  person: PersonInfo;
 };
 
-const FormContainer = styled.div`
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 5px;
-`;
-
-const FormTitle = styled.h2`
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 20px;
-`;
-
-const FormField = styled.div`
+// コンポーネントのスタイリング
+const CardWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: 0 auto;
 
-  label {
-    width: 150px;
-    margin-right: 10px;
-  }
-
-  input[type='text'],
-  input[type='number'],
-  select {
-    flex: 1;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+  @media (max-width: 480px) {
+    flex-direction: column;
+    text-align: center;
   }
 `;
 
-const SubmitButton = styled.button`
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
+const Avatar = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
 
-  &:hover {
-    background-color: #0056b3;
+  @media (max-width: 480px) {
+    margin-right: 0;
+    margin-bottom: 16px;
   }
 `;
 
-const PublicWorkerTaxDeductionForm: React.FC<PublicWorkerTaxDeductionFormProps> = ({
-  fromDate,
-  toDate,
-  insuranceType,
-  personalNumber,
-  age,
-  annualIncome,
-  employmentIncome,
-  deductibleExpense,
-  onSubmit,
-}) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmit({
-      fromDate,
-      toDate,
-      insuranceType,
-      personalNumber,
-      age,
-      annualIncome,
-      employmentIncome,
-      deductibleExpense,
-    });
-  };
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Name = styled.h3`
+  margin: 0;
+  font-size: 18px;
+`;
+
+const Role = styled.p`
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #666;
+`;
+
+// 担当者情報を表示するコンポーネント
+const PersonCard: React.FC<PersonCardProps> = ({ person }) => {
+  // 担当者情報が空の場合の例外処理
+  if (!person) {
+    return null;
+  }
+
+  const { name, role, image } = person;
 
   return (
-    <FormContainer>
-      <FormTitle>特定課税仕入税率管理入力</FormTitle>
-      <form onSubmit={handleSubmit}>
-        <FormField>
-          <label>検索:</label>
-          <input type="text" value={fromDate} readOnly />
-          <span> 〜 </span>
-          <input type="text" value={toDate} readOnly />
-        </FormField>
-        <FormField>
-          <label>種別:</label>
-          <select value={insuranceType}>
-            <option value="健康">健康</option>
-            <option value="厚生年金">厚生年金</option>
-            <option value="雇用">雇用</option>
-            <option value="介護">介護</option>
-            <option value="労災">労災</option>
-          </select>
-        </FormField>
-        <FormField>
-          <label>伝票番号:</label>
-          <input type="text" value={personalNumber} readOnly />
-        </FormField>
-        <FormField>
-          <label>年度:</label>
-          <input type="number" value={age} readOnly />
-        </FormField>
-        <FormField>
-          <label>課税金額:</label>
-          <input type="number" value={annualIncome} readOnly />
-        </FormField>
-        <FormField>
-          <label>税抜金額:</label>
-          <input type="number" value={employmentIncome} readOnly />
-        </FormField>
-        <FormField>
-          <label>消費税額:</label>
-          <input type="number" value={deductibleExpense} readOnly />
-        </FormField>
-        <SubmitButton type="submit">OK</SubmitButton>
-      </form>
-    </FormContainer>
+    <CardWrapper>
+      <Avatar src={image} alt={name} />
+      <InfoWrapper>
+        <Name>{name}</Name>
+        <Role>{role}</Role>
+      </InfoWrapper>
+    </CardWrapper>
   );
 };
 
-// サンプルデータを用いたコンポーネントの使用例
-const SampleUsage: React.FC = () => {
-  const handleSubmit = (data: PublicWorkerTaxDeductionFormData) => {
-    console.log('Submitted data:', data);
-  };
+// サンプルデータ
+const samplePerson: PersonInfo = {
+  name: '山田太郎',
+  role: 'フロントエンドエンジニア',
+  image: 'https://example.com/avatar.jpg',
+};
 
+// 使用例
+const App: React.FC = () => {
   return (
-    <PublicWorkerTaxDeductionForm
-      fromDate="2023-03-27"
-      toDate="2023-03-27"
-      insuranceType="健康"
-      personalNumber="43"
-      age={43}
-      annualIncome={80000}
-      employmentIncome={80000}
-      deductibleExpense={0}
-      onSubmit={handleSubmit}
-    />
+    <div>
+      <h1>担当者情報</h1>
+      <PersonCard person={samplePerson} />
+    </div>
   );
 };
 
-export default PublicWorkerTaxDeductionForm;
+export default App;
