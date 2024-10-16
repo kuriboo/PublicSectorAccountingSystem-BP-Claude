@@ -1,117 +1,226 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import styled from '@emotion/styled';
 
-type PrintModeOption = 'プレビュー' | 'PDF';
+// 負担行為伺兼命令書のプロパティの型定義
+type FinancialOrderProps = {
+  fiscalYear: number;
+  orderDate: string;
+  orderNumber: string;
+  documentNumber: string;
+  managementNumber: string;
+  departmentCode: string;
+  departmentName: string;
+  position: string;
+  name: string;
+  date: string;
+  detailItems: Array<{
+    breakdown: string;
+    code: string;
+    amount: number;
+  }>;
+  specificationNumber: string;
+  applicationDate: string;
+  budgetCode: string;
+  summaryItems: Array<{
+    breakdown: string;
+    code: string;
+    amount: number;
+  }>;
+  totalAmount: number;
+  applicationDepartment: string;
+  accountTitle: string;
+  taxIncluded: number;
+  applicationPerson: string;
+};
 
-interface PrintSettingsProps {
-  onPrint: (copies: number, printMode: PrintModeOption) => void;
-}
+// スタイル定義
+const Container = styled.div`
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
 
-const PrintSettings: React.FC<PrintSettingsProps> = ({ onPrint }) => {
-  const [printMode, setPrintMode] = useState<PrintModeOption>('プレビュー');
-  const [copies, setCopies] = useState(1);
+  @media (max-width: 600px) {
+    padding: 10px;
+  }
+`;
 
-  const handlePrintModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPrintMode(event.target.value as PrintModeOption);
-  };
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 
-  const handleCopiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value, 10);
-    setCopies(isNaN(value) ? 1 : value);
-  };
+  th, td {
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center;
+  }
 
-  const handlePrint = () => {
-    onPrint(copies, printMode);
-  };
+  th {
+    background-color: #f0f0f0;
+  }
+`;
 
+const AmountTable = styled.table`
+  float: right;
+  margin-left: 20px;
+
+  td {
+    padding: 2px 5px;
+    text-align: right;
+  }
+`;
+
+// 負担行為伺兼命令書コンポーネント
+const FinancialOrder: React.FC<FinancialOrderProps> = ({
+  fiscalYear,
+  orderDate,
+  orderNumber,
+  documentNumber,
+  managementNumber,
+  departmentCode,
+  departmentName,
+  position,  
+  name,
+  date,
+  detailItems,
+  specificationNumber,
+  applicationDate,
+  budgetCode,
+  summaryItems,
+  totalAmount,
+  applicationDepartment,
+  accountTitle,
+  taxIncluded,
+  applicationPerson,
+}) => {
   return (
     <Container>
-      <Title>印刷機能選択</Title>
-      <InputGroup>
-        <input
-          type="radio"
-          id="preview"
-          value="プレビュー"
-          checked={printMode === 'プレビュー'}
-          onChange={handlePrintModeChange}
-        />
-        <label htmlFor="preview">プレビュー</label>
-      </InputGroup>
-      <InputGroup>
-        <input
-          type="radio"
-          id="pdf"
-          value="PDF"
-          checked={printMode === 'PDF'}
-          onChange={handlePrintModeChange}
-        />
-        <label htmlFor="pdf">PDF</label>
-      </InputGroup>
-      <InputGroup>
-        <label htmlFor="copies">部数</label>
-        <input
-          type="number"
-          id="copies"
-          min="1"
-          value={copies}
-          onChange={handleCopiesChange}
-        />
-      </InputGroup>
-      <ButtonGroup>
-        <Button type="button" onClick={handlePrint}>
-          OK
-        </Button>
-        <Button type="button">キャンセル</Button>
-      </ButtonGroup>
+      <h2>負担行為伺兼命令書</h2>
+      <p>
+        決定№: {orderNumber}<br />
+        負担№: {documentNumber}
+      </p>
+      <p>
+        決定処理日 平成{fiscalYear}年 {orderDate.split('-')[1]}月{orderDate.split('-')[2]}日<br />
+        支払予定日 平成{fiscalYear}年 {applicationDate.split('-')[1]}月{applicationDate.split('-')[2]}日
+      </p>
+
+      <Table>
+        <thead>
+          <tr>
+            <th>部 局</th>
+            <th>所属</th>
+            <th>起案者</th>
+            <th colSpan={2}>業務係長</th>
+            <th colSpan={2}>施設係長</th>
+            <th>係</th>
+            <th>起案者</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{departmentCode}</td>
+            <td>{departmentName}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </Table>
+
+      <p>以下のとおり支出してよろしいか。</p>
+      <p>
+        款　　{budgetCode.slice(0,3)}<br />
+        項　　{budgetCode.slice(3,5)}<br />
+        目　　{budgetCode.slice(5,7)}<br />
+        細節　{budgetCode.slice(7,9)}
+      </p>
+
+      {detailItems.map((item, index) => (
+        <p key={index}>
+          {item.breakdown}　{item.code}　{item.amount.toLocaleString()}円
+        </p>
+      ))}
+
+      <AmountTable>
+        <tbody>
+          {summaryItems.map((item, index) => (
+            <tr key={index}>
+              <td>{item.breakdown}</td>
+              <td>{item.amount.toLocaleString()}円</td>
+            </tr>
+          ))}
+          <tr>
+            <td>税 込 分 課 税</td>
+            <td>{taxIncluded.toLocaleString()}円</td>
+          </tr>
+          <tr>
+            <td>予 算 残 額</td>
+            <td>{(totalAmount - taxIncluded).toLocaleString()}円</td>
+          </tr>
+        </tbody>
+      </AmountTable>
+
+      <p>
+        摘　　　要 電子書籍購入費<br />
+        稟　　　議 電子書籍購入費
+      </p>
+
+      <p>
+        起案日　{applicationDate}<br />
+        決　　裁　{applicationDepartment}<br />
+        専 攻 所 属  {applicationPerson}
+      </p>
     </Container>
   );
 };
 
-// サンプルデータを用いた使用例
-const App: React.FC = () => {
-  const handlePrint = (copies: number, printMode: PrintModeOption) => {
-    console.log(`印刷設定: 部数=${copies}, モード=${printMode}`);
-    // 実際の印刷処理を実装する
-  };
+export default FinancialOrder;
 
-  return <PrintSettings onPrint={handlePrint} />;
+// 使用例
+const SampleData: FinancialOrderProps = {
+  fiscalYear: 27,
+  orderDate: '2022-03-27',
+  orderNumber: '27-000451-07',
+  documentNumber: '27-000413',
+  managementNumber: '',
+  departmentCode: '002',
+  departmentName: '事業費用',
+  position: '',  
+  name: '',
+  date: '',
+  detailItems: [
+    { breakdown: '講　　座　費', code: '01', amount: 1000000 },
+    { breakdown: '本　体　金　額', code: '', amount: 1000000 },
+    { breakdown: '消　費　税　額', code: '13', amount: 100000 },
+    { breakdown: '予　算　現　額', code: '0001', amount: 101000000 },
+    { breakdown: '負　担　累　計', code: '0001', amount: 98999000 },
+  ],
+  specificationNumber: '01〇〇事業',
+  applicationDate: '2022-03-27',
+  budgetCode: '002事業費用01管業費用01〇〇事業',
+  summaryItems: [
+    { breakdown: '消費税額等', amount: 0 },
+    { breakdown: '予算現額', amount: 100000000 },
+  ],
+  totalAmount: 101000000,
+  applicationDepartment: '',
+  accountTitle: '',
+  taxIncluded: 1000000,
+  applicationPerson: '',  
 };
 
-// スタイリング
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-family: sans-serif;
-`;
-
-const Title = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-`;
-
-const Button = styled.button`
-  padding: 5px 10px;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-
-export default PrintSettings;
+const App: React.FC = () => {
+  return (
+    <div>
+      <h1>負担行為伺兼命令書のサンプル</h1>
+      <FinancialOrder {...SampleData} />
+    </div>
+  );  
+};
