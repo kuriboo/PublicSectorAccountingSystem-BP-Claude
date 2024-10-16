@@ -1,125 +1,53 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-interface FixedAssetConversionProps {
+type FixedAssetConvertProps = {
   companyName: string;
-  year: number;
-  assetType: string;
-  registrationDate: string;
-  conversionDate: string;
-  fileName: string;
-}
+  convertedYear: number;
+  accountStartDate: string;
+  accountEndDate: string;
+  remarks: string[];
+};
 
-const Container = styled.div`
-  background-color: #f0f0f0;
-  padding: 20px;
-  margin: 20px;
-  border-radius: 5px;
-`;
-
-const Title = styled.h2`
-  color: #333;
-  font-size: 18px;
-  margin-bottom: 10px;
-`;
-
-const CompanyName = styled.p`
-  font-size: 16px;
-  margin-bottom: 5px;
-`;
-
-const Info = styled.p`
-  font-size: 14px;
-  margin-bottom: 3px;
-`;
-
-const FileName = styled.p`
-  font-size: 14px;
-  color: #666;
-`;
-
-const NoteList = styled.ul`
-  margin-top: 20px;
-  font-size: 14px;
-`;
-
-const NoteItem = styled.li`
-  margin-bottom: 5px;
-`;
-
-const ButtonContainer = styled.div`
-  margin-top: 20px;
-  text-align: right;
-`;
-
-const Button = styled.button`
-  padding: 8px 16px;
-  margin-left: 10px;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:first-of-type {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-  }
-
-  &:last-of-type {
-    background-color: #6c757d;
-    color: #fff;
-    border: none;
-  }
-`;
-
-const FixedAssetConversion: React.FC<FixedAssetConversionProps> = ({
+const FixedAssetConvert: React.FC<FixedAssetConvertProps> = ({
   companyName,
-  year,
-  assetType,
-  registrationDate,
-  conversionDate,
-  fileName,
+  convertedYear,
+  accountStartDate,
+  accountEndDate,
+  remarks,
 }) => {
+  // 日付をYYYY/MM/DD形式に変換する関数
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}/${month}/${day}`;
+  };
+
   return (
     <Container>
       <Title>固定資産コンバート</Title>
-      <CompanyName>会社名: {companyName}</CompanyName>
-      <Info>対象年度: {year}年度</Info>
-      <Info>固定資産種類: {assetType}</Info>
-      <Info>登録年月日: {registrationDate}</Info>
-      <Info>変換年月日: {conversionDate}</Info>
-      {fileName && <FileName>ファイル: {fileName}</FileName>}
-
-      <NoteList>
-        <NoteItem>固定資産情報をファイルから取込、登録を行います。</NoteItem>
-        <NoteItem>
-          ZIP圧縮されたファイルのみ取り込めます。取り込むファイルについては専用のEXCELファイル(原盤)から作成してください。
-        </NoteItem>
-        <NoteItem>
-          原盤以外で作成、編集されたファイルを取り込むとエラーになります。
-        </NoteItem>
-        <NoteItem>異動年月日は当期会計年度内の日付を入力してください。</NoteItem>
-        <NoteItem>
-          コンバートするデータの異動年月日は画面で入力した異動年月日の日付で登録されます。
-          ただし、原盤上で異動区分が「01：取得」の固定資産情報を取り込む場合、
-          コンバートするデータの異動年月日は原盤で指定された取得年月日と同じになります。
-        </NoteItem>
-        <NoteItem>
-          既に登録済みの資産番号と同一のデータが含まれている場合はデータ上書きが行われますのでご注意ください。
-        </NoteItem>
-        <NoteItem>
-          コンバート処理後、登録を行った固定資産情報の一覧を帳票出力できます。
-        </NoteItem>
-        <NoteItem>
-          コンバート処理でエラーがあった場合はすべてのデータがコンバート前の状態に戻ります。
-        </NoteItem>
-        <NoteItem>
-          コンバートした固定資産情報は1固定資産コンバート取消(機能にて取消を行ってください。
-          ただし、コンバート後異動が発生している場合はコンバート取消を行うことはできません。
-          また、コンバート取消は当年度にコンバートされた固定資産情報に限ります。
-        </NoteItem>
-      </NoteList>
-
+      <CompanyName>{companyName}</CompanyName>
+      <ConvertedYear>総務課 予算・会計担当 ぎょうせい太郎</ConvertedYear>
+      <ConvertedYear>平成30年06月26日</ConvertedYear>
+      <InfoContainer>
+        <InfoLabel>当期会計年度</InfoLabel>
+        <InfoValue>{formatDate(accountStartDate)} 年度</InfoValue>
+      </InfoContainer>
+      <InfoContainer>
+        <InfoLabel>異動年月日</InfoLabel>
+        <InfoValue>{formatDate(accountEndDate)}</InfoValue>
+      </InfoContainer>
+      <FileInput>
+        <FileIcon />
+        <FileName>C:¥Users¥Administrator¥Documents¥固定資産情報_20180625164351.zip</FileName>
+      </FileInput>
+      <RemarkList>
+        {remarks.map((remark, index) => (
+          <RemarkItem key={index}>{remark}</RemarkItem>
+        ))}
+      </RemarkList>
       <ButtonContainer>
         <Button>OK</Button>
         <Button>クリア</Button>
@@ -129,18 +57,102 @@ const FixedAssetConversion: React.FC<FixedAssetConversionProps> = ({
   );
 };
 
-// Usage example
-const App: React.FC = () => {
-  return (
-    <FixedAssetConversion
-      companyName="行政市水道事業会計"
-      year={30}
-      assetType="平成30年06月26日"
-      registrationDate="平成30年度"
-      conversionDate="平成30年04月01日"
-      fileName="C:\Users\Administrator\Documents\固定資産情報.zip"
-    />
-  );
+// サンプルデータを用いた使用例
+const SampleUsage: React.FC = () => {
+  const sampleData: FixedAssetConvertProps = {
+    companyName: '行政市水道事業会計',
+    convertedYear: 30,
+    accountStartDate: '2018-04-01',
+    accountEndDate: '2019-03-31',
+    remarks: [
+      '固定資産情報をファイルから取込、登録を行います。',
+      'ZIP圧縮されたファイルのみ取り込めます。取り込むファイルについては専用のEXCELファイル(原票)から作成してください。',
+      '原票以外で作成、編集されたファイルを取り込むとエラーとなります。',
+      '異動年月日は当期会計年度内の日付を入力してください。',
+      'コンバートするデータの異動年月日は画面で入力した異動年月日の日付で登録されます。',
+      'ただし、原票上で異動区分が「01：取得」の固定資産情報を取り込む場合、',
+      'コンバートするデータの異動年月日は原票で指定された取得年月日と同じになります。',
+      '既に登録済みの資産番号と同一のデータがあまされている場合はデータルを取り込んだ場合はエラーとなります。',
+      'コンバート処理後、登録を行った固定資産情報の一覧を帳票出力できます。',
+      'コンバート処理でエラーがあった場合はすべてのデータがコンバート前の状態に戻ります。',
+      'コンバートした固定資産情報は1固定資産コンバート取消(機能にて取消を行うことができます。',
+      'ただし、コンバート後異動が発生している場合はコンバート取消を行うことはできません。',
+      'また、コンバート取消は当年度にコンバートされた固定資産情報に限ります。',
+    ],
+  };
+
+  return <FixedAssetConvert {...sampleData} />;
 };
 
-export default App;
+// スタイリング用のコンポーネント
+const Container = styled.div`
+  padding: 20px;
+  background-color: #f0f0f0;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  margin-bottom: 20px;
+`;
+
+const CompanyName = styled.p`
+  font-size: 18px;
+  margin-bottom: 10px;
+`;
+
+const ConvertedYear = styled.p`
+  font-size: 16px;
+  margin-bottom: 10px;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+`;
+
+const InfoLabel = styled.p`
+  font-weight: bold;
+  margin-right: 10px;
+`;
+
+const InfoValue = styled.p`
+  margin: 0;
+`;
+
+const FileInput = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const FileIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  background-color: #999;
+  margin-right: 10px;
+`;
+
+const FileName = styled.p`
+  margin: 0;
+`;
+
+const RemarkList = styled.ul`
+  margin-bottom: 20px;
+`;
+
+const RemarkItem = styled.li`
+  margin-bottom: 5px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Button = styled.button`
+  margin-left: 10px;
+  padding: 8px 16px;
+  font-size: 16px;
+`;
+
+export default FixedAssetConvert;
