@@ -1,103 +1,157 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-type ContractType = '買取' | '売却';
+type TaxExemptionEntry = {
+  date: string;
+  description: string;
+  taxCategory: string;
+  taxRate: number;
+  amount: number;
+  taxAmount: number;
+  consumptionTaxAmount: number;
+};
 
-interface Property {
-  type: ContractType;
-  address: string;
-  price: number;
-  yield: number;
-}
+type TaxExemptionFormProps = {
+  entries: TaxExemptionEntry[];
+  onSubmit: () => void;
+  onCancel: () => void;
+};
 
-interface PropertyCardProps {
-  property: Property;
-}
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: sans-serif;
+`;
 
-const Card = styled.div`
-  background-color: #fff;
+const Title = styled.h2`
+  margin-bottom: 20px;
+`;
+
+const Table = styled.table`
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
+const Button = styled.button`
+  padding: 8px 16px;
+  margin-left: 10px;
+  border: none;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-  margin-bottom: 16px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
 
-  @media (min-width: 768px) {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  &:hover {
+    background-color: #0056b3;
   }
 `;
 
-const CardTitle = styled.h3`
-  margin: 0;
-  font-size: 18px;
-  font-weight: bold;
-`;
-
-const CardContent = styled.div`
-  margin-top: 8px;
-
-  @media (min-width: 768px) {
-    display: flex;
-    align-items: center;
-  }
-`;
-
-const CardInfo = styled.div`
-  margin-right: 16px;
-`;
-
-const CardLabel = styled.span`
-  font-size: 14px;
-  color: #666;
-`;
-
-const CardValue = styled.span`
-  font-size: 16px;
-  font-weight: bold;
-`;
-
-const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
-  const { type, address, price, yield: propertyYield } = property;
+const TaxExemptionForm: React.FC<TaxExemptionFormProps> = ({ entries, onSubmit, onCancel }) => {
+  // 合計金額を計算
+  const totalAmount = entries.reduce((sum, entry) => sum + entry.amount, 0);
+  // 合計税額を計算
+  const totalTaxAmount = entries.reduce((sum, entry) => sum + entry.taxAmount, 0);
 
   return (
-    <Card>
-      <CardTitle>{type === '買取' ? '買取物件' : '売却物件'}</CardTitle>
-      <CardContent>
-        <CardInfo>
-          <CardLabel>住所:</CardLabel>
-          <CardValue>{address}</CardValue>
-        </CardInfo>
-        <CardInfo>
-          <CardLabel>価格:</CardLabel>
-          <CardValue>{price.toLocaleString()}万円</CardValue>
-        </CardInfo>
-        {propertyYield && (
-          <CardInfo>
-            <CardLabel>利回り:</CardLabel>
-            <CardValue>{propertyYield}%</CardValue>
-          </CardInfo>
-        )}
-      </CardContent>
-    </Card>
+    <Container>
+      <Title>特定課税仕入伝票管理入力</Title>
+      <Table>
+        <thead>
+          <tr>
+            <th>摘要2</th>
+            <th>振替年月</th>
+            <th>振替番号</th>
+            <th>伝票日付</th>
+            <th>摘要</th>
+            <th>金額</th>
+            <th>税込額</th>
+            <th>消費税額</th>
+          </tr>
+        </thead>
+        <tbody>
+          {entries.map((entry, index) => (
+            <tr key={index}>
+              <td>{entry.date}</td>
+              <td>{entry.description}</td>
+              <td>{entry.taxCategory}</td>
+              <td>{entry.taxRate}%</td>
+              <td>{entry.amount.toLocaleString()}</td>
+              <td>{entry.taxAmount.toLocaleString()}</td>
+              <td>{entry.consumptionTaxAmount.toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={4}>計</td>
+            <td>{totalAmount.toLocaleString()}</td>
+            <td>{totalTaxAmount.toLocaleString()}</td>
+            <td>0</td>
+          </tr>
+        </tfoot>
+      </Table>
+      <ButtonContainer>
+        <Button onClick={onCancel}>クリア</Button>
+        <Button onClick={onSubmit}>終了</Button>
+      </ButtonContainer>
+    </Container>
   );
 };
 
-// Usage example
-const SamplePropertyCard: React.FC = () => {
-  const sampleProperty: Property = {
-    type: '買取',
-    address: '東京都新宿区西新宿1-1-1',
-    price: 5000,
-    yield: 6.5,
+// サンプルデータを使用した例
+const sampleData: TaxExemptionEntry[] = [
+  {
+    date: '2016/03/27',
+    description: '振替手形',
+    taxCategory: '課税',
+    taxRate: 8,
+    amount: 90000,
+    taxAmount: 7200,
+    consumptionTaxAmount: 0,
+  },
+  {
+    date: '2016/03/27',
+    description: '売上手形',
+    taxCategory: '課税',
+    taxRate: 8,
+    amount: 80000,
+    taxAmount: 6400,
+    consumptionTaxAmount: 0,
+  },
+];
+
+const TaxExemptionFormExample: React.FC = () => {
+  const handleSubmit = () => {
+    // 送信処理
+    console.log('Form submitted');
   };
 
-  return (
-    <div>
-      <h2>物件カード</h2>
-      <PropertyCard property={sampleProperty} />
-    </div>
-  );
+  const handleCancel = () => {
+    // キャンセル処理
+    console.log('Form cancelled');
+  };
+
+  return <TaxExemptionForm entries={sampleData} onSubmit={handleSubmit} onCancel={handleCancel} />;
 };
 
-export default SamplePropertyCard;
+export default TaxExemptionFormExample;
