@@ -9,207 +9,161 @@ type ReservationData = {
   date: string;
   time: string;
   numberOfPeople: number;
+  courseType: string;
   name: string;
   phoneNumber: string;
   email: string;
-  requests: string;
+  additionalRequests: string;
 };
 
 const ReservationForm: React.FC<ReservationFormProps> = ({ onSubmit }) => {
-  const [reservationData, setReservationData] = React.useState<ReservationData>({
+  const [formData, setFormData] = React.useState<ReservationData>({
     date: '',
     time: '',
     numberOfPeople: 1,
+    courseType: '',
     name: '',
     phoneNumber: '',
     email: '',
-    requests: '',
+    additionalRequests: '',
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    setReservationData(prevData => ({
+  // フォームの入力値が変更された時のハンドラ
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
       ...prevData,
-      [name]: name === 'numberOfPeople' ? parseInt(value) : value,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit(reservationData);
-    // Clear form after submission
-    setReservationData({
-      date: '',
-      time: '',
-      numberOfPeople: 1,
-      name: '',
-      phoneNumber: '',
-      email: '',
-      requests: '',
-    });
+  // 予約ボタンがクリックされた時のハンドラ
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit(formData);
   };
 
   return (
-    <FormContainer>
-      <FormTitle>予約情報マスター</FormTitle>
-      <Form onSubmit={handleSubmit}>
-        <InputRow>
-          <Label>
-            予約日付
-            <Input
-              type="date"
-              name="date"
-              value={reservationData.date}
-              onChange={handleChange}
-              required
-            />
-          </Label>
-          <Label>
-            時刻
-            <Input
-              type="time"
-              name="time"
-              value={reservationData.time}
-              onChange={handleChange}
-              required
-            />
-          </Label>
-        </InputRow>
-        <InputRow>
-          <Label>
-            人数
-            <Input
-              type="number"
-              name="numberOfPeople"
-              min={1}
-              value={reservationData.numberOfPeople}
-              onChange={handleChange}
-              required
-            />
-          </Label>
-          <Label>
-            予約者氏名
-            <Input
-              type="text"
-              name="name"
-              value={reservationData.name}
-              onChange={handleChange}
-              required
-            />
-          </Label>
-        </InputRow>
-        <InputRow>
-          <Label>
-            電話番号
-            <Input
-              type="tel"
-              name="phoneNumber"
-              value={reservationData.phoneNumber}
-              onChange={handleChange}
-              required
-            />
-          </Label>
-          <Label>
-            メールアドレス
-            <Input
-              type="email"
-              name="email"
-              value={reservationData.email}
-              onChange={handleChange}
-              required
-            />
-          </Label>
-        </InputRow>
-        <Label>
-          備考
-          <Textarea
-            name="requests"
-            value={reservationData.requests}
-            onChange={handleChange}
-          />
-        </Label>
-        <ButtonRow>
-          <Button type="submit">登録</Button>
-        </ButtonRow>
-      </Form>
-    </FormContainer>
+    <Form onSubmit={handleSubmit}>
+      <FormSection>
+        <Label>予約日</Label>
+        <Input type="date" name="date" value={formData.date} onChange={handleChange} required />
+        <Input type="time" name="time" value={formData.time} onChange={handleChange} required />
+      </FormSection>
+      
+      <FormSection>
+        <Label>人数</Label>
+        <Select name="numberOfPeople" value={formData.numberOfPeople} onChange={handleChange}>
+          {[...Array(10)].map((_, i) => (
+            <option key={i} value={i + 1}>{i + 1}名</option>
+          ))}
+        </Select>
+      </FormSection>
+
+      <FormSection>
+        <Label>予約コース</Label>
+        <RadioGroup>
+          <Radio type="radio" id="course-a" name="courseType" value="A" checked={formData.courseType === 'A'} onChange={handleChange} />
+          <RadioLabel htmlFor="course-a">昼の部</RadioLabel>
+
+          <Radio type="radio" id="course-b" name="courseType" value="B" checked={formData.courseType === 'B'} onChange={handleChange} />
+          <RadioLabel htmlFor="course-b">夜の部</RadioLabel>
+        </RadioGroup>
+      </FormSection>
+
+      <FormSection>
+        <Label>予約者情報</Label>
+        <Input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="代表者名" required />
+        <Input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} placeholder="電話番号" required />
+        <Input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="メールアドレス" />
+      </FormSection>
+
+      <FormSection>
+        <Label>連絡事項</Label>
+        <Textarea name="additionalRequests" value={formData.additionalRequests} onChange={handleChange} rows={3} />
+      </FormSection>
+
+      <SubmitButton type="submit">予約</SubmitButton>
+    </Form>
   );
 };
 
-const FormContainer = styled.div`
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 5px;
-`;
+// サンプルデータを用いたコンポーネントの使用例
+const SampleReservationForm: React.FC = () => {
+  const handleSubmit = (data: ReservationData) => {
+    console.log('Submitted data:', data);
+    // ここで予約データをサーバーに送信するなどの処理を行う
+  };
 
-const FormTitle = styled.h2`
-  text-align: center;
-  margin-bottom: 20px;
-`;
+  return (
+    <div>
+      <h2>予約フォーム</h2>
+      <ReservationForm onSubmit={handleSubmit} />
+    </div>
+  );
+};
 
+export default SampleReservationForm;
+
+// スタイリング用のコンポーネント
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+  margin: 0 auto;
 `;
 
-const InputRow = styled.div`
+const FormSection = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-  }
+  flex-direction: column;
+  gap: 5px;
 `;
 
 const Label = styled.label`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  margin-right: 10px;
-
-  &:last-child {
-    margin-right: 0;
-  }
+  font-weight: bold;
 `;
 
 const Input = styled.input`
   padding: 5px;
   border: 1px solid #ccc;
-  border-radius: 3px;
-  margin-top: 5px;
+  border-radius: 4px;
+`;
+
+const Select = styled.select`
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const RadioGroup = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const Radio = styled.input`
+  margin-right: 5px;
+`;
+
+const RadioLabel = styled.label`
+  margin-right: 15px;
 `;
 
 const Textarea = styled.textarea`
   padding: 5px;
   border: 1px solid #ccc;
-  border-radius: 3px;
-  margin-top: 5px;
+  border-radius: 4px;
 `;
 
-const ButtonRow = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-`;
-
-const Button = styled.button`
+const SubmitButton = styled.button`
+  padding: 10px;
   background-color: #007bff;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
-
-// Sample usage
-const SampleReservationForm: React.FC = () => {
-  const handleSubmit = (data: ReservationData) => {
-    console.log('Submitted reservation data:', data);
-    // Perform further actions with the submitted data
-  };
-
-  return <ReservationForm onSubmit={handleSubmit} />;
-};
-
-export default SampleReservationForm;
