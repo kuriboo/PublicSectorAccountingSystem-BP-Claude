@@ -1,187 +1,156 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
-// 振替伝票コンポーネントの型定義
-interface TransferSlipProps {
-  transferDate?: string;
-  transferAmount?: number;
-  accountingDate1?: string;
-  accountingDate2?: string;
-  accountingYear?: number;
-  accountingMonth?: number;
-  accountingDay?: number;
-  detailsOfTransfer1?: string[];
-  detailsOfTransfer2?: string[];
-  totalAmount?: number;
-}
-
-// 振替伝票コンポーネント
-const TransferSlip: React.FC<TransferSlipProps> = ({
-  transferDate = '',
-  transferAmount = 0,
-  accountingDate1 = '',
-  accountingDate2 = '',
-  accountingYear = 0,
-  accountingMonth = 0, 
-  accountingDay = 0,
-  detailsOfTransfer1 = [],
-  detailsOfTransfer2 = [],
-  totalAmount = 0,
-}) => {
-  return (
-    <SlipContainer>
-      <SlipHeader>
-        <SlipTitle>振替伝票（単票）</SlipTitle>
-        <SlipNumber>伝票No. 27-000043</SlipNumber>
-      </SlipHeader>
-      <SlipTable>
-        <thead>
-          <tr>
-            <th>所属</th>
-            <th>検証用</th>
-            <th colSpan={3}>自由日1名</th>
-            <th colSpan={3}>自由日2名</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>債主</td>
-            <td>{transferDate}</td>
-            <td colSpan={3}>平成28年 3月27日</td>
-            <td>平成</td>
-            <td>{accountingYear}</td>
-            <td>年{accountingMonth}月{accountingDay}日</td>
-            <td>起案者</td>
-          </tr>
-          <tr><td colSpan={9}></td></tr>
-          <tr>
-            <td rowSpan={6}>会計</td>
-            <td colSpan={4}>借方科目<br />細部<br />明細</td>
-            <td colSpan={4}>貸方科目<br />細部<br />明細</td>
-            <td rowSpan={6}>金額</td>
-          </tr>
-          <tr><td colSpan={9}></td></tr>
-          <tr>
-            <td rowSpan={4} colSpan={4}>
-              {detailsOfTransfer1.map((detail, index) => (
-                <React.Fragment key={index}>
-                  {detail}<br />
-                </React.Fragment>
-              ))}
-            </td>
-            <td rowSpan={4} colSpan={4}>
-              {detailsOfTransfer2.map((detail, index) => (
-                <React.Fragment key={index}>  
-                  {detail}<br />
-                </React.Fragment>
-              ))}
-            </td>
-            <td rowSpan={4}>{totalAmount.toLocaleString()}円</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colSpan={2}>仕訳1</td>
-            <td colSpan={3}>税区分</td>
-            <td colSpan={2}>仕訳2</td>
-            <td colSpan={2}>資金予算区分 無</td>
-          </tr>
-        </tfoot>
-      </SlipTable>
-    </SlipContainer>
-  );
+type Props = {
+  documentNo: string;
+  date: string;
+  name: string;
+  amount: string;
 };
 
-// スタイリング
-const SlipContainer = styled.div`
-  width: 100%;
-  padding: 16px;
+const Container = styled.div`
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
   box-sizing: border-box;
 
-  @media (max-width: 768px) {
-    padding: 8px;
+  @media (max-width: 600px) {
+    padding: 10px;
   }
 `;
 
-const SlipHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-`;
-
-const SlipTitle = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-`;
-
-const SlipNumber = styled.p`
-  font-size: 16px;
-  margin: 0;
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
-`;
-
-const SlipTable = styled.table`
+const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
+`;
 
-  th, td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-    
-    @media (max-width: 768px) {
-      padding: 4px;
-      font-size: 12px;
-    }
-  }
-
-  th {
-    background-color: #f0f0f0;
+const TableRow = styled.tr`
+  &:nth-of-type(even) {
+    background-color: #f2f2f2;
   }
 `;
 
-// サンプルデータ
-const sampleData: TransferSlipProps = {
-  transferDate: '債証用',
-  transferAmount: 80000,
-  accountingDate1: '平成28年 3月27日',  
-  accountingDate2: '平成27年4月1日',
-  accountingYear: 27,
-  accountingMonth: 4,
-  accountingDay: 1,
-  detailsOfTransfer1: [
-    '流動資源',
-    'その他流動資源',
-    '仮払消費税及び地方消費税',
-    '仮払消費税及び地方消費税',
-    '仮払消費税及び地方消費税',   
-  ],
-  detailsOfTransfer2: [
-    '流動負債',
-    'その他流動負債',
-    '仮受消費税及び地方消費税',
-    '仮受消費税及び地方消費税',
-    '仮受消費税及び地方消費税',
-  ],
-  totalAmount: 80000,
+const TableHeader = styled.th`
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #ddd;
+`;
+
+const TableCell = styled.td`
+  padding: 8px;
+  border: 1px solid #ddd;
+`;
+
+const BanktTansfer = styled.div`
+  margin-top: 20px;
+`;
+
+const TransferTitle = styled.div`
+  font-weight: bold;
+`;
+
+const TransferList = styled.ul`
+  padding-left: 20px;
+  margin: 5px 0;
+`;
+
+const TotalAmount = styled.div`
+  font-weight: bold;
+  text-align: right;
+  margin-top: 20px;
+`;
+
+const InvoiceComponent: React.FC<Props> = ({ documentNo, date, name, amount }) => {
+  // 例外処理: documentNo, date, name, amountのいずれかが空の場合はエラーメッセージを表示
+  if (!documentNo || !date || !name || !amount) {
+    return <div>エラー: 請求情報が不完全です。</div>;
+  }
+
+  return (
+    <Container>
+      <h2>振替伝票（単票）</h2>
+      <div>
+        <span>伝票No. {documentNo}</span>
+        <span style={{ float: 'right' }}>振替</span>
+      </div>
+      <Table>
+        <thead>
+          <TableRow>
+            <TableHeader>所属</TableHeader>
+            <TableHeader>検証用</TableHeader>
+            <TableHeader>自由日1名</TableHeader>
+            <TableHeader>自由日2名</TableHeader>
+          </TableRow>
+        </thead>
+        <tbody>
+          <TableRow>
+            <TableCell>{name}</TableCell>
+            <TableCell>株長</TableCell>
+            <TableCell>平成28年 3月27日</TableCell>
+            <TableCell>平成 年 月 日</TableCell>
+          </TableRow>
+        </tbody>
+      </Table>
+      <Table>
+        <thead>
+          <TableRow>
+            <TableHeader>借方科目</TableHeader>
+            <TableHeader>貸方科目</TableHeader>
+          </TableRow>
+        </thead>
+        <tbody>
+          <TableRow>
+            <TableCell>
+              <div>細節<br/>明細</div>
+            </TableCell>
+            <TableCell>
+              <div>細節<br/>明細</div>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <TransferTitle>流動資産</TransferTitle>
+              <TransferList>
+                <li>その他流動資産</li>
+                <li>仮払消費税及び地方消費税</li>
+                <li>仮払消費税及び地方消費税</li>
+                <li>仮払消費税及び地方消費税</li>
+                <li>仮払消費税及び地方消費税</li>
+              </TransferList>
+              <div>税 区 分</div>
+              <div>収 入 区 分</div>
+            </TableCell>
+            <TableCell>
+              <TransferTitle>流動負債</TransferTitle>
+              <TransferList>
+                <li>その他流動負債</li>
+                <li>仮受消費税及び地方消費税</li>
+                <li>仮受消費税及び地方消費税</li>
+                <li>仮受消費税及び地方消費税</li>
+                <li>仮受消費税及び地方消費税</li>
+              </TransferList>
+              <div>税 区 分</div>
+              <div>資金予算区分 無</div>
+            </TableCell>
+          </TableRow>
+        </tbody>
+      </Table>
+      <TotalAmount>金 額 {amount}</TotalAmount>
+    </Container>
+  );
 };
 
 // 使用例
 const App: React.FC = () => {
   return (
-    <div>
-      <h1>振替伝票サンプル</h1>
-      <TransferSlip {...sampleData} />
-    </div>
+    <InvoiceComponent
+      documentNo="27-000043"
+      date="平成 27年度"
+      name="検証用"
+      amount="80,000円"
+    />
   );
 };
 
