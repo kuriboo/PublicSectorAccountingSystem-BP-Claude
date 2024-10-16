@@ -1,97 +1,93 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-interface ProfileProps {
-  name: string;
-  title: string;
-  description: string;
-  profileImage: string;
-}
+// MenuItemProps型定義
+type MenuItemProps = {
+  label: string;
+  price: number;
+  description?: string;
+};
 
-const ProfileContainer = styled.div`
+// MenuItemコンポーネント
+const MenuItem: React.FC<MenuItemProps> = ({ label, price, description }) => {
+  return (
+    <MenuItemWrapper>
+      <MenuItemLabel>{label}</MenuItemLabel>
+      <MenuItemPrice>¥{price.toLocaleString()}</MenuItemPrice>
+      {description && <MenuItemDescription>{description}</MenuItemDescription>}
+    </MenuItemWrapper>
+  );
+};
+
+// MenuItemのスタイル定義
+const MenuItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  background-color: #f5f5f5;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: center;
-  }
-`;
-
-const ProfileImage = styled.img`
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
   margin-bottom: 1rem;
-
-  @media (min-width: 768px) {
-    margin-right: 2rem;
-    margin-bottom: 0;
-  }
 `;
 
-const ProfileInfo = styled.div`
-  text-align: center;
-
-  @media (min-width: 768px) {
-    text-align: left;
-  }
-`;
-
-const Name = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-`;
-
-const Title = styled.p`
+const MenuItemLabel = styled.span`
   font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 1rem;
+  font-weight: bold;
 `;
 
-const Description = styled.p`
+const MenuItemPrice = styled.span`
   font-size: 1rem;
-  line-height: 1.5;
+  color: #666;
 `;
 
-const Profile: React.FC<ProfileProps> = ({ name, title, description, profileImage }) => {
-  // 値が入っていない場合のデフォルト値を設定
-  const defaultName = '名前が設定されていません';
-  const defaultTitle = 'タイトルが設定されていません';
-  const defaultDescription = '説明文が設定されていません';
-  const defaultImage = 'https://via.placeholder.com/150';
+const MenuItemDescription = styled.p`
+  font-size: 0.9rem;
+  color: #999;
+  margin-top: 0.5rem;
+`;
 
+// MenuProps型定義
+type MenuProps = {
+  title: string;
+  items: MenuItemProps[];
+};
+
+// Menuコンポーネント
+const Menu: React.FC<MenuProps> = ({ title, items }) => {
   return (
-    <ProfileContainer>
-      <ProfileImage src={profileImage || defaultImage} alt="Profile" />
-      <ProfileInfo>
-        <Name>{name || defaultName}</Name>
-        <Title>{title || defaultTitle}</Title>
-        <Description>{description || defaultDescription}</Description>
-      </ProfileInfo>
-    </ProfileContainer>
+    <MenuWrapper>
+      <MenuTitle>{title}</MenuTitle>
+      {items.map((item, index) => (
+        <MenuItem key={index} {...item} />
+      ))}
+    </MenuWrapper>
   );
 };
+
+// Menuのスタイル定義
+const MenuWrapper = styled.div`
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  @media (min-width: 768px) {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+`;
+
+const MenuTitle = styled.h2`
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+`;
+
+// サンプルデータ
+const sampleMenuItems: MenuItemProps[] = [
+  { label: '鰻きょうせい', price: 1000 },
+  { label: '鰻ひつまぶし', price: 1500, description: '薬味を添えて3種類の味が楽しめます。' },
+];
 
 // 使用例
-const App: React.FC = () => {
-  const profileData = {
-    name: '鈴木 太郎',
-    title: 'フロントエンドエンジニア',
-    description: 'TypeScriptとReactが得意なフロントエンドエンジニアです。',
-    profileImage: 'https://example.com/profile.jpg',
-  };
-
-  return (
-    <div>
-      <h1>プロフィール</h1>
-      <Profile {...profileData} />
-    </div>
-  );
+const MenuExample: React.FC = () => {
+  return <Menu title="鰻メニュー" items={sampleMenuItems} />;
 };
 
-export default App;
+export default MenuExample;
