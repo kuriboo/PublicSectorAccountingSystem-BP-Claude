@@ -1,92 +1,158 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-// 登録・訂正・削除のボタンコンポーネント
-type ButtonProps = {
-  label: string;
-  onClick: () => void;
-  disabled?: boolean;
+// 特定課税仕入伝票管理入力フォームのプロパティ型定義
+type TaxInputFormProps = {
+  onSubmit: (data: TaxInputFormData) => void;
 };
 
-const Button: React.FC<ButtonProps> = ({ label, onClick, disabled = false }) => {
-  return (
-    <StyledButton onClick={onClick} disabled={disabled}>
-      {label}
-    </StyledButton>
-  );
+// 特定課税仕入伝票管理入力フォームのデータ型定義
+type TaxInputFormData = {
+  date: string;
+  endDate: string;
+  orderNumber: string;
+  supplierCode: string;
+  departmentCode: string;
+  productCode: string;
+  quantity: number;
+  unitPrice: number;
+  taxRate: number;
+  memo: string;
 };
 
-// ボタンのスタイリング
-const StyledButton = styled.button`
-  padding: 4px 8px;
-  margin-right: 8px;
-  font-size: 14px;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+// 特定課税仕入伝票管理入力フォームのコンポーネント
+const TaxInputForm: React.FC<TaxInputFormProps> = ({ onSubmit }) => {
+  // 状態管理用のstate
+  const [formData, setFormData] = React.useState<TaxInputFormData>({
+    date: '',
+    endDate: '',
+    orderNumber: '',
+    supplierCode: '',
+    departmentCode: '',
+    productCode: '',
+    quantity: 0,
+    unitPrice: 0,
+    taxRate: 0,
+    memo: '',
+  });
 
-  &:hover {
-    background-color: #0056b3;
-  }
-
-  &:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 12px;
-    padding: 2px 6px;
-  }
-`;
-
-// ボタングループのコンポーネント
-const ButtonGroup: React.FC = () => {
-  // ボタンクリック時のハンドラー
-  const handleRegisterClick = () => {
-    console.log('登録ボタンがクリックされました');
+  // フォームの入力値が変更された時のハンドラ
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleCorrectClick = () => {
-    console.log('訂正ボタンがクリックされました');
-  };
-
-  const handleDeleteClick = () => {
-    console.log('削除ボタンがクリックされました');
+  // フォームが送信された時のハンドラ 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onSubmit(formData);
   };
 
   return (
-    <Container>
-      <Button label="登録" onClick={handleRegisterClick} />
-      <Button label="訂正" onClick={handleCorrectClick} />
-      <Button label="削除" onClick={handleDeleteClick} disabled />
-    </Container>
+    <Form onSubmit={handleSubmit}>
+      <Row>
+        <label>
+          伝票日付
+          <input type="date" name="date" value={formData.date} onChange={handleChange} required />
+        </label>
+        <label>
+          伝票番号
+          <input type="text" name="orderNumber" value={formData.orderNumber} onChange={handleChange} required />
+        </label>
+      </Row>
+      <Row>
+        <label>
+          検索期間
+          <input type="date" name="date" value={formData.date} onChange={handleChange} />
+          〜
+          <input type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
+        </label>
+      </Row>
+      <Row>
+        <label>
+          仕入先
+          <input type="text" name="supplierCode" value={formData.supplierCode} onChange={handleChange} required />
+        </label>
+      </Row>
+      <Row>
+        <label>
+          部門
+          <input type="text" name="departmentCode" value={formData.departmentCode} onChange={handleChange} required />
+        </label>
+      </Row>
+      <Row>
+        <label>
+          商品
+          <input type="text" name="productCode" value={formData.productCode} onChange={handleChange} required />
+        </label>
+        <label>
+          数量
+          <input type="number" name="quantity" value={formData.quantity} onChange={handleChange} required min="0" />
+        </label>
+        <label>
+          単価  
+          <input type="number" name="unitPrice" value={formData.unitPrice} onChange={handleChange} required min="0" />
+        </label>
+        <label>
+          税率
+          <input type="number" name="taxRate" value={formData.taxRate} onChange={handleChange} required min="0" max="100" />
+          %
+        </label>
+      </Row>
+      <Row>
+        <label>
+          摘要
+          <input type="text" name="memo" value={formData.memo} onChange={handleChange} />
+        </label>
+      </Row>
+      <Row>
+        <button type="submit">登録</button>
+        <button type="reset">クリア</button>
+      </Row>
+    </Form>
   );
 };
 
-// ボタングループのスタイリング
-const Container = styled.div`
+// スタイリング
+const Form = styled.form`
   display: flex;
-  justify-content: flex-end;
-  padding: 16px;
-  background-color: #f8f9fa;
-  border-radius: 4px;
+  flex-direction: column;
+  gap: 16px;
+`;
 
-  @media (max-width: 480px) {
-    padding: 8px;
+const Row = styled.div`
+  display: flex;
+  gap: 16px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
   }
 `;
+
+// サンプルデータ
+const sampleData: TaxInputFormData = {
+  date: '2019-03-27',
+  endDate: '2019-03-27', 
+  orderNumber: '999999',
+  supplierCode: '10000000',
+  departmentCode: '451',
+  productCode: 'ABC123',
+  quantity: 10,
+  unitPrice: 1000,
+  taxRate: 10,
+  memo: 'サンプル',
+};
 
 // 使用例
-const App: React.FC = () => {
-  return (
-    <div>
-      <h1>ボタングループの例</h1>
-      <ButtonGroup />
-    </div>
-  );
+const TaxInputFormExample: React.FC = () => {
+  const handleSubmit = (data: TaxInputFormData) => {
+    console.log(data);
+  };
+
+  return <TaxInputForm onSubmit={handleSubmit} />;
 };
 
-export default App;
+export default TaxInputForm;
