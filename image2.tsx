@@ -1,104 +1,72 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-// スタイル定義
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background-color: #f8f8f8;
-  border-bottom: 1px solid #ddd;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`;
-
-const Logo = styled.img`
-  height: 40px;
-
-  @media (max-width: 768px) {
-    margin-bottom: 1rem;
-  }
-`;
-
-const Nav = styled.nav`
-  ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-    }
-  }
-
-  li {
-    margin-left: 1rem;
-
-    @media (max-width: 768px) {
-      margin-left: 0;
-      margin-bottom: 0.5rem;
-    }
-  }
-
-  a {
-    color: #333;
-    text-decoration: none;
-    
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
-// ヘッダーコンポーネントの型定義
-type HeaderProps = {
-  logo: string;
-  items: { label: string; url: string }[];
+// MenuProps interface defines the properties for the Menu component
+interface MenuProps {
+  items: string[]; // Array of menu item labels
 }
 
-// ヘッダーコンポーネント
-const SiteHeader: React.FC<HeaderProps> = ({ logo, items }) => {
+// MenuItemProps interface defines the properties for the MenuItem component
+interface MenuItemProps {
+  label: string; // Label for the menu item
+}
+
+// MenuItem component represents a single menu item
+const MenuItem: React.FC<MenuItemProps> = ({ label }) => {
+  return <Item>{label}</Item>;
+};
+
+// Menu component represents the entire menu
+const Menu: React.FC<MenuProps> = ({ items }) => {
   return (
-    <Header>
-      <Logo src={logo} alt="Site Logo" />
-      <Nav>
-        <ul>
-          {items.map((item, index) => (
-            <li key={index}>
-              <a href={item.url}>{item.label}</a>
-            </li>
-          ))}
-        </ul>  
-      </Nav>
-    </Header>
+    <MenuContainer>
+      {items.map((item, index) => (
+        <MenuItem key={index} label={item} />
+      ))}
+    </MenuContainer>
   );
 };
 
-// サンプルデータ
-const sampleData = {
-  logo: 'https://example.com/logo.png',
-  items: [
-    { label: 'ホーム', url: '/' },
-    { label: '製品', url: '/products' },
-    { label: 'お問い合わせ', url: '/contact' },
-  ],
-};
-
-// サンプル使用コンポーネント 
+// Example usage of the Menu component
 const App: React.FC = () => {
+  const menuItems = ['魅せようせい', '商品一覧', 'コーディネート', '店舗情報', 'ニュースブログ', 'プライバシーポリシー'];
+
   return (
     <div>
-      <SiteHeader logo={sampleData.logo} items={sampleData.items} />
-      <main>
-        {/* ページコンテンツ */}
-      </main>
+      <Title>株式会社ようせい</Title>
+      <Menu items={menuItems} />
     </div>
   );
 };
 
 export default App;
+
+// Styled components
+const MenuContainer = styled.ul`
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  background-color: #333;
+  color: #fff;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const Item = styled.li`
+  padding: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #555;
+  }
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+`;
