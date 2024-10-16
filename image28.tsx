@@ -1,156 +1,150 @@
-import React from 'react';
-import styled from '@emotion/styled';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-type Props = {
-  documentNo: string;
-  date: string;
-  name: string;
-  amount: string;
+type PriceListItem = {
+  label: string;
+  diameter: number;
+  price: number;
 };
 
-const Container = styled.div`
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
+type PriceListProps = {
+  items: PriceListItem[];
+  materialType?: string;
+  quantity?: number;
+  taxRate?: number;
+  consumptionTax?: number;
+  totalAmount?: number;
+};
 
-  @media (max-width: 600px) {
-    padding: 10px;
+const Wrapper = styled.div`
+  font-family: sans-serif;
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  }
+  .summary {
+    margin-top: 20px;
+    text-align: right;
+    > div {
+      margin-bottom: 5px;
+    }
   }
 `;
 
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-`;
+const PriceList: React.FC<PriceListProps> = ({
+  items,
+  materialType = '10加入亜鉛荒',
+  quantity = 1,
+  taxRate = 10,
+  consumptionTax = 0,
+  totalAmount = 0,
+}) => {
+  // State for diameter and form
+  const [diameter, setDiameter] = useState(25);
+  const [form, setForm] = useState('mm');
 
-const TableRow = styled.tr`
-  &:nth-of-type(even) {
-    background-color: #f2f2f2;
-  }
-`;
-
-const TableHeader = styled.th`
-  text-align: left;
-  padding: 8px;
-  border: 1px solid #ddd;
-`;
-
-const TableCell = styled.td`
-  padding: 8px;
-  border: 1px solid #ddd;
-`;
-
-const BanktTansfer = styled.div`
-  margin-top: 20px;
-`;
-
-const TransferTitle = styled.div`
-  font-weight: bold;
-`;
-
-const TransferList = styled.ul`
-  padding-left: 20px;
-  margin: 5px 0;
-`;
-
-const TotalAmount = styled.div`
-  font-weight: bold;
-  text-align: right;
-  margin-top: 20px;
-`;
-
-const InvoiceComponent: React.FC<Props> = ({ documentNo, date, name, amount }) => {
-  // 例外処理: documentNo, date, name, amountのいずれかが空の場合はエラーメッセージを表示
-  if (!documentNo || !date || !name || !amount) {
-    return <div>エラー: 請求情報が不完全です。</div>;
-  }
+  // Calculate consumption tax and total amount
+  const calculatedTax = Math.floor(totalAmount * (taxRate / 100));
+  const calculatedTotal = totalAmount + calculatedTax;
 
   return (
-    <Container>
-      <h2>振替伝票（単票）</h2>
+    <Wrapper>
       <div>
-        <span>伝票No. {documentNo}</span>
-        <span style={{ float: 'right' }}>振替</span>
+        <label>
+          納付分類:
+          <select value={materialType}>
+            <option value="10加入亜鉛荒">10加入亜鉛荒</option>
+            {/* Add more options as needed */}
+          </select>
+        </label>
       </div>
-      <Table>
+      <table>
         <thead>
-          <TableRow>
-            <TableHeader>所属</TableHeader>
-            <TableHeader>検証用</TableHeader>
-            <TableHeader>自由日1名</TableHeader>
-            <TableHeader>自由日2名</TableHeader>
-          </TableRow>
+          <tr>
+            <th>形状寸法</th>
+            <th>形状</th>
+            <th>単価</th>
+          </tr>
         </thead>
         <tbody>
-          <TableRow>
-            <TableCell>{name}</TableCell>
-            <TableCell>株長</TableCell>
-            <TableCell>平成28年 3月27日</TableCell>
-            <TableCell>平成 年 月 日</TableCell>
-          </TableRow>
+          {items.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <input
+                  type="number"
+                  value={item.diameter}
+                  onChange={(e) => {
+                    const newItems = [...items];
+                    newItems[index].diameter = Number(e.target.value);
+                    setDiameter(newItems[index].diameter);
+                  }}
+                />
+                <select
+                  value={form}
+                  onChange={(e) => setForm(e.target.value)}
+                >
+                  <option value="mm">mm</option>
+                  {/* Add more options as needed */}
+                </select>
+              </td>
+              <td>{item.label}</td>
+              <td>{item.price.toLocaleString()}</td>
+            </tr>
+          ))}
         </tbody>
-      </Table>
-      <Table>
-        <thead>
-          <TableRow>
-            <TableHeader>借方科目</TableHeader>
-            <TableHeader>貸方科目</TableHeader>
-          </TableRow>
-        </thead>
-        <tbody>
-          <TableRow>
-            <TableCell>
-              <div>細節<br/>明細</div>
-            </TableCell>
-            <TableCell>
-              <div>細節<br/>明細</div>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <TransferTitle>流動資産</TransferTitle>
-              <TransferList>
-                <li>その他流動資産</li>
-                <li>仮払消費税及び地方消費税</li>
-                <li>仮払消費税及び地方消費税</li>
-                <li>仮払消費税及び地方消費税</li>
-                <li>仮払消費税及び地方消費税</li>
-              </TransferList>
-              <div>税 区 分</div>
-              <div>収 入 区 分</div>
-            </TableCell>
-            <TableCell>
-              <TransferTitle>流動負債</TransferTitle>
-              <TransferList>
-                <li>その他流動負債</li>
-                <li>仮受消費税及び地方消費税</li>
-                <li>仮受消費税及び地方消費税</li>
-                <li>仮受消費税及び地方消費税</li>
-                <li>仮受消費税及び地方消費税</li>
-              </TransferList>
-              <div>税 区 分</div>
-              <div>資金予算区分 無</div>
-            </TableCell>
-          </TableRow>
-        </tbody>
-      </Table>
-      <TotalAmount>金 額 {amount}</TotalAmount>
-    </Container>
+      </table>
+      <div className="summary">
+        <div>
+          単価: <span>{totalAmount.toLocaleString()}</span>
+        </div>
+        <div>
+          数量: <span>{quantity}</span>
+        </div>
+        <div>
+          金額: <span>{totalAmount.toLocaleString()}</span>
+        </div>
+        <div>
+          消費税率: <span>{taxRate}%</span>
+        </div>
+        <div>
+          消費税額: <span>{calculatedTax.toLocaleString()}</span>
+        </div>
+        <div>
+          総額: <span>{calculatedTotal.toLocaleString()}</span>
+        </div>
+      </div>
+    </Wrapper>
   );
 };
 
-// 使用例
+// Sample usage
 const App: React.FC = () => {
+  const sampleData: PriceListItem[] = [
+    { label: '形状コード', diameter: 13, price: 157500 },
+    { label: '20', diameter: 20, price: 210000 },
+    { label: '25', diameter: 25, price: 420000 },
+    { label: '30', diameter: 30, price: 525000 },
+    { label: '40', diameter: 40, price: 1050000 },
+    { label: '50', diameter: 50, price: 1575000 },
+  ];
+
   return (
-    <InvoiceComponent
-      documentNo="27-000043"
-      date="平成 27年度"
-      name="検証用"
-      amount="80,000円"
-    />
+    <div>
+      <h1>Price List Example</h1>
+      <PriceList
+        items={sampleData}
+        quantity={210000}
+        totalAmount={210000}
+      />
+    </div>
   );
 };
 
