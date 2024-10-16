@@ -1,54 +1,65 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-// エラーメッセージのスタイルを定義
-const ErrorMessageWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background-color: #f0f0f0;
+// ボタンのプロパティの型定義
+interface ButtonProps {
+  label: string;
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+// ボタンのスタイルコンポーネント
+const StyledButton = styled.button<{ disabled?: boolean }>`
+  padding: 10px 20px;
   font-size: 16px;
-  font-weight: bold;
-  color: #ff0000;
+  border-radius: 5px;
+  border: none;
+  background-color: ${({ disabled }) => (disabled ? '#ccc' : '#007bff')};
+  color: #fff;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: ${({ disabled }) => (disabled ? 0.6 : 0.8)};
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
 `;
 
-// エラーメッセージのアイコンのスタイルを定義
-const ErrorIcon = styled.span`
-  display: inline-block;
-  margin-right: 8px;
-  font-size: 20px;
-`;
+// 再利用可能なボタンコンポーネント
+const Button: React.FC<ButtonProps> = ({ label, onClick, disabled }) => {
+  // ボタンのクリックハンドラ
+  const handleClick = () => {
+    if (onClick && !disabled) {
+      onClick();
+    }
+  };
 
-// エラーメッセージのプロパティの型を定義
-type ErrorMessageProps = {
-  message: string;
+  return <StyledButton onClick={handleClick} disabled={disabled}>{label}</StyledButton>;
 };
 
-// エラーメッセージのコンポーネントを定義
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
-  // メッセージが空の場合はnullを返す
-  if (!message) return null;
-
-  return (
-    <ErrorMessageWrapper>
-      <ErrorIcon>⚠️</ErrorIcon>
-      {message}
-    </ErrorMessageWrapper>
-  );
+// デフォルトプロパティ
+Button.defaultProps = {
+  disabled: false,
 };
 
-// エラーメッセージのサンプルデータ
-const sampleMessage = '正常に処理されませんでした。';
+// サンプルデータを用いたボタンコンポーネントの使用例
+const ButtonExample: React.FC = () => {
+  const handleClick = () => {
+    alert('Button clicked!');
+  };
 
-// エラーメッセージのコンポーネントの使用例
-const ErrorMessageExample: React.FC = () => {
   return (
-    <div style={{ width: 400, height: 200 }}>
-      <ErrorMessage message={sampleMessage} />
+    <div>
+      <Button label="OK" onClick={handleClick} />
+      <Button label="キャンセル" disabled />
+      <Button label="終了" />
     </div>
   );
 };
 
-export default ErrorMessage;
+export default ButtonExample;
