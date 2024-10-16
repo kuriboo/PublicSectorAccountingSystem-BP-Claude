@@ -1,93 +1,91 @@
 import React from 'react';
 import styled from 'styled-components';
 
-// MenuItemProps型定義
-type MenuItemProps = {
-  label: string;
-  price: number;
-  description?: string;
-};
+// 型定義
+interface TableProps {
+  headers: string[];
+  rows: string[][];
+}
 
-// MenuItemコンポーネント
-const MenuItem: React.FC<MenuItemProps> = ({ label, price, description }) => {
-  return (
-    <MenuItemWrapper>
-      <MenuItemLabel>{label}</MenuItemLabel>
-      <MenuItemPrice>¥{price.toLocaleString()}</MenuItemPrice>
-      {description && <MenuItemDescription>{description}</MenuItemDescription>}
-    </MenuItemWrapper>
-  );
-};
-
-// MenuItemのスタイル定義
-const MenuItemWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
+// スタイル定義
+const TableContainer = styled.div`
+  overflow-x: auto;
+  margin: 20px;
 `;
 
-const MenuItemLabel = styled.span`
-  font-size: 1.2rem;
-  font-weight: bold;
-`;
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
 
-const MenuItemPrice = styled.span`
-  font-size: 1rem;
-  color: #666;
-`;
-
-const MenuItemDescription = styled.p`
-  font-size: 0.9rem;
-  color: #999;
-  margin-top: 0.5rem;
-`;
-
-// MenuProps型定義
-type MenuProps = {
-  title: string;
-  items: MenuItemProps[];
-};
-
-// Menuコンポーネント
-const Menu: React.FC<MenuProps> = ({ title, items }) => {
-  return (
-    <MenuWrapper>
-      <MenuTitle>{title}</MenuTitle>
-      {items.map((item, index) => (
-        <MenuItem key={index} {...item} />
-      ))}
-    </MenuWrapper>
-  );
-};
-
-// Menuのスタイル定義
-const MenuWrapper = styled.div`
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  @media (min-width: 768px) {
-    max-width: 600px;
-    margin: 0 auto;
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  @media screen and (max-width: 600px) {
+    th, td {
+      display: block;
+      width: 100%;
+    }
+    
+    tr {
+      border-bottom: 2px solid #ddd;
+    }
   }
 `;
 
-const MenuTitle = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  text-align: center;
-`;
+// コンポーネント定義
+const DataTable: React.FC<TableProps> = ({ headers, rows }) => {
+  // ヘッダーが空の場合は空配列をデフォルト値として設定
+  const tableHeaders = headers.length > 0 ? headers : [];
+  
+  // 行データが空の場合は空配列をデフォルト値として設定  
+  const tableRows = rows.length > 0 ? rows : [];
 
-// サンプルデータ
-const sampleMenuItems: MenuItemProps[] = [
-  { label: '鰻きょうせい', price: 1000 },
-  { label: '鰻ひつまぶし', price: 1500, description: '薬味を添えて3種類の味が楽しめます。' },
-];
-
-// 使用例
-const MenuExample: React.FC = () => {
-  return <Menu title="鰻メニュー" items={sampleMenuItems} />;
+  return (
+    <TableContainer>
+      <Table>
+        <thead>
+          <tr>
+            {tableHeaders.map((header, index) => (
+              <th key={index}>{header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {tableRows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {row.map((cell, cellIndex) => (
+                <td key={cellIndex}>{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </TableContainer>
+  );
 };
 
-export default MenuExample;
+export default DataTable;
+
+// 使用例
+const SampleDataTable: React.FC = () => {
+  const headers = ['Name', 'Age', 'City'];
+  const rows = [
+    ['John Doe', '28', 'New York'],
+    ['Jane Smith', '35', 'London'],
+    ['Mike Johnson', '42', 'Paris']
+  ];
+
+  return (
+    <div>
+      <h2>Sample Data Table</h2>
+      <DataTable headers={headers} rows={rows} />
+    </div>
+  );
+};
