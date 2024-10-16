@@ -1,168 +1,169 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-type ExpenseSummaryProps = {
-  year: number;
-  annualExpense: number;
-  transactionDetails: TransactionDetail[];
+type DentalTreatmentStatementProps = {
+  patientName: string;
+  patientBirthDate: string;
+  insuranceType: string;
+  treatments: {
+    date: string;
+    name: string;
+    points: number;
+    copayment: number;
+  }[];
+  totalPoints: number;
+  totalCopayment: number;
+  doctorName: string;
+  doctorLicenseNumber: string;
 };
 
-type TransactionDetail = {
-  date: string;
-  content: string;
-  debit: number;
-  credit: number;
-};
-
-const ExpenseSummary: React.FC<ExpenseSummaryProps> = ({
-  year,
-  annualExpense,
-  transactionDetails,
+const DentalTreatmentStatement: React.FC<DentalTreatmentStatementProps> = ({
+  patientName,
+  patientBirthDate,
+  insuranceType,
+  treatments,
+  totalPoints,
+  totalCopayment,
+  doctorName,
+  doctorLicenseNumber,
 }) => {
   return (
-    <Container>
-      <Title>振替伝票（単票）</Title>
-      <Header>
-        <HeaderItem>
-          <HeaderLabel>平成</HeaderLabel>
-          <HeaderValue>{year}年度</HeaderValue>
-        </HeaderItem>
-        <HeaderItem>
-          <HeaderLabel>行秋市事業会計</HeaderLabel>
-          <HeaderValue>27-000481</HeaderValue>
-        </HeaderItem>
-      </Header>
-      <Table>
-        <TableHeader>
-          <TableHeaderCell>月 日</TableHeaderCell>
-          <TableHeaderCell>科目</TableHeaderCell>
-          <TableHeaderCell>摘要</TableHeaderCell>
-          <TableHeaderCell>借方科目</TableHeaderCell>
-          <TableHeaderCell>貸方科目</TableHeaderCell>
-          <TableHeaderCell>金 額</TableHeaderCell>
-        </TableHeader>
-        <TableBody>
-          {transactionDetails.map((detail, index) => (
-            <TableRow key={index}>
-              <TableCell>{detail.date}</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>{detail.debit}</TableCell>
-              <TableCell>{detail.credit}</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
+    <StatementContainer>
+      <StatementHeader>振替伝票（単票）</StatementHeader>
+      <PatientInfo>
+        <PatientName>{patientName || '-'}</PatientName>
+        <PatientBirthDate>{patientBirthDate || '-'}</PatientBirthDate>
+        <InsuranceType>{insuranceType || '-'}</InsuranceType>
+      </PatientInfo>
+      <TreatmentTable>
+        <thead>
+          <tr>
+            <StatementHeaderCell>診療年月日</StatementHeaderCell>
+            <StatementHeaderCell>傷病名称</StatementHeaderCell>
+            <StatementHeaderCell>点数</StatementHeaderCell>
+            <StatementHeaderCell>一部負担金</StatementHeaderCell>
+          </tr>
+        </thead>
+        <tbody>
+          {treatments.map((treatment, index) => (
+            <tr key={index}>
+              <StatementBodyCell>{treatment.date}</StatementBodyCell>
+              <StatementBodyCell>{treatment.name}</StatementBodyCell>
+              <StatementBodyCell>{treatment.points}</StatementBodyCell>
+              <StatementBodyCell>{treatment.copayment}</StatementBodyCell>
+            </tr>
           ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={5}>合 計</TableCell>
-            <TableCell>{annualExpense.toLocaleString()}円</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-      <Footer>
-        <div>伝票発行</div>
-        <div>収 入 区 分 &nbsp;&nbsp;{'{収入区分}'}</div>
-        <div>資金予算区分等 &nbsp;&nbsp;{'{資金予算区分等}'}</div>
-      </Footer>
-    </Container>
+        </tbody>
+      </TreatmentTable>
+      <TotalRow>
+        <TotalLabel>金額</TotalLabel>
+        <TotalPoints>{totalPoints || '-'}</TotalPoints>
+        <TotalCopayment>{totalCopayment || '-'}</TotalCopayment>
+      </TotalRow>
+      <DoctorInfo>
+        <DoctorName>{doctorName || '-'}</DoctorName>
+        <DoctorLicenseNumber>{doctorLicenseNumber || '-'}</DoctorLicenseNumber>
+      </DoctorInfo>
+    </StatementContainer>
   );
 };
 
-// サンプルデータ
-const sampleData: ExpenseSummaryProps = {
-  year: 27,
-  annualExpense: 1000000,
-  transactionDetails: [
-    {
-      date: '4月7日',
-      content: '事務費',
-      debit: 100000,
-      credit: 0,
-    },
-    {
-      date: '5月7日',
-      content: '光熱費',
-      debit: 50000,
-      credit: 0,
-    },
-    {
-      date: '6月7日',
-      content: '家賃',
-      debit: 0,
-      credit: 150000,
-    },
+// Sample data for demonstration
+const sampleData: DentalTreatmentStatementProps = {
+  patientName: '田中太郎',
+  patientBirthDate: '平成元年8月27日生',
+  insuranceType: '社会保険 国民健康保険',
+  treatments: [
+    { date: '2/10', name: '処置', points: 200, copayment: 600 },
+    { date: '2/17', name: '補綴', points: 500, copayment: 1500 },
   ],
+  totalPoints: 1000000,
+  totalCopayment: 1000000,
+  doctorName: '山田花子',
+  doctorLicenseNumber: '1234567890',
 };
 
-const ExpenseSummaryExample: React.FC = () => {
-  return <ExpenseSummary {...sampleData} />;
+const SampleDentalTreatmentStatement: React.FC = () => {
+  return <DentalTreatmentStatement {...sampleData} />;
 };
 
-export default ExpenseSummaryExample;
-
-// スタイリング
-const Container = styled.div`
-  font-family: sans-serif;
+// Styled components
+const StatementContainer = styled.div`
+  font-family: Arial, sans-serif;
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  border: 1px solid #ccc;
+
+  @media (max-width: 600px) {
+    padding: 10px;
+  }
 `;
 
-const Title = styled.h2`
+const StatementHeader = styled.h2`
   text-align: center;
   margin-bottom: 20px;
 `;
 
-const Header = styled.div`
+const PatientInfo = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
-const HeaderItem = styled.div`
-  display: flex;
-  align-items: center;
-`;
+const PatientName = styled.div``;
 
-const HeaderLabel = styled.div`
-  margin-right: 10px;
-`;
+const PatientBirthDate = styled.div``;
 
-const HeaderValue = styled.div`
-  font-weight: bold;
-`;
+const InsuranceType = styled.div``;
 
-const Table = styled.table`
+const TreatmentTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
 `;
 
-const TableHeader = styled.thead`
-  background-color: #f0f0f0;
+const StatementHeaderCell = styled.th``;
+
+const StatementBodyCell = styled.td``;
+
+const TotalRow = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 `;
 
-const TableHeaderCell = styled.th`
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ccc;
+const TotalLabel = styled.div`
+  margin-right: 10px;
 `;
 
-const TableBody = styled.tbody``;
-
-const TableRow = styled.tr``;
-
-const TableCell = styled.td`
-  padding: 10px;
-  border: 1px solid #ccc;
-  text-align: center;
+const TotalPoints = styled.div`
+  margin-right: 10px;
 `;
 
-const TableFooter = styled.tfoot`
-  font-weight: bold;
-`;
+const TotalCopayment = styled.div``;
 
-const Footer = styled.div`
+const DoctorInfo = styled.div`
   text-align: right;
 `;
+
+const DoctorName = styled.div``;
+
+const DoctorLicenseNumber = styled.div``;
+
+export default SampleDentalTreatmentStatement;
