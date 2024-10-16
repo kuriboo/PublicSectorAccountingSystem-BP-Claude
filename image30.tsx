@@ -1,69 +1,76 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-// 警告メッセージのスタイルを定義
-const AlertWrapper = styled.div`
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
-  border-radius: 4px;
-  color: #856404;
-  padding: 15px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-
-  @media (max-width: 600px) {
-    padding: 10px;
-  }
-`;
-
-const AlertIcon = styled.span`
-  font-size: 24px;
-  margin-right: 15px;
-
-  @media (max-width: 600px) {
-    font-size: 20px;
-    margin-right: 10px;
-  }
-`;
-
-const AlertMessage = styled.div`
-  flex: 1;
-
-  @media (max-width: 600px) {
-    font-size: 14px;
-  }
-`;
-
-// 警告メッセージのプロパティを定義
-type AlertProps = {
-  message: string;
-  icon?: string;
+type MenuItem = {
+  label: string;
+  link: string;
 };
 
-// 警告メッセージコンポーネントを実装
-const Alert: React.FC<AlertProps> = ({ message, icon = '⚠️' }) => {
-  // メッセージが空の場合は何も表示しない
-  if (!message) {
-    return null;
-  }
+type MenuProps = {
+  title: string;
+  items: MenuItem[];
+};
 
+const MenuContainer = styled.div`
+  background-color: #f0f0f0;
+  padding: 16px;
+  border-radius: 8px;
+  width: 200px;
+`;
+
+const MenuTitle = styled.h2`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const MenuList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const MenuListItem = styled.li`
+  margin-bottom: 8px;
+`;
+
+const MenuLink = styled.a`
+  text-decoration: none;
+  color: #333;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Menu: React.FC<MenuProps> = ({ title, items }) => {
   return (
-    <AlertWrapper>
-      <AlertIcon>{icon}</AlertIcon>
-      <AlertMessage>{message}</AlertMessage>
-    </AlertWrapper>
+    <MenuContainer>
+      <MenuTitle>{title}</MenuTitle>
+      <MenuList>
+        {items.map((item, index) => (
+          <MenuListItem key={index}>
+            <MenuLink href={item.link}>{item.label}</MenuLink>
+          </MenuListItem>
+        ))}
+      </MenuList>
+    </MenuContainer>
   );
 };
 
-// サンプルデータを用いた使用例
-const SampleUsage: React.FC = () => {
+// Usage example
+const App: React.FC = () => {
+  const menuItems: MenuItem[] = [
+    { label: '消費税計算', link: '/tax-calculator' },
+    { label: '消費税一覧表', link: '/tax-list' },
+    { label: '消費税額計算', link: '/tax-amount-calculator' },
+    { label: '設定', link: '/settings' },
+  ];
+
   return (
     <div>
-      <Alert message="調査番号 '10' で、納入通知書登録されました。" />
-      <Alert message="" /> {/* 空のメッセージの場合は表示されない */}
+      <Menu title="月例メニュー" items={menuItems} />
     </div>
   );
 };
 
-export default Alert;
+export default App;
