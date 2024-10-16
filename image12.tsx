@@ -1,213 +1,110 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
-// 型定義
-type ReserveFormProps = {
-  fromPref?: string;
-  fromCity?: string;
-  fromStation?: string;
-  toPref?: string;
-  toCity?: string; 
-  toStation?: string;
-  date?: string;
-  time?: string;
-  trainType?: string;
-  ticketType?: string;
-  adultNum?: number;
-  childNum?: number;
-  onSubmit: () => void;
+// 給与データの型定義
+type SalaryData = {
+  節番号: string;
+  給与年度: string;
+  決定年月: string;
+  明細日: string;
+  支給年月日: string;
+  会計年度: string;
+  日コード: string;
+  管理区分: string;
+  支給額: string;
+  控除額: string;
 };
 
-// スタイル定義
-const FormWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: #f0f0f0;
+// 給与データのプロパティ型定義
+type SalaryTableProps = {
+  data: SalaryData[];
+};
 
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-around;
-  }
-`;
-
-const FieldSet = styled.fieldset`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-
-  @media (min-width: 768px) {
-    margin-bottom: 0;
-  }
-`;
-
-const Legend = styled.legend`
-  font-weight: bold;
-`;
-
-const Label = styled.label`
-  margin-bottom: 5px;
-`;
-
-const Select = styled.select`
-  padding: 5px;
-  font-size: 16px;
-`;
-
-const Input = styled.input`
-  padding: 5px;
-  font-size: 16px;
-`;
-
-const SubmitButton = styled.button`
-  padding: 10px 20px;
-  font-size: 18px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
-// コンポーネント実装
-const ReserveForm: React.FC<ReserveFormProps> = ({
-  fromPref = '',
-  fromCity = '',
-  fromStation = '',
-  toPref = '',
-  toCity = '',
-  toStation = '',
-  date = '',
-  time = '',
-  trainType = '指定なし',
-  ticketType = '',
-  adultNum = 1,
-  childNum = 0,
-  onSubmit,
-}) => {
-  // フォーム送信処理
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmit();
-  };
-
+// 給与データテーブルコンポーネント
+const SalaryTable: React.FC<SalaryTableProps> = ({ data }) => {
   return (
-    <form onSubmit={handleSubmit}>
-      <FormWrapper>
-        <FieldSet>
-          <Legend>出発地</Legend>
-          <Label>
-            都道府県
-            <Select value={fromPref}>
-              <option value="">選択してください</option>
-              {/* 都道府県のオプション */}
-            </Select>
-          </Label>
-          <Label>
-            市区町村
-            <Input type="text" value={fromCity} />
-          </Label>
-          <Label>
-            駅名
-            <Input type="text" value={fromStation} />
-          </Label>
-        </FieldSet>
-
-        <FieldSet>
-          <Legend>到着地</Legend>
-          <Label>
-            都道府県
-            <Select value={toPref}>
-              <option value="">選択してください</option>
-              {/* 都道府県のオプション */}
-            </Select>
-          </Label>
-          <Label>
-            市区町村  
-            <Input type="text" value={toCity} />
-          </Label>
-          <Label>
-            駅名
-            <Input type="text" value={toStation} />
-          </Label>
-        </FieldSet>
-
-        <FieldSet>
-          <Legend>乗車日</Legend>
-          <Label>
-            日付
-            <Input type="date" value={date} />
-          </Label>
-          <Label>
-            時刻
-            <Input type="time" value={time} />
-          </Label>
-        </FieldSet>
-
-        <FieldSet>
-          <Legend>詳細条件</Legend>
-          <Label>
-            列車種別
-            <Select value={trainType}>
-              <option value="指定なし">指定なし</option>
-              {/* 列車種別のオプション */}
-            </Select>
-          </Label>
-          <Label>
-            座席タイプ
-            <Select value={ticketType}>
-              <option value="">選択してください</option>
-              <option value="自由席">自由席</option>
-              <option value="指定席">指定席</option>
-            </Select>
-          </Label>
-          <Label>
-            大人
-            <Input type="number" value={adultNum} min={1} />
-          </Label>
-          <Label>
-            子供
-            <Input type="number" value={childNum} min={0} />  
-          </Label>
-        </FieldSet>
-      </FormWrapper>
-
-      <SubmitButton type="submit">検索</SubmitButton>
-    </form>
+    <Table>
+      <thead>
+        <tr>
+          <Th>節番号</Th>
+          <Th>給与年度</Th>
+          <Th>決定年月</Th>
+          <Th>明細日</Th>
+          <Th>支給年月日</Th>
+          <Th>会計年度</Th>
+          <Th>日コード</Th>
+          <Th>管理区分</Th>
+          <Th>支給額</Th>
+          <Th>控除額</Th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row, index) => (
+          <tr key={index}>
+            <Td>{row.節番号}</Td>
+            <Td>{row.給与年度}</Td>
+            <Td>{row.決定年月}</Td>
+            <Td>{row.明細日}</Td>
+            <Td>{row.支給年月日}</Td>
+            <Td>{row.会計年度}</Td>
+            <Td>{row.日コード}</Td>
+            <Td>{row.管理区分}</Td>
+            <Td>{row.支給額}</Td>
+            <Td>{row.控除額}</Td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
   );
 };
 
+// スタイリング
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+`;
+
+const Th = styled.th`
+  background-color: #f2f2f2;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ddd;
+`;
+
+const Td = styled.td`
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+`;
+
 // サンプルデータ
-const sampleData = {
-  fromPref: '東京都',
-  fromCity: '新宿区',
-  fromStation: '新宿',
-  toPref: '大阪府',
-  toCity: '大阪市',  
-  toStation: '新大阪',
-  date: '2023-05-01',
-  time: '10:00',
-  trainType: '新幹線',
-  ticketType: '指定席',
-  adultNum: 2,
-  childNum: 1,
-};
+const sampleData: SalaryData[] = [
+  {
+    節番号: '2021',
+    給与年度: '1',
+    決定年月: '令和03年12月25日',
+    明細日: '令和03年12月25日',
+    支給年月日: '2021',
+    会計年度: '54000000',
+    日コード: '1000',
+    管理区分: '200,000',
+    支給額: '200,000',
+    控除額: '0',
+  },
+  // ... 他のサンプルデータ
+];
 
-// 表示用コンポーネント
+// 使用例
 const App: React.FC = () => {
-  const handleSubmit = () => {
-    console.log('検索ボタンがクリックされました');
-  };
-
   return (
     <div>
-      <h1>新幹線予約フォーム</h1>
-      <ReserveForm {...sampleData} onSubmit={handleSubmit} />
+      <h1>給与データ取込削除</h1>
+      <SalaryTable data={sampleData} />
     </div>
   );
 };
