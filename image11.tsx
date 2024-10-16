@@ -1,69 +1,152 @@
-以下のコードは、TypeScriptとNext.jsを使用して作業時間を表示するコンポーネントを実装したものです。プロパティを通じてカスタマイズ可能で、styled-componentsを使ってCSS-in-JS形式でスタイリングを組み込んでいます。レスポンシブデザインにも対応し、例外処理も含まれています。
-
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
-// プロパティの型定義
-interface WorkHoursProps {
-  title?: string;
-  hours?: string;
+interface PublicApprovalFormProps {
+  onSubmit: (data: { startDate: string; endDate: string; approvalType: string }) => void;
 }
 
-// スタイルコンポーネントの定義
-const Container = styled.div`
+const PublicApprovalForm: React.FC<PublicApprovalFormProps> = ({ onSubmit }) => {
+  const [startDate, setStartDate] = React.useState('');
+  const [endDate, setEndDate] = React.useState('');
+  const [approvalType, setApprovalType] = React.useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({ startDate, endDate, approvalType });
+  };
+
+  return (
+    <FormWrapper onSubmit={handleSubmit}>
+      <Title>控除額支出命令書発行</Title>
+      <FormGroup>
+        <Label>発行区分</Label>
+        <RadioGroup>
+          <Radio
+            type="radio"
+            name="approvalType"
+            value="新規"
+            checked={approvalType === '新規'}
+            onChange={(e) => setApprovalType(e.target.value)}
+          />
+          <RadioLabel>新規</RadioLabel>
+          <Radio
+            type="radio"
+            name="approvalType"
+            value="再発行"
+            checked={approvalType === '再発行'}
+            onChange={(e) => setApprovalType(e.target.value)}
+          />
+          <RadioLabel>再発行</RadioLabel>
+        </RadioGroup>
+      </FormGroup>
+      <FormGroup>
+        <Label>発行対象</Label>
+        <Input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <Separator>~</Separator>
+        <Input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+      </FormGroup>
+      <ButtonGroup>
+        <Button type="submit">OK</Button>
+        <Button type="button">クリア</Button>
+        <Button type="button">終了</Button>
+      </ButtonGroup>
+    </FormWrapper>
+  );
+};
+
+// スタイリング
+const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
   background-color: #f0f0f0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-  }
+  border-radius: 5px;
 `;
 
 const Title = styled.h2`
-  font-size: 24px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+`;
 
-  @media (min-width: 768px) {
-    margin-bottom: 0;
+const FormGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 100%;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
-const Hours = styled.p`
-  font-size: 18px;
+const Label = styled.label`
+  margin-right: 10px;
+  min-width: 80px;
 `;
 
-// 作業時間コンポーネントの定義
-const WorkHours: React.FC<WorkHoursProps> = ({ title = '仕訳時間', hours = '-' }) => {
-  return (
-    <Container>
-      <Title>{title}</Title>
-      <Hours>{hours}</Hours>
-    </Container>
-  );
+const RadioGroup = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Radio = styled.input`
+  margin-right: 5px;
+`;
+
+const RadioLabel = styled.label`
+  margin-right: 10px;
+`;
+
+const Input = styled.input`
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+`;
+
+const Separator = styled.span`
+  margin: 0 10px;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const Button = styled.button`
+  padding: 10px 20px;
+  margin: 0 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+// 使用例
+const SampleUsage = () => {
+  const handleSubmit = (data: {
+    startDate: string;
+    endDate: string;
+    approvalType: string;
+  }) => {
+    console.log('Form submitted:', data);
+  };
+
+  return <PublicApprovalForm onSubmit={handleSubmit} />;
 };
 
-// サンプルデータを用いた使用例
-const SampleUsage: React.FC = () => {
-  return (
-    <div>
-      <WorkHours />
-      <WorkHours title="勤務時間" hours="8時間30分" />
-    </div>
-  );
-};
-
-export default WorkHours;
-
-このコードでは、WorkHoursコンポーネントを定義し、titleとhoursのプロパティを受け取ります。デフォルト値も設定されているので、プロパティが渡されない場合でも表示されます。
-
-styled-componentsを使ってContainerやTitleなどのスタイルコンポーネントを定義し、レスポンシブデザインにも対応しています。
-
-最後に、サンプルデータを用いたSampleUsageコンポーネントを実装し、WorkHoursコンポーネントの使用例を示しています。
-
-コンポーネントの再利用性とカスタマイズ性を考慮し、例外処理も含めた実装となっています。
+export default PublicApprovalForm;
