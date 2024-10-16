@@ -1,158 +1,129 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-type FixedAssetConvertProps = {
-  companyName: string;
-  convertedYear: number;
-  accountStartDate: string;
-  accountEndDate: string;
-  remarks: string[];
+// 車両情報の型定義
+type VehicleInfo = {
+  code: string;
+  name: string;
+  maker: string;
+  price: number;
+  registrationYear: number;
+  mileage: number;
 };
 
-const FixedAssetConvert: React.FC<FixedAssetConvertProps> = ({
-  companyName,
-  convertedYear,
-  accountStartDate,
-  accountEndDate,
-  remarks,
-}) => {
-  // 日付をYYYY/MM/DD形式に変換する関数
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const day = ('0' + date.getDate()).slice(-2);
-    return `${year}/${month}/${day}`;
-  };
-
-  return (
-    <Container>
-      <Title>固定資産コンバート</Title>
-      <CompanyName>{companyName}</CompanyName>
-      <ConvertedYear>総務課 予算・会計担当 ぎょうせい太郎</ConvertedYear>
-      <ConvertedYear>平成30年06月26日</ConvertedYear>
-      <InfoContainer>
-        <InfoLabel>当期会計年度</InfoLabel>
-        <InfoValue>{formatDate(accountStartDate)} 年度</InfoValue>
-      </InfoContainer>
-      <InfoContainer>
-        <InfoLabel>異動年月日</InfoLabel>
-        <InfoValue>{formatDate(accountEndDate)}</InfoValue>
-      </InfoContainer>
-      <FileInput>
-        <FileIcon />
-        <FileName>C:¥Users¥Administrator¥Documents¥固定資産情報_20180625164351.zip</FileName>
-      </FileInput>
-      <RemarkList>
-        {remarks.map((remark, index) => (
-          <RemarkItem key={index}>{remark}</RemarkItem>
-        ))}
-      </RemarkList>
-      <ButtonContainer>
-        <Button>OK</Button>
-        <Button>クリア</Button>
-        <Button>終了</Button>
-      </ButtonContainer>
-    </Container>
-  );
-};
-
-// サンプルデータを用いた使用例
-const SampleUsage: React.FC = () => {
-  const sampleData: FixedAssetConvertProps = {
-    companyName: '行政市水道事業会計',
-    convertedYear: 30,
-    accountStartDate: '2018-04-01',
-    accountEndDate: '2019-03-31',
-    remarks: [
-      '固定資産情報をファイルから取込、登録を行います。',
-      'ZIP圧縮されたファイルのみ取り込めます。取り込むファイルについては専用のEXCELファイル(原票)から作成してください。',
-      '原票以外で作成、編集されたファイルを取り込むとエラーとなります。',
-      '異動年月日は当期会計年度内の日付を入力してください。',
-      'コンバートするデータの異動年月日は画面で入力した異動年月日の日付で登録されます。',
-      'ただし、原票上で異動区分が「01：取得」の固定資産情報を取り込む場合、',
-      'コンバートするデータの異動年月日は原票で指定された取得年月日と同じになります。',
-      '既に登録済みの資産番号と同一のデータがあまされている場合はデータルを取り込んだ場合はエラーとなります。',
-      'コンバート処理後、登録を行った固定資産情報の一覧を帳票出力できます。',
-      'コンバート処理でエラーがあった場合はすべてのデータがコンバート前の状態に戻ります。',
-      'コンバートした固定資産情報は1固定資産コンバート取消(機能にて取消を行うことができます。',
-      'ただし、コンバート後異動が発生している場合はコンバート取消を行うことはできません。',
-      'また、コンバート取消は当年度にコンバートされた固定資産情報に限ります。',
-    ],
-  };
-
-  return <FixedAssetConvert {...sampleData} />;
-};
-
-// スタイリング用のコンポーネント
+// スタイル定義
 const Container = styled.div`
+  font-family: Arial, sans-serif;
+  max-width: 400px;
+  margin: 0 auto;
   padding: 20px;
-  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 `;
 
-const Title = styled.h2`
-  font-size: 24px;
-  margin-bottom: 20px;
-`;
-
-const CompanyName = styled.p`
-  font-size: 18px;
-  margin-bottom: 10px;
-`;
-
-const ConvertedYear = styled.p`
-  font-size: 16px;
-  margin-bottom: 10px;
-`;
-
-const InfoContainer = styled.div`
+const Row = styled.div`
   display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
 `;
 
-const InfoLabel = styled.p`
+const Label = styled.span`
   font-weight: bold;
+`;
+
+const Value = styled.span``;
+
+const Divider = styled.hr`
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+`;
+
+const Price = styled.div`
+  font-size: 24px;
+  font-weight: bold;
+  text-align: right;
+`;
+
+const Button = styled.button`
+  padding: 10px 20px;
   margin-right: 10px;
-`;
-
-const InfoValue = styled.p`
-  margin: 0;
-`;
-
-const FileInput = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const FileIcon = styled.div`
-  width: 20px;
-  height: 20px;
-  background-color: #999;
-  margin-right: 10px;
-`;
-
-const FileName = styled.p`
-  margin: 0;
-`;
-
-const RemarkList = styled.ul`
-  margin-bottom: 20px;
-`;
-
-const RemarkItem = styled.li`
-  margin-bottom: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  &:last-child {
+    margin-right: 0;
+  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-top: 20px;
 `;
 
-const Button = styled.button`
-  margin-left: 10px;
-  padding: 8px 16px;
-  font-size: 16px;
-`;
+// 車両情報コンポーネント
+const VehicleInfoComponent: React.FC<{ info: VehicleInfo }> = ({ info }) => {
+  // 値が存在しない場合のデフォルト値を設定
+  const {
+    code = '',
+    name = '',
+    maker = '',
+    price = 0,
+    registrationYear = 0,
+    mileage = 0,
+  } = info;
 
-export default FixedAssetConvert;
+  return (
+    <Container>
+      <Row>
+        <Label>車両コード</Label>
+        <Value>{code}</Value>
+      </Row>
+      <Row>
+        <Label>車両名称</Label>
+        <Value>{name}</Value>
+      </Row>
+      <Row>
+        <Label>車両規格</Label>
+        <Value>{maker}</Value>
+      </Row>
+      <Divider />
+      <Row>
+        <Label>適用開始年月日</Label>
+        <Value>{registrationYear}年04月01日</Value>
+      </Row>
+      <Row>
+        <Label>車価</Label>
+        <Price>{price.toLocaleString()}円</Price>
+      </Row>
+      <ButtonContainer>
+        <Button>前データ</Button>
+        <Button>次データ</Button>
+        <Button>OK</Button>
+        <Button>クリア</Button>
+        <Button>キャンセル</Button>
+      </ButtonContainer>
+    </Container>
+  );
+};
+
+// サンプルデータ
+const sampleVehicleInfo: VehicleInfo = {
+  code: '00001',
+  name: '派特塩素',
+  maker: '1トンハイブリッド',
+  price: 1200000,
+  registrationYear: 2022,
+  mileage: 5000,
+};
+
+// 使用例
+const VehicleInfoExample: React.FC = () => {
+  return <VehicleInfoComponent info={sampleVehicleInfo} />;
+};
+
+export default VehicleInfoExample;
