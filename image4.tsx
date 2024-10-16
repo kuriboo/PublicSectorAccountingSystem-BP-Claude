@@ -1,120 +1,111 @@
 import React from 'react';
 import styled from 'styled-components';
 
-// 予約検索フォームのプロパティ型定義
-type ReservationSearchFormProps = {
-  onSubmit: (formData: FormData) => void;
+// 定義可能な共通設定のタイプ
+type CommonSettingType = {
+  label: string;
+  value: string;
 };
 
-// 予約検索フォームのコンポーネント
-const ReservationSearchForm: React.FC<ReservationSearchFormProps> = ({ onSubmit }) => {
-  // フォーム送信時の処理
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    onSubmit(formData);
-  };
-
-  return (
-    <Form onSubmit={handleSubmit}>
-      <Fieldset>
-        <Legend>予約科目マスタ</Legend>
-        <Row>
-          <Label>診療科</Label>
-          <Select name="department">
-            <option value="">選択してください</option>
-            {/* 診療科の選択肢 */}
-          </Select>
-        </Row>
-        <Row>
-          <Label>診療日</Label>
-          <Input type="date" name="date" />
-        </Row>
-        <Row>
-          <Label>時間</Label>
-          <Input type="time" name="time" />
-        </Row>
-      </Fieldset>
-      <Row>
-        <ButtonGroup>
-          <Button type="submit">検索</Button>
-          <Button type="reset">クリア</Button>
-        </ButtonGroup>
-      </Row>
-    </Form>
-  );
+// 定義可能なシステム設定のタイプ
+type SystemSettingType = {
+  label: string;
+  value: string;
+  onClick: () => void;
 };
 
-// スタイリング用のコンポーネント
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+// コンポーネントのプロパティのタイプ
+type SystemSettingsProps = {
+  commonSettings: CommonSettingType[];
+  systemSettings: SystemSettingType[];
+};
+
+// スタイル付きのセクションコンポーネント
+const Section = styled.div`
+  margin-bottom: 20px;
 `;
 
-const Fieldset = styled.fieldset`
-  border: 1px solid #ccc;
-  padding: 16px;
-`;
-
-const Legend = styled.legend`
+// スタイル付きのラベルコンポーネント 
+const Label = styled.div`
   font-weight: bold;
+  margin-bottom: 5px;
 `;
 
-const Row = styled.div`
+// スタイル付きの設定項目コンポーネント
+const Setting = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 `;
 
-const Label = styled.label`
-  width: 80px;
+// スタイル付きの設定値コンポーネント
+const Value = styled.div`
+  margin-right: 10px;
 `;
 
-const Input = styled.input`
-  padding: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const Select = styled.select`
-  padding: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
+// スタイル付きのボタンコンポーネント
 const Button = styled.button`
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: #fff;
+  padding: 5px 10px;
   border: none;
-  border-radius: 4px;
+  background-color: #f0f0f0;
   cursor: pointer;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #e0e0e0;
   }
 `;
 
-// サンプルデータを用いた使用例
-const sampleDepartments = ['内科', '外科', '小児科'];
-
-const App: React.FC = () => {
-  const handleSubmit = (formData: FormData) => {
-    // フォームデータの処理
-    console.log(formData);
-  };
-
+/**
+ * システム設定コンポーネント
+ */
+const SystemSettings: React.FC<SystemSettingsProps> = ({ commonSettings, systemSettings }) => {
   return (
     <div>
-      <h1>予約検索フォーム</h1>
-      <ReservationSearchForm onSubmit={handleSubmit} />
+      <Section>
+        <Label>共通設定</Label>
+        {commonSettings.map((setting, index) => (
+          <Setting key={index}>
+            <Value>{setting.label}</Value>
+            <div>{setting.value}</div>
+          </Setting>
+        ))}
+      </Section>
+
+      <Section>
+        <Label>システム・リソース</Label>
+        {systemSettings.map((setting, index) => (
+          <Setting key={index}>
+            <Value>{setting.label}</Value>
+            <div>{setting.value}</div>
+            <Button onClick={setting.onClick}>参照</Button>
+          </Setting>
+        ))}
+      </Section>
+    </div>
+  );
+};
+
+// サンプルデータ
+const sampleCommonSettings: CommonSettingType[] = [
+  { label: '業務コード', value: 'RY001' },
+  { label: '得意先コード', value: '1111' },
+  { label: '仕入先コード', value: '2222' },
+];
+
+const sampleSystemSettings: SystemSettingType[] = [
+  { label: 'データ格納フォルダ', value: 'C:¥Ryosei¥Ryohin', onClick: () => console.log('Open data folder') },
+  { label: 'シミュレーションパス', value: 'C:¥Ryosei¥RyohinSystem', onClick: () => console.log('Open simulation path') },
+  { label: '会計連携フォルダ', value: 'C:¥Ryosei¥Ryohin¥System', onClick: () => console.log('Open accounting link folder') },
+];
+
+/**
+ * サンプル表示用のコンポーネント
+ */
+const App: React.FC = () => {
+  return (
+    <div>
+      <h1>システム設定</h1>
+      <SystemSettings commonSettings={sampleCommonSettings} systemSettings={sampleSystemSettings} />
     </div>
   );
 };
