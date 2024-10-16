@@ -1,132 +1,111 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-// 固定資産コンバート取消のデータ型定義
-type ConvertCancelData = {
-  no: number;
-  companyCode: string;
-  convertDate: string;
-  fileName: string;
-  filePath: string;
-}
-
-// 固定資産コンバート取消コンポーネントのプロパティ型定義
-type ConvertCancelProps = {
-  data: ConvertCancelData[];
-}
-
-// 固定資産コンバート取消コンポーネント
-const ConvertCancel: React.FC<ConvertCancelProps> = ({ data }) => {
-  return (
-    <Container>
-      <Title>固定資産コンバート取消</Title>
-      <TransferDate>取消日 平成30年06月26日</TransferDate>
-
-      <TableContainer>
-        <TableHeader>
-          <HeaderCell>No.</HeaderCell>
-          <HeaderCell>コンバート回時</HeaderCell>
-          <HeaderCell>異動区分</HeaderCell>
-          <HeaderCell>取込ファイル名</HeaderCell>
-        </TableHeader>
-        <TableBody>
-          {data.map((item, index) => (
-            <TableRow key={index}>
-              <Cell>{item.no}</Cell>
-              <Cell>{item.convertDate}</Cell>
-              <Cell>{item.companyCode}</Cell>
-              <Cell>{item.fileName}</Cell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </TableContainer>
-
-      <Notes>
-        ・固定資産コンバート最新で登録した固定資産情報を削除します。<br />
-        ・コンバートを行った日時を指定して取消を行います。指定した日時にコンバートしたすべての固定資産情報が削除されます。<br />
-        ただし、コンバート後、異動が発生した固定資産がある場合は、コンバート取消を行うことはできません。<br />
-        コンバート後の異動をすべて削除してから、コンバート取消を行ってください。<br /> 
-        ・当年度に行ったコンバートのみ取り消すことができます。<br />
-        ・コンバート取消を行った場合、データを元に戻すことはできません。
-      </Notes>
-    </Container>
-  );
+// 型定義
+type ConvertReportProps = {
+  data: Array<{
+    no: number;
+    convertDate: string;
+    result: string;
+    outputFile: string;
+  }>;
 };
 
-// スタイリング
+// スタイル定義
 const Container = styled.div`
-  font-family: "MS Gothic", monospace;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  background-color: #f0f0f0;
+  padding: 16px;
+  font-family: sans-serif;
 `;
 
 const Title = styled.h2`
   font-size: 18px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 `;
 
-const TransferDate = styled.p`
-  font-size: 14px;
-  margin-bottom: 20px;
-`;
-
-const TableContainer = styled.table`
+const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
 `;
 
-const TableHeader = styled.thead`
-  background-color: #f0f0f0;
+const Notice = styled.div`
+  margin-top: 16px;
+  font-size: 14px;
+  color: #666;
 `;
 
-const HeaderCell = styled.th`
-  padding: 8px;
-  text-align: left;
-  border: 1px solid #ccc;
-  white-space: nowrap;
-`;
-
-const TableBody = styled.tbody``;
-
-const TableRow = styled.tr``;
-
-const Cell = styled.td`
-  padding: 8px;
-  border: 1px solid #ccc;
-`;
-
-const Notes = styled.div`
-  font-size: 12px;
-  white-space: pre-line;
-`;
-
-// サンプルデータ
-const sampleData: ConvertCancelData[] = [
-  {
-    no: 1,
-    companyCode: '電算移行',
-    convertDate: '平成30年06月25日 10:54:55',
-    fileName: '固定資産情報_20180625145431.zip',
-    filePath: '固定資産情報_20180625145431.zip',
-  },
-  {
-    no: 2,
-    companyCode: '電算移行',
-    convertDate: '平成30年06月19日 15:57:28',
-    fileName: '固定資産情報_20180619142707.zip',
-    filePath: '固定資産情報_20180619142707.zip',
-  },
-];
-
-// 使用例
-const App: React.FC = () => {
+/**
+ * 固定資産コンバート取消のレポートコンポーネント
+ */
+const ConvertReport: React.FC<ConvertReportProps> = ({ data }) => {
   return (
-    <div>
-      <ConvertCancel data={sampleData} />
-    </div>
+    <Container>
+      <Title>固定資産コンバート取消</Title>
+      <Table>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>コンバート日時</th>
+            <th>変動区分</th>
+            <th>取込ファイル名</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>{item.no}</td>
+              <td>{item.convertDate}</td>
+              <td>{item.result}</td>
+              <td>{item.outputFile}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      <Notice>
+        ・固定資産コンバート最終で登録した固定資産情報を削除します。<br />
+        ・コンバートを行った日時を指定して取消を行います。指定した日時にコンバートしたすべての固定資産情報が削除されます。<br />
+        ただし、コンバート後、異動が発生した固定資産がある場合は、コンバート取消を行うことはできません。<br />
+        コンバート後の異動をすべて削除してから、コンバート取消を行ってください。<br />
+        ・当年度に行ったコンバートのみ取り消すことができます。<br /> 
+        ・コンバート取消を行った場合、データを元に戻すことはできません。
+      </Notice>
+    </Container>
   );
 };
 
-export default App;
+export default ConvertReport;
+
+// 使用例
+const sampleData = [
+  {
+    no: 1,
+    convertDate: '平成30年06月25日 10:54:55',
+    result: '電算移行',
+    outputFile: '固定資産情報201806251054____.zip',
+  },
+  {
+    no: 2,
+    convertDate: '平成30年06月19日 15:57:28',
+    result: '電算移行', 
+    outputFile: '固定資産情報201806191457____.zip',
+  },
+];
+
+const App: React.FC = () => {
+  return (
+    <div>
+      <h1>固定資産コンバート取消レポート</h1>
+      <ConvertReport data={sampleData} />
+    </div>
+  );
+};
