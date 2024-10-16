@@ -1,40 +1,46 @@
 import React from 'react';
 import styled from 'styled-components';
 
-// プロパティの型定義
-interface CompanyProfileProps {
-  companyName?: string;
-  description?: string;
+// Define the types for the component props
+interface ProfileCardProps {
+  name: string;
+  title: string;
+  description: string;
+  avatarUrl: string;
 }
 
-// スタイリング
-const ProfileContainer = styled.div`
+// Define the styled components
+const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 5px;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  margin: 0 auto;
 
   @media (min-width: 768px) {
     flex-direction: row;
-    justify-content: space-between;
+    max-width: 600px;
   }
 `;
 
-const CompanyLogo = styled.div`
-  font-size: 48px;
-  font-weight: bold;
-  margin-bottom: 20px;
+const Avatar = styled.img`
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
 
   @media (min-width: 768px) {
+    margin-right: 24px;
     margin-bottom: 0;
-    margin-right: 20px;
   }
 `;
 
-const CompanyInfo = styled.div`
+const InfoContainer = styled.div`
   text-align: center;
 
   @media (min-width: 768px) {
@@ -42,40 +48,58 @@ const CompanyInfo = styled.div`
   }
 `;
 
-const CompanyName = styled.h2`
+const Name = styled.h2`
   font-size: 24px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+`;
+
+const Title = styled.p`
+  font-size: 18px;
+  color: #666666;
+  margin-bottom: 16px;
 `;
 
 const Description = styled.p`
   font-size: 16px;
+  line-height: 1.5;
 `;
 
-// コンポーネント定義
-const CompanyProfile: React.FC<CompanyProfileProps> = ({ companyName, description }) => {
+// Define the ProfileCard component
+const ProfileCard: React.FC<ProfileCardProps> = ({ name, title, description, avatarUrl }) => {
+  // Render a default avatar if avatarUrl is not provided
+  const renderAvatar = () => {
+    if (avatarUrl) {
+      return <Avatar src={avatarUrl} alt={name} />;
+    } else {
+      return <Avatar src="/default-avatar.png" alt="Default Avatar" />;
+    }
+  };
+
   return (
-    <ProfileContainer>
-      <CompanyLogo>会</CompanyLogo>
-      <CompanyInfo>
-        {companyName && <CompanyName>{companyName}</CompanyName>}
-        {description && <Description>{description}</Description>}
-      </CompanyInfo>
-    </ProfileContainer>
+    <CardContainer>
+      {renderAvatar()}
+      <InfoContainer>
+        <Name>{name || 'Unknown'}</Name>
+        <Title>{title || 'No Title'}</Title>
+        <Description>{description || 'No description available.'}</Description>
+      </InfoContainer>
+    </CardContainer>
   );
 };
 
-// デフォルトのプロパティ値
-CompanyProfile.defaultProps = {
-  companyName: '株式会社 ぎょうせい',
-  description: 'データ・システム事業部',
-};
-
-// 使用例
+// Example usage of the ProfileCard component
 const App: React.FC = () => {
+  const profileData = {
+    name: 'John Doe',
+    title: 'Software Engineer',
+    description: 'Passionate developer with expertise in web technologies.',
+    avatarUrl: 'https://example.com/avatar.jpg',
+  };
+
   return (
     <div>
-      <h1>Company Profile</h1>
-      <CompanyProfile />
+      <h1>Profile Card Example</h1>
+      <ProfileCard {...profileData} />
     </div>
   );
 };
