@@ -1,138 +1,73 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-type BookingFormProps = {
-  onSubmit: (data: BookingData) => void;
+// MenuItemProps型定義
+type MenuItemProps = {
+  label: string;
+  onClick: () => void;
 };
 
-type BookingData = {
-  managementNumber: string;
-  fiscalYear: string;
-  startDate: string;
-  endDate: string;
-  startTime: string;
-  endTime: string;
-  overnightStayPurpose: string;
-  dayTripPurpose: string;
-  upkeepDivision: string;
-  changeCounterpart: string;
-  yearEndAdjustmentDivision: string;
-  pricePerUnit: number;
-  days: number;
-  nights: number;
+// MenuItem コンポーネント
+const MenuItem: React.FC<MenuItemProps> = ({ label, onClick }) => {
+  return <MenuItemWrapper onClick={onClick}>{label}</MenuItemWrapper>;
 };
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  @media (min-width: 768px) {
-    max-width: 600px;
-    margin: 0 auto;
+// MenuItemのスタイリング
+const MenuItemWrapper = styled.div`
+  padding: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f0f0f0;
   }
 `;
 
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  width: 100%;
-`;
+// MenuProps型定義
+type MenuProps = {
+  items: MenuItemProps[];
+};
 
-const Label = styled.label`
-  font-weight: bold;
-  margin-bottom: 5px;
-`;
-
-const Input = styled.input`
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const Select = styled.select`
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const TextArea = styled.textarea`
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-
-const BookingForm: React.FC<BookingFormProps> = ({ onSubmit }) => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Collect form data and call onSubmit prop with the data
-    const data: BookingData = {
-      managementNumber: '',
-      fiscalYear: '',
-      startDate: '',
-      endDate: '',
-      startTime: '',
-      endTime: '',
-      overnightStayPurpose: '',
-      dayTripPurpose: '',
-      upkeepDivision: '',
-      changeCounterpart: '',
-      yearEndAdjustmentDivision: '',
-      pricePerUnit: 0,
-      days: 0,
-      nights: 0,
-    };
-    onSubmit(data);
-  };
-
+// Menu コンポーネント 
+const Menu: React.FC<MenuProps> = ({ items }) => {
   return (
-    <Container>
-      <form onSubmit={handleSubmit}>
-        <FormGroup>
-          <Label>管理マスタ</Label>
-          <Input type="text" required />
-        </FormGroup>
-        <FormGroup>
-          <Label>年度</Label>
-          <Select required>
-            <option value="">選択してください</option>
-            {/* Add options for fiscal years */}
-          </Select>
-        </FormGroup>
-        <FormGroup>
-          <Label>利用日</Label>
-          <Input type="date" required />
-        </FormGroup>
-        {/* Add more form fields */}
-        <Button type="submit">登録</Button>
-      </form>
-    </Container>
+    <MenuWrapper>
+      {items.map((item, index) => (
+        <MenuItem key={index} label={item.label} onClick={item.onClick} />
+      ))}
+    </MenuWrapper>
   );
 };
 
-// Usage example
-const App: React.FC = () => {
-  const handleBookingSubmit = (data: BookingData) => {
-    // Handle form submission
-    console.log(data);
-  };
+// Menuのスタイリング
+const MenuWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: 200px;
 
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+
+// サンプルデータ
+const menuItems: MenuItemProps[] = [
+  { label: '消費税計算', onClick: () => console.log('消費税計算clicked') },
+  { label: '事業所得計算', onClick: () => console.log('事業所得計算clicked') },
+  { label: '申告作成', onClick: () => console.log('申告作成clicked') },
+  { label: '設定', onClick: () => console.log('設定clicked') },
+];
+
+// サンプル表示用コンポーネント
+const SampleComponent: React.FC = () => {
   return (
     <div>
-      <h1>公営企業会計システム</h1>
-      <BookingForm onSubmit={handleBookingSubmit} />
+      <h1>月例メニュー</h1>
+      <Menu items={menuItems} />
     </div>
   );
 };
 
-export default App;
+export default SampleComponent;
