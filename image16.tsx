@@ -1,158 +1,112 @@
-// 必要なライブラリのインポート
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
-// 型定義
-type CompanyInfoFormProps = {
-  companyName: string;
-  companyAddress: string;
-  companyTel: string;
-  companyFax: string;
-  businessNumber: string;
-  representativeName: string;
-  representativePosition: string;
-  accountName: string;
-  accountNumber: string;
-  bankName: string;
-  bankBranch: string;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+// プロパティの型定義
+type ProfileCardProps = {
+  profileImage: string;
+  profileAlt?: string;
+  name: string;
+  title: string;
+  description: string;
 };
 
-// スタイリング
-const FormWrapper = styled.div`
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 5px;
+// スタイルコンポーネント
+const CardWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  max-width: 300px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    max-width: 500px;
+  }
 `;
 
-const FormTitle = styled.h2`
-  font-size: 18px;
-  margin-bottom: 15px;
+const ProfileImage = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+
+  @media (min-width: 768px) {
+    margin-right: 1rem;
+    margin-bottom: 0;
+  }
 `;
 
-const FormGroup = styled.div`
-  margin-bottom: 20px;
+const ProfileInfo = styled.div`
+  text-align: center;
+
+  @media (min-width: 768px) {
+    text-align: left;
+  }
 `;
 
-const FormLabel = styled.label`
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+const Name = styled.h2`
+  margin: 0;
+  font-size: 1.5rem;
 `;
 
-const FormInput = styled.input`
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+const Title = styled.h3`
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+  color: #666666;
 `;
 
-const SubmitButton = styled.button`
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
+const Description = styled.p`
+  margin: 0;
+  font-size: 1rem;
+  color: #333333;
 `;
 
-// コンポーネント
-const CompanyInfoForm: React.FC<CompanyInfoFormProps> = ({
-  companyName,
-  companyAddress,
-  companyTel,
-  companyFax,
-  businessNumber,
-  representativeName,
-  representativePosition,
-  accountName,
-  accountNumber,
-  bankName,
-  bankBranch,
-  onSubmit,
+// プロフィールカードコンポーネント
+const ProfileCard: React.FC<ProfileCardProps> = ({
+  profileImage,
+  profileAlt = 'Profile',
+  name,
+  title,
+  description,
 }) => {
+  // 値が入っていない場合の処理
+  const validName = name || 'Unknown';
+  const validTitle = title || 'Not specified';
+  const validDescription = description || 'No description available';
+
   return (
-    <FormWrapper>
-      <FormTitle>会社情報登録</FormTitle>
-      <form onSubmit={onSubmit}>
-        <FormGroup>
-          <FormLabel>会社名</FormLabel>
-          <FormInput type="text" value={companyName} required />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>住所</FormLabel>
-          <FormInput type="text" value={companyAddress} required />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>電話番号</FormLabel>
-          <FormInput type="tel" value={companyTel} required />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>FAX番号</FormLabel>
-          <FormInput type="tel" value={companyFax} />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>業務年数</FormLabel>
-          <FormInput type="number" value={businessNumber} required />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>代表者氏名</FormLabel>
-          <FormInput type="text" value={representativeName} required />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>代表者役職</FormLabel>
-          <FormInput type="text" value={representativePosition} required />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>口座名義</FormLabel>
-          <FormInput type="text" value={accountName} required />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>口座番号</FormLabel>
-          <FormInput type="text" value={accountNumber} required />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>金融機関名</FormLabel>
-          <FormInput type="text" value={bankName} required />
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>支店名</FormLabel>
-          <FormInput type="text" value={bankBranch} required />
-        </FormGroup>
-        <SubmitButton type="submit">登録</SubmitButton>
-      </form>
-    </FormWrapper>
+    <CardWrapper>
+      <ProfileImage src={profileImage} alt={profileAlt} />
+      <ProfileInfo>
+        <Name>{validName}</Name>
+        <Title>{validTitle}</Title>
+        <Description>{validDescription}</Description>
+      </ProfileInfo>
+    </CardWrapper>
   );
 };
 
-// サンプルデータを用いた使用例
-const SampleData = {
-  companyName: 'ABC株式会社',
-  companyAddress: '東京都新宿区西新宿1-1-1',
-  companyTel: '03-1234-5678',
-  companyFax: '03-1234-5679',
-  businessNumber: '15',
-  representativeName: '山田太郎',
-  representativePosition: '代表取締役',
-  accountName: 'ABC株式会社',
-  accountNumber: '1234567',
-  bankName: 'XYZ銀行',
-  bankBranch: '新宿支店',
+// サンプルデータ
+const sampleData = {
+  profileImage: 'https://example.com/profile.jpg',
+  name: 'John Doe',
+  title: 'Software Engineer',
+  description: 'Passionate about creating amazing web applications.',
 };
 
-const CompanyInfoFormSample = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // フォーム送信の処理をここに記述
-    console.log('Form submitted');
-  };
-
+// 使用例コンポーネント
+const App: React.FC = () => {
   return (
-    <CompanyInfoForm
-      {...SampleData}
-      onSubmit={handleSubmit}
-    />
+    <div>
+      <h1>Profile Card Example</h1>
+      <ProfileCard {...sampleData} />
+    </div>
   );
 };
 
-export default CompanyInfoFormSample;
+export default App;
