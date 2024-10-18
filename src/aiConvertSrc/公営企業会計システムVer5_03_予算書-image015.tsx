@@ -127,7 +127,7 @@ const ReservationPlanForm: React.FC<ReservationPlanFormProps> = ({
   );
 };
 
-export default ReservationPlanForm;
+
 
 // 使用例
 const SampleReservationPlanForm = () => {
@@ -147,3 +147,5 @@ const SampleReservationPlanForm = () => {
     />
   );
 };
+
+export default SampleReservationPlanForm;

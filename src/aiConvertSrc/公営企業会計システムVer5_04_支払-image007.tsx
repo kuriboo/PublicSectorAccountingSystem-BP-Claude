@@ -133,4 +133,4 @@ const TaxCalculatorExample = () => {
   );
 };
 
-export default TaxCalculator;
+export default TaxCalculatorExample;

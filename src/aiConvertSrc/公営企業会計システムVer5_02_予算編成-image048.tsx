@@ -172,7 +172,7 @@ const EndButton = styled.button``;
 // サンプルデータ
 const sampleData = {
   period: '平成29年06月09日',
-  targetAmount: 総務課予算・会計担当ぎょうせい太郎,
+  //targetAmount: 総務課予算・会計担当ぎょうせい太郎,
   startDate: '00000000000000',
   endDate: '99999999999999',
   tableData: [

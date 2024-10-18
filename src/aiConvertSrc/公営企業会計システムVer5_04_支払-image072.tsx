@@ -129,7 +129,7 @@ const EntryForm: React.FC<EntryFormProps> = ({ onSubmit }) => {
   );
 };
 
-export default EntryForm;
+
 
 // Usage example:
 const App: React.FC = () => {
@@ -145,3 +145,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

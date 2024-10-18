@@ -138,4 +138,4 @@ const ExampleProfileCard: React.FC = () => {
   return <ProfileCard {...profileData} />;
 };
 
-export default ProfileCard;
+export default ExampleProfileCard;

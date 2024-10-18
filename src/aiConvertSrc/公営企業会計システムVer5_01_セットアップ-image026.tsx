@@ -224,4 +224,4 @@ const Table = styled.table`
   }
 `;
 
-export default JournalEntryForm;
+export default SampleUsage;

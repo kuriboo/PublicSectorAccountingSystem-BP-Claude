@@ -62,4 +62,4 @@ const ExampleMenu: React.FC = () => {
   return <MainMenu menuItems={menuItems} onMenuItemClick={handleMenuItemClick} />;
 };
 
-export default MainMenu;
+export default ExampleMenu;

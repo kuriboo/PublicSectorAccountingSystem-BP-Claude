@@ -102,4 +102,4 @@ const CancellationExample: React.FC = () => {
   );
 };
 
-export default Cancellation;
+export default CancellationExample;

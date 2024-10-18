@@ -125,8 +125,6 @@ const PublicEnterpriseAccountingSystem: React.FC<PublicEnterpriseAccountingSyste
   );
 };
 
-export default PublicEnterpriseAccountingSystem;
-
 // 使用例
 const App: React.FC = () => {
   return (
@@ -139,3 +137,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default App;

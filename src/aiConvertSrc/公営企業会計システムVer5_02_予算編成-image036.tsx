@@ -98,14 +98,14 @@ const sampleData: TableRowData[] = [
     name: '運転管理業託',
     budget: 191000,
     estimatedDate: '20010619',
-    flowCorrectionType: '下水道課',
+    flowCorrectionType: '下水道課' as FlowCorrectionType,
   },
   {
     id: '0030106190009100',
     name: '汚泥運搬委託',
     budget: 180000,
     estimatedDate: '20010619',
-    flowCorrectionType: '下水道課',
+    flowCorrectionType: '下水道課' as FlowCorrectionType,
   },
 ];
 

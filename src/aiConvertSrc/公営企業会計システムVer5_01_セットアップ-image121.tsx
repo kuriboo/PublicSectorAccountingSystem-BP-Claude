@@ -1,5 +1,3 @@
-以下はNext.js + TypeScriptで実装した単価名称マスタコンポーネントです。
-
 import React, { useState } from 'react';
 import styled from 'styled-components';
 

@@ -129,4 +129,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default CompanyAcquisitionEntry;
+export default SampleUsage;

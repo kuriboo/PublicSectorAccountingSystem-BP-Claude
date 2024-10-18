@@ -391,4 +391,4 @@ const Button = styled.button<{ primary?: boolean }>`
   }
 `;
 
-export default MasterMaintenanceScreen;
+export default SampleMasterMaintenance;

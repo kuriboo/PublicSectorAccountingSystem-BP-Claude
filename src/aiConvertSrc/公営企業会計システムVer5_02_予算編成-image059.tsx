@@ -207,4 +207,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default CompanyInfoComponent;
+export default SampleUsage;

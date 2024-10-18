@@ -20,7 +20,6 @@ type Format = {
   仕所: string;
   氏名: string;
   支払済印: string;
-  仕所: string;
 }
 
 type Props = {

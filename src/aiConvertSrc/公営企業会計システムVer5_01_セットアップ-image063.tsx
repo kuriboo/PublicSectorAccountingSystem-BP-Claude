@@ -61,7 +61,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   );
 };
 
-export default RangeSlider;
+
 
 // Usage example
 const App: React.FC = () => {
@@ -79,3 +79,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

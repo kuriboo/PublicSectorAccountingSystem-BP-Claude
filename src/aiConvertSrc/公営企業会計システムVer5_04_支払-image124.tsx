@@ -217,4 +217,4 @@ const TableCell = styled.td`
   border: 1px solid #ddd;
 `;
 
-export default PaymentSummary;
+export default SampleUsage;

@@ -79,4 +79,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default ReservationSummary;
+export default SampleUsage;

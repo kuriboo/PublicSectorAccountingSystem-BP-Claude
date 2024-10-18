@@ -181,7 +181,7 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default CompanyCollectInput;
+export default SampleUsage;
 
 // styles
 const Container = styled.div`

@@ -26,16 +26,16 @@ type Props = {
 const ZaimuDataForm: React.FC<Props> = ({ data }) => {
   // デフォルト値の設定
   const defaultValues: ZaimuData = {
-    yosan: '00020101',
-    shikibetsu: '2 運営経費',
-    entryDate: '2023/01/13',
-    keihi: '05 8',
+    yosan: '',
+    shikibetsu: '',
+    entryDate: '',
+    keihi: '',
     yonyuDate: '',
-    kenseiDate: '2 翌期末払',
-    torihikisaki: '0620501 〇〇商事',
-    shohizei: '課税',
-    shohizeiCategory: '2',
-    yusouhi: '000000',
+    kenseiDate: '',
+    torihikisaki: '',
+    shohizei: '',
+    shohizeiCategory: '',
+    yusouhi: '',
     comment: '',
     picture: '',
     attachedFile: '',
@@ -45,21 +45,21 @@ const ZaimuDataForm: React.FC<Props> = ({ data }) => {
 
   // プロパティからデータを取得し、デフォルト値で補完
   const {
-    yosan,
-    shikibetsu,
-    entryDate,
-    keihi,
-    yonyuDate,
-    kenseiDate,
-    torihikisaki,
-    shohizei,
-    shohizeiCategory,
-    yusouhi,
-    comment,
-    picture,
-    attachedFile,
-    tantou,
-    shonin
+    yosan = '',
+    shikibetsu = '',
+    entryDate = '',
+    keihi = '',
+    yonyuDate = '',
+    kenseiDate = '',
+    torihikisaki = '',
+    shohizei = '',
+    shohizeiCategory = '',
+    yusouhi = '',
+    comment = '',
+    picture = '',
+    attachedFile = '',
+    tantou = '',
+    shonin = ''
   } = { ...defaultValues, ...data };
 
   return (

@@ -98,4 +98,4 @@ const Button = styled.button`
   }
 `;
 
-export default PrintRequestForm;
+export default SampleUsage;

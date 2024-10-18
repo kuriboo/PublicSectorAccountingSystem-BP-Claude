@@ -2,26 +2,32 @@ import React from 'react';
 import styled from 'styled-components';
 
 // 型定義
-type Chair = {
+type CommonPart = {
   PO: string;
   LBLNCD: string;
   SHM: string;
+};
+
+type Chair = CommonPart & {
   var2: string;
 };
 
-type Mask = {
-  PO: string;
-  LBLNCD: string;
-  SHM: string;
-  PWBWCD: string;
-  PRCD: string;
-  STLBLCD: string;
-  SMENCD: string;
-  SZBLNCD: string;
+type Mask = CommonPart & {
+  PWBWCD?: string;
+  PRCD?: string;
+  STLBLCD?: string;
+  SMENCD?: string;
+  SZBLNCD?: string;
 };
 
+type ExtendedMask = Mask & {
+  [key: string]: string | undefined;
+};
+
+type Part = Chair | ExtendedMask;
+
 type PartsTree = {
-  [key: string]: Chair | Mask;
+  [key: string]: Part;
 };
 
 // スタイル定義
@@ -33,24 +39,23 @@ const TreeWrapper = styled.div`
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: center;
+    flex-wrap: wrap;
   }
 `;
 
 const PartWrapper = styled.div`
   border: 1px solid #ccc;
   padding: 16px;
-  margin-bottom: 16px;
-
-  @media (min-width: 768px) {
-    margin-right: 16px;
-    margin-bottom: 0;
-  }
+  margin: 8px;
+  width: 250px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 `;
 
 const PartTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 8px;
+  color: #333;
 `;
 
 const PartContent = styled.div`
@@ -60,26 +65,60 @@ const PartContent = styled.div`
 
 const PartItem = styled.div`
   margin-bottom: 4px;
+  font-size: 14px;
+  color: #666;
 `;
 
 // パーツツリーコンポーネント
 const PartsTreeComponent: React.FC<{ data: PartsTree }> = ({ data }) => {
+  const renderPartContent = (part: Part) => {
+    return Object.entries(part).map(([k, v]) => (
+      <PartItem key={k}>
+        {k}: {v !== undefined ? v : 'N/A'}
+      </PartItem>
+    ));
+  };
+
   return (
     <TreeWrapper>
       {Object.entries(data).map(([key, value]) => (
         <PartWrapper key={key}>
           <PartTitle>{key}</PartTitle>
           <PartContent>
-            {Object.entries(value).map(([k, v]) => (
-              <PartItem key={k}>
-                {k}: {v}
-              </PartItem>
-            ))}
+            {renderPartContent(value as Part)}
           </PartContent>
         </PartWrapper>
       ))}
     </TreeWrapper>
   );
+};
+
+// データバリデーション関数
+const validatePartsTree = (data: PartsTree): boolean => {
+  for (const [key, part] of Object.entries(data)) {
+    if (typeof key !== 'string' || key.trim() === '') {
+      console.error('Invalid key:', key);
+      return false;
+    }
+
+    if (typeof part !== 'object' || part === null) {
+      console.error('Invalid part:', part);
+      return false;
+    }
+
+    if (!('PO' in part) || !('LBLNCD' in part) || !('SHM' in part)) {
+      console.error('Missing required properties in part:', part);
+      return false;
+    }
+
+    for (const [propKey, propValue] of Object.entries(part)) {
+      if (typeof propValue !== 'string') {
+        console.error(`Invalid property value in part ${key}:`, propKey, propValue);
+        return false;
+      }
+    }
+  }
+  return true;
 };
 
 // サンプルデータ
@@ -132,6 +171,10 @@ const sampleData: PartsTree = {
 
 // 使用例
 const App: React.FC = () => {
+  if (!validatePartsTree(sampleData)) {
+    return <div>Invalid data structure</div>;
+  }
+
   return (
     <div>
       <h1>パーツツリー</h1>

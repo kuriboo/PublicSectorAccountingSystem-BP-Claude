@@ -113,8 +113,6 @@ const MasterMaintenance: React.FC<Props> = ({ title = 'システム固定資産�
   );
 };
 
-export default MasterMaintenance;
-
 // Usage example
 const masters: MasterType[] = [
   { code: '01', name: '取得' },
@@ -132,3 +130,5 @@ const App: React.FC = () => {
 
   return <MasterMaintenance masters={masters} onRegister={handleRegister} />;
 };
+
+export default App;

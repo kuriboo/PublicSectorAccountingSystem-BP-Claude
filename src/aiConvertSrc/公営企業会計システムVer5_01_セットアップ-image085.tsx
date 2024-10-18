@@ -171,4 +171,4 @@ const FooterButton = styled.button`
   margin: 0 4px;
 `;
 
-export default CollectCondition;
+export default SampleUsage;

@@ -100,8 +100,6 @@ const GroupMaster: React.FC<GroupMasterProps> = ({ groupCodes, groupNames, onSub
   );
 };
 
-export default GroupMaster;
-
 // 使用例
 const App: React.FC = () => {
   const groupCodes = ['0000001', '0000002', '0000007', '0000009', '9999999'];
@@ -123,3 +121,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

@@ -161,8 +161,6 @@ const SalaryStatement: React.FC<SalaryStatementProps> = ({
   );
 };
 
-export default SalaryStatement;
-
 // Sample usage
 const SampleSalaryStatement: React.FC = () => {
   const sampleData: SalaryStatementProps = {
@@ -184,3 +182,5 @@ const SampleSalaryStatement: React.FC = () => {
 
   return <SalaryStatement {...sampleData} />;
 };
+
+export default SampleSalaryStatement;

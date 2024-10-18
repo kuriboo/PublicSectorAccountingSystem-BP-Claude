@@ -111,4 +111,4 @@ const TableCell = styled.td`
   padding: 0.5rem;
 `;
 
-export default TaxCalculator;
+export default SampleUsage;

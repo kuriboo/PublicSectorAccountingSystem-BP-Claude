@@ -144,4 +144,4 @@ const Button = styled.button`
   }
 `;
 
-export default PrintForm;
+export default SamplePrintForm;

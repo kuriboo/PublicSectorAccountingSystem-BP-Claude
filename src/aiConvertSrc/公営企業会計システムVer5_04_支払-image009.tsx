@@ -1,5 +1,3 @@
-以下は、Next.js + TypeScriptを使用して、指定された画像を元にコンポーネントを生成したコードです。
-
 import React from 'react';
 import styled from '@emotion/styled';
 
@@ -193,17 +191,5 @@ const SampleUsage: React.FC = () => {
   return <CompanyOrderForm {...sampleData} />;
 };
 
-export default CompanyOrderForm;
+export default SampleUsage;
 
-このコードでは、以下のポイントを考慮しています。
-
-1. TypeScriptの型定義を使用して、コンポーネントのプロパティの型を指定しています。
-2. コンポーネントはプロパティを通じてカスタマイズ可能になっています。
-3. EmotionのCSS-in-JS形式を使用して、コンポーネント内にスタイリングを直接組み込んでいます。
-4. コメントを適宜追加しています。
-5. 値が入っていない場合の処理は特に実装していませんが、必要に応じて追加できます。
-6. サンプルデータを用いて、コンポーネントの使用例を示しています。
-
-レスポンシブデザインについては、メディアクエリを使用して適切なスタイルを設定することができます。
-
-このコンポーネントを使用することで、指定された画像のような支出負担行為伺入力フォームを表示することができます。

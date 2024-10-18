@@ -69,4 +69,4 @@ const ExampleUsage: React.FC = () => {
   );
 };
 
-export default SingleLineInput;
+export default ExampleUsage;

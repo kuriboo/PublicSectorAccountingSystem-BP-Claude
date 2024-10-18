@@ -79,8 +79,6 @@ const CompanyList: React.FC<CompanyListProps> = ({ companies }) => {
   );
 };
 
-export default CompanyList;
-
 // Usage example
 const sampleCompanies: Company[] = [
   {

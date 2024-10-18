@@ -141,7 +141,7 @@ const AgreementForm: React.FC<AgreementFormProps> = ({ year, default: defaultVal
   );
 };
 
-export default AgreementForm;
+
 
 // Example usage
 const handleFormSubmit = (data: FormData) => {
@@ -157,3 +157,5 @@ const SampleUsage: React.FC = () => {
     </div>
   );
 };
+
+export default SampleUsage;

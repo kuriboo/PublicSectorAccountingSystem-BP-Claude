@@ -151,4 +151,4 @@ const Button = styled.button`
   }
 `;
 
-export default ZuhyoControlFileList;
+export default SampleZuhyoControlFileList;

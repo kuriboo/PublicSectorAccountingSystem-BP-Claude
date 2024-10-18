@@ -1,5 +1,3 @@
-Here's the Next.js + TypeScript component based on the provided image:
-
 import React from 'react';
 import styled from 'styled-components';
 

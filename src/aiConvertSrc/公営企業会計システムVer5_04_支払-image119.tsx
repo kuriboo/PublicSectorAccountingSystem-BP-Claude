@@ -94,4 +94,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default PackageSearch;
+export default SampleUsage;

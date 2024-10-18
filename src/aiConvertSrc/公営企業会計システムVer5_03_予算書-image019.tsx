@@ -118,7 +118,7 @@ const DepositForm: React.FC<DepositFormProps> = ({
       depositAmount,
       depositCount,
       tax,
-      size,
+      size: size as "A4" | "A4横", // 型を明示的に指定
       title,
       subtitle,
       note,

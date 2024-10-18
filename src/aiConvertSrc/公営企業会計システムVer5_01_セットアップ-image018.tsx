@@ -211,4 +211,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default CompanyInfo;
+export default SampleUsage;

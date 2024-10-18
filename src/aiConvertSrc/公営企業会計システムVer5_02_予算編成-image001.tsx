@@ -104,4 +104,4 @@ const ExampleUsage: React.FC = () => {
   );
 };
 
-export default ArticleCard;
+export default ExampleUsage;

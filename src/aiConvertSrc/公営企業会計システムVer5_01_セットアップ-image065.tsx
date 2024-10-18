@@ -61,7 +61,7 @@ const FinancialInstitutionMasterTable: React.FC<FinancialInstitutionMasterTableP
   );
 };
 
-export default FinancialInstitutionMasterTable;
+
 
 // 使用例
 const sampleData: FinancialInstitutionMaster[] = [
@@ -87,3 +87,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

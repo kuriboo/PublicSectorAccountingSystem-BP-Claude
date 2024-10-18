@@ -61,7 +61,7 @@ const AccountDetailTable: React.FC<Props> = ({ accountDetails }) => {
   );
 };
 
-export default AccountDetailTable;
+
 
 // 使用例
 const sampleData: AccountDetail[] = [
@@ -78,3 +78,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

@@ -32,7 +32,7 @@ const ConfirmationForm: React.FC<Props> = ({ isChecked, onChange }) => {
   );
 };
 
-export default ConfirmationForm;
+
 
 // スタイリング
 const Container = styled.div`
@@ -117,3 +117,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

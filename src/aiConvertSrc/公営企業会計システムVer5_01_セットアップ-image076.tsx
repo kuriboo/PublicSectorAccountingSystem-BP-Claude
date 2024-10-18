@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
 type GradeCalculatorProps = {
-  currentGrade?: number;
-  targetGrade?: number;
+  initialCurrentGrade?: number;
+  initialTargetGrade?: number;
 };
 
-const GradeCalculator: React.FC<GradeCalculatorProps> = ({ currentGrade = 0, targetGrade = 0 }) => {
-  const [calculatedGrade, setCalculatedGrade] = React.useState<string>('');
+const GradeCalculator: React.FC<GradeCalculatorProps> = ({ 
+  initialCurrentGrade = 0, 
+  initialTargetGrade = 0 
+}) => {
+  const [currentGrade, setCurrentGrade] = useState<number>(initialCurrentGrade);
+  const [targetGrade, setTargetGrade] = useState<number>(initialTargetGrade);
+  const [calculatedGrade, setCalculatedGrade] = useState<string>('');
 
   const handleCalculate = () => {
     // 計算ロジックを実装（例は単純な加算）
@@ -15,16 +20,37 @@ const GradeCalculator: React.FC<GradeCalculatorProps> = ({ currentGrade = 0, tar
     setCalculatedGrade(grade.toString());
   };
 
+  const handleClear = () => {
+    setCurrentGrade(0);
+    setTargetGrade(0);
+    setCalculatedGrade('');
+  };
+
+  const handleCancel = () => {
+    // キャンセル処理を実装（例：初期値に戻す）
+    setCurrentGrade(initialCurrentGrade);
+    setTargetGrade(initialTargetGrade);
+    setCalculatedGrade('');
+  };
+
   return (
     <Container>
       <Title>単位集計計算機</Title>
       <InputRow>
         <Label>集計先区分</Label>
-        <Input type="number" value={currentGrade} onChange={e => setCurrentGrade(Number(e.target.value))} />
+        <Input 
+          type="number" 
+          value={currentGrade} 
+          onChange={(e) => setCurrentGrade(Number(e.target.value))} 
+        />
       </InputRow>
       <InputRow>
         <Label>集計先番号</Label>
-        <Input type="number" value={targetGrade} onChange={e => setTargetGrade(Number(e.target.value))} />
+        <Input 
+          type="number" 
+          value={targetGrade} 
+          onChange={(e) => setTargetGrade(Number(e.target.value))} 
+        />
       </InputRow>
       <InputRow>
         <Label>加減区分</Label>
@@ -32,8 +58,8 @@ const GradeCalculator: React.FC<GradeCalculatorProps> = ({ currentGrade = 0, tar
       </InputRow>
       <ButtonRow>
         <Button onClick={handleCalculate}>OK</Button>
-        <Button>クリア</Button>
-        <Button>キャンセル</Button>
+        <Button onClick={handleClear}>クリア</Button>
+        <Button onClick={handleCancel}>キャンセル</Button>
       </ButtonRow>
       {calculatedGrade && <Result>計算結果: {calculatedGrade}</Result>}
     </Container>
@@ -100,7 +126,7 @@ const App: React.FC = () => {
   return (
     <div>
       <h1>成績計算アプリ</h1>
-      <GradeCalculator currentGrade={80} targetGrade={90} />
+      <GradeCalculator initialCurrentGrade={80} initialTargetGrade={90} />
     </div>
   );
 };

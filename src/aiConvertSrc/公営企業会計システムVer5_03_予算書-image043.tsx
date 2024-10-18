@@ -62,7 +62,7 @@ const Profile: React.FC<ProfileProps> = ({ name, role, imageUrl, message }) => {
   );
 };
 
-export default Profile;
+
 
 // 使用例
 const SampleProfile = () => {
@@ -80,3 +80,5 @@ const SampleProfile = () => {
     </div>
   );
 };
+
+export default SampleProfile;

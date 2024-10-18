@@ -1,5 +1,3 @@
-以下は、Next.js + TypeScriptを使用して、画像のような資産集計システムのコンポーネントを実装した例です。
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -105,14 +103,3 @@ const SampleAssetSummary: React.FC = () => {
 };
 
 export default SampleAssetSummary;
-
-ポイント:
-- AssetSummaryPropsでコンポーネントのプロパティを型定義
-- styled-componentsを使ってスタイリング
-- レスポンシブ対応のCSSを記述
-- 数値の3桁区切り表示にtoLocaleString()を使用  
-- サンプルデータを使った表示用のSampleAssetSummaryコンポーネントを実装
-- プロパティが未定義の場合の処理は省略
-
-以上、Next.js + TypeScriptで資産集計のUIをコンポーネント化した例でした。
-実際のデータの受け渡しやイベントハンドリングなどは、アプリケーションの要件に合わせて実装する必要があります。

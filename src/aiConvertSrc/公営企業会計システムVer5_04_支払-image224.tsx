@@ -64,7 +64,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
 // サンプルデータを用いた使用例
 const SampleOrderTable: React.FC = () => {
   const sampleOrders: Order[] = [
-    { id: '00201011', date: '2020/10/11', customer: '原沢 康浩株式会社', total: 0001 }
+    { id: '00201011', date: '2020/10/11', customer: '原沢 康浩株式会社', total: 1 }
   ];
 
   return (
@@ -79,4 +79,4 @@ const SampleOrderTable: React.FC = () => {
   );
 };
 
-export default OrderTable;
+export default SampleOrderTable;

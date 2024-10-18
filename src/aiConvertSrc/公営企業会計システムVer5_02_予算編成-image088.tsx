@@ -145,4 +145,4 @@ const SubmitButton = styled.button`
   padding: 8px 16px;
 `;
 
-export default TaxFileForm;
+export default SampleUsage;

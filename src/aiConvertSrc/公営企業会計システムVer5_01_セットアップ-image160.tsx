@@ -154,4 +154,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default MasterMaintenance;
+export default SampleUsage;

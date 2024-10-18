@@ -154,7 +154,7 @@ const OptionRow = styled.div`
   }
 `;
 
-export default UserInfo;
+
 
 // Usage example
 const App: React.FC = () => {
@@ -173,3 +173,5 @@ const App: React.FC = () => {
 
   return <UserInfo {...sampleData} onInputChange={handleInputChange} />;
 };
+
+export default App;

@@ -154,4 +154,4 @@ const SampleTaxWithholdingSlip: React.FC = () => {
   return <TaxWithholdingSlip {...sampleData} />;
 };
 
-export default TaxWithholdingSlip;
+export default SampleTaxWithholdingSlip;

@@ -98,4 +98,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default MasterList;
+export default SampleUsage;

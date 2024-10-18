@@ -245,4 +245,4 @@ const Button = styled.button`
   }
 `;
 
-export default ProductInfo;
+export default SampleUsage;

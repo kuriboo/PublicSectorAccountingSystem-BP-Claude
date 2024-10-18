@@ -130,7 +130,7 @@ const CompanyRegistrationForm: React.FC = () => {
   );
 };
 
-export default CompanyRegistrationForm;
+
 
 // Usage example:
 const App: React.FC = () => {
@@ -141,3 +141,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

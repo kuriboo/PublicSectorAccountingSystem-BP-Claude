@@ -137,7 +137,7 @@ const TaxCalculator: React.FC<Props> = ({ inputAmount, calculationResults }) => 
   );
 };
 
-export default TaxCalculator;
+
 
 // 使用例
 const sampleData = {
@@ -175,3 +175,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

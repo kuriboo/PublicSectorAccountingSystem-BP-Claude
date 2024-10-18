@@ -110,7 +110,7 @@ const TransferCorrection: React.FC<Props> = ({ budgets, transferData, onSubmit }
   );
 };
 
-export default TransferCorrection;
+
 
 // 使用例
 const sampleBudgets: Budget[] = [
@@ -139,3 +139,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default App;

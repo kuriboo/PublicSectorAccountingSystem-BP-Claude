@@ -1,5 +1,3 @@
-以下は、指定された要件に基づいて生成したNext.js + TypeScriptのコンポーネントです。
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -70,4 +68,4 @@ http://192.168.3.115/crs/crscom/comSQL.crs`,
   return <Error {...sampleData} />;
 };
 
-export default Error;
+export default SampleError;

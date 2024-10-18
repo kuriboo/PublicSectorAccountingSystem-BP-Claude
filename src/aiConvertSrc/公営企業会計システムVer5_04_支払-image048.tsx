@@ -102,7 +102,7 @@ const PrinterStatusSelector: React.FC<PrinterStatusSelectorProps> = ({ onChange 
   );
 };
 
-export default PrinterStatusSelector;
+
 
 // Usage example:
 const SamplePage = () => {
@@ -117,3 +117,5 @@ const SamplePage = () => {
     </div>
   );
 };
+
+export default SamplePage;

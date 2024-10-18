@@ -223,4 +223,4 @@ const SampleBusinessForm: React.FC = () => {
   );  
 };
 
-export default BusinessForm;
+export default SampleBusinessForm;

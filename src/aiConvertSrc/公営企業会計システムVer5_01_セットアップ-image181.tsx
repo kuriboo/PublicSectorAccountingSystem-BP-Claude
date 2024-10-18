@@ -178,4 +178,4 @@ const SampleMasterMaintenance: React.FC = () => {
   return <MasterMaintenance masterType="company" data={sampleData} />;
 };
 
-export default MasterMaintenance;
+export default SampleMasterMaintenance;

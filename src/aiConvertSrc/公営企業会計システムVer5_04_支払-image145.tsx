@@ -64,4 +64,4 @@ const ChecklistItemExample: React.FC = () => {
   );
 };
 
-export default ChecklistItem;
+export default ChecklistItemExample;

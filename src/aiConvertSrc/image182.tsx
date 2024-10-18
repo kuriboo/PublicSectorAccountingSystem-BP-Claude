@@ -1,5 +1,3 @@
-以下がNext.js + TypeScriptで実装した公営企業会計システムの管理マスタコンポーネントです。
-
 import React from 'react';
 import styled from '@emotion/styled';
 
@@ -231,8 +229,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-このコンポーネントでは、管理マスタの各項目をプロパティとして受け取り、テーブル形式で表示しています。
-また、CSS-in-JSライブラリの@emotion/styledを使用してスタイリングを行い、レスポンシブデザインにも対応しています。
-各項目の値が未設定の場合は「未設定」と表示するようにしています。
-最後に、サンプルデータを用意し、使用例としてAppコンポーネント内で管理マスタコンポーネントを呼び出しています。

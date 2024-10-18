@@ -344,4 +344,4 @@ const ItemTotal = styled.div`
   padding-top: 5px;
 `;
 
-export default PaymentApplicationForm;
+export default SampleUsage;

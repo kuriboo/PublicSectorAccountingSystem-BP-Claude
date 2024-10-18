@@ -141,7 +141,7 @@ const UsageExample: React.FC = () => {
   );
 };
 
-export default ApplicationMasterForm;
+export default UsageExample;
 
 // Styled components
 const Container = styled.div`

@@ -72,8 +72,6 @@ const ApGroupMaster: React.FC<Props> = ({ apGroups }) => {
   );
 };
 
-export default ApGroupMaster;
-
 // コンポーネントの使用例
 const SampleData: ApGroup[] = [
   { code: '00000101', name: '可' },
@@ -94,3 +92,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

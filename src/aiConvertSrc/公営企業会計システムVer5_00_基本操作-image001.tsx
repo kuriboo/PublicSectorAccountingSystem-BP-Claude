@@ -85,4 +85,4 @@ const FeatureCardExample: React.FC = () => {
   );
 };
 
-export default FeatureCard;
+export default FeatureCardExample;

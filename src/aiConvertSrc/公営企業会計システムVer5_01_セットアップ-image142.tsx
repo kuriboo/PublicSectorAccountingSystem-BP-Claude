@@ -158,4 +158,4 @@ const Footer = styled.div`
   }
 `;
 
-export default DecisionMakerMaster;
+export default App;

@@ -126,7 +126,7 @@ const CompanySettingsForm: React.FC<Props> = ({
   );
 };
 
-export default CompanySettingsForm;
+
 
 // Usage example
 const divisions = [
@@ -154,3 +154,5 @@ const ExampleUsage = () => {
     />
   );
 }
+
+export default ExampleUsage;

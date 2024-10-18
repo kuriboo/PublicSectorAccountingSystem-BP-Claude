@@ -241,4 +241,4 @@ const Button = styled.button`
   }
 `;
 
-export default CompanyAccountingSystem;
+export default PreviewCompanyAccountingSystem;

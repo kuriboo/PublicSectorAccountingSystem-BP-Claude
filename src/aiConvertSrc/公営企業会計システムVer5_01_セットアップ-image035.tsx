@@ -143,4 +143,4 @@ const TotalCompositionRatio = styled.div`
   font-weight: bold;
 `;
 
-export default StockCompositionRatio;
+export default SampleUsage;

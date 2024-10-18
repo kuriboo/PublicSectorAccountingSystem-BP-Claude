@@ -44,7 +44,7 @@ const UserSummary: React.FC<UserSummaryProps> = ({
   );
 };
 
-export default UserSummary;
+
 
 // Styles
 const Container = styled.div`
@@ -112,3 +112,5 @@ const UserSummaryExample: React.FC = () => {
     />
   );
 };
+
+export default UserSummaryExample;

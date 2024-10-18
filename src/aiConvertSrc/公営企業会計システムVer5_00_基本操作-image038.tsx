@@ -5,8 +5,8 @@ type TaxTableProps = {
   data: {
     date: string;
     personalIncomeTax: number;
-    corporateTax: number;
-    foodExpenses: number;
+    corporateTax: string;
+    foodExpenses: string;
     alcoholTax: number;
     totalTax: number;
   }[];
@@ -30,8 +30,8 @@ const TaxTable: React.FC<TaxTableProps> = ({ data }) => {
             <tr key={index}>
               <td>{row.date}</td>
               <td>{row.personalIncomeTax.toLocaleString()}</td>
-              <td>{row.corporateTax.toLocaleString()}</td>
-              <td>{row.foodExpenses.toLocaleString()}</td>
+              <td>{row.corporateTax}</td>
+              <td>{row.foodExpenses}</td>
               <td>{row.alcoholTax.toLocaleString()}</td>
             </tr>
           ))}
@@ -75,8 +75,8 @@ const SampleUsage: React.FC = () => {
     {
       date: '事務用消耗品',
       personalIncomeTax: 28808,
-      corporateTax: 事務用備品,
-      foodExpenses: 課税,
+      corporateTax: '事務用備品',
+      foodExpenses: '課税',
       alcoholTax: 28808,
       totalTax: 1708
     },
@@ -91,4 +91,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default TaxTable;
+export default SampleUsage;

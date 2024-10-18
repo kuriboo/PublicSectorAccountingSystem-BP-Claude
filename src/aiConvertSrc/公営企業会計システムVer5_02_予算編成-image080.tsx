@@ -77,4 +77,4 @@ const SampleReservationDetail: React.FC = () => {
   return <ReservationDetail {...sampleData} />;
 };
 
-export default ReservationDetail;
+export default SampleReservationDetail;

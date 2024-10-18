@@ -87,7 +87,7 @@ const BankStatement: React.FC<Props> = ({
   day = 0,
   dueDate = '',
 }) => {
-  const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0);
+  const totalAmount = transactions.reduce((sum, t: { amount: number }) => sum + t.amount, 0); // 型を明示的に指定
 
   return (
     <Container>
@@ -122,11 +122,11 @@ const BankStatement: React.FC<Props> = ({
         <tbody>
           {transactions.map((t, i) => (
             <tr key={i}>
-              <TableCell>{t.date}</TableCell>
-              <NumberCell>{t.name}</NumberCell>
-              <TableCell>{t.description}</TableCell>
-              <NumberCell>{t.amount.toLocaleString()}</NumberCell>
-              <TableCell>{t.description}</TableCell>
+              <TableCell>{(t as { date: string }).date}</TableCell>
+              <NumberCell>{(t as { name: string }).name}</NumberCell>
+              <TableCell>{(t as { description: string }).description}</TableCell>
+              <NumberCell>{(t as { amount: number }).amount.toLocaleString()}</NumberCell>
+              <TableCell>{(t as { description: string }).description}</TableCell>
             </tr>
           ))}
         </tbody>

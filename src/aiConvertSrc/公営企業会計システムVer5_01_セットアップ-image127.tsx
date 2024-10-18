@@ -114,3 +114,5 @@ const SampleUsage: React.FC = () => {
     </div>
   );
 };
+
+export default SampleUsage;

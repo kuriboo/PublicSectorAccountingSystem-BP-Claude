@@ -91,4 +91,4 @@ const TaxDeductionFormExample: React.FC = () => {
   return <TaxDeductionForm {...sampleData} />;
 };
 
-export default TaxDeductionForm;
+export default TaxDeductionFormExample;

@@ -159,4 +159,4 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
-export default ReservationInfo;
+export default SampleUsage;

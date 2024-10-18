@@ -84,4 +84,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default DateRangeSetting;
+export default SampleUsage;

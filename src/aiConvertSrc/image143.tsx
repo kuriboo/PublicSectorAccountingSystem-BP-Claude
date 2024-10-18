@@ -114,8 +114,6 @@ const FixedTermCapitalManagementSystem: React.FC<FixedTermCapitalManagementSyste
   );
 };
 
-export default FixedTermCapitalManagementSystem;
-
 // Usage example
 const App: React.FC = () => {
   return (
@@ -133,3 +131,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default App;

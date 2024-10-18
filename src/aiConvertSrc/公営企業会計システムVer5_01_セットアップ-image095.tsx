@@ -180,8 +180,6 @@ const PrintButton = styled(Button)`
   color: #fff;  
 `;
 
-export default LoanAccountRegisterForm;
-
 // Usage example 
 const App: React.FC = () => {
   const handleSubmit = (data: LoanAccountRegisterFormData) => {

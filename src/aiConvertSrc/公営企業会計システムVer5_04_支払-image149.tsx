@@ -121,7 +121,7 @@ const PublicationForm: React.FC<Props> = ({ formData, onSubmit }) => {
   );
 };
 
-export default PublicationForm;
+
 
 // Usage example:
 const ExampleUsage: React.FC = () => {
@@ -140,3 +140,5 @@ const ExampleUsage: React.FC = () => {
 
   return <PublicationForm formData={exampleData} onSubmit={handleSubmit} />;
 };
+
+export default ExampleUsage;

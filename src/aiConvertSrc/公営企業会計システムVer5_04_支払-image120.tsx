@@ -45,7 +45,7 @@ const PublicAccountingPackage: React.FC<PublicAccountingPackageProps> = ({ warni
   );
 };
 
-export default PublicAccountingPackage;
+
 
 // 使用例
 const PackageSample = () => {
@@ -60,3 +60,5 @@ const PackageSample = () => {
     </div>
   );
 };
+
+export default PackageSample;

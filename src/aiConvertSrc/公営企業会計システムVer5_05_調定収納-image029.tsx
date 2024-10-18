@@ -106,4 +106,4 @@ const SampleProductCard = () => {
   return <ProductCard {...sampleProduct} />;
 };
 
-export default ProductCard;
+export default SampleProductCard;

@@ -116,4 +116,4 @@ const Checkbox = styled.input`
   margin-right: 5px;
 `;
 
-export default IncomeItemSetting;
+export default SampleIncomeItemSetting;

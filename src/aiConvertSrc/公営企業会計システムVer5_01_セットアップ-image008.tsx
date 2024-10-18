@@ -132,4 +132,4 @@ const Button = styled.button`
   }
 `;
 
-export default ShopMaster;
+export default SampleShopMaster;

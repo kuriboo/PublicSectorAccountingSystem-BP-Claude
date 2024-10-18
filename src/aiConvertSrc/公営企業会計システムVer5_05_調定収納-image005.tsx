@@ -105,4 +105,4 @@ const UsageSample = () => {
   );
 };
 
-export default DateRangePicker;
+export default UsageSample;

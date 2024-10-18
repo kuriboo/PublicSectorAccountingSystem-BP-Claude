@@ -1,5 +1,3 @@
-以下のようなNext.js + TypeScriptのコンポーネントを生成しました。
-
 import React from 'react';
 import styled from '@emotion/styled';
 
@@ -146,7 +144,7 @@ const MasterListCreation: React.FC<MasterListCreationProps> = ({
   );
 };
 
-export default MasterListCreation;
+
 
 // 使用例
 const UsageExample = () => {
@@ -170,3 +168,5 @@ const UsageExample = () => {
     />
   );
 };
+
+export default UsageExample;

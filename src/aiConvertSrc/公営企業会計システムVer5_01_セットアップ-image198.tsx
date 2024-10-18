@@ -87,4 +87,4 @@ const SampleNewsCard: React.FC = () => {
   return <NewsCard {...sampleData} />;
 };
 
-export default NewsCard;
+export default SampleNewsCard;

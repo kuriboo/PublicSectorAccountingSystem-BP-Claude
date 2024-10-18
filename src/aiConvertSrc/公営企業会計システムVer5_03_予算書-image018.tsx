@@ -161,4 +161,4 @@ const SampleLoanBalanceSheet: React.FC = () => {
   );
 };
 
-export default LoanBalanceSheet;
+export default SampleLoanBalanceSheet;

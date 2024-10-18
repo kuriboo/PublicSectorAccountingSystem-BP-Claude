@@ -74,9 +74,9 @@ const ReceiptSearchForm: React.FC<ReceiptSearchFormProps> = ({ onSubmit }) => {
           }
         : undefined,
       printTarget: Array.from(form.printTarget)
-        .filter((checkbox: HTMLInputElement) => checkbox.checked)
+        .filter((checkbox: unknown): checkbox is HTMLInputElement => (checkbox as HTMLInputElement).checked) // 型ガードを使用
         .map((checkbox: HTMLInputElement) => checkbox.value)
-        .join(','),
+        .join(','), 
       isSeparated: form.isSeparated.value as '一括' | '別紙',
     };
     onSubmit(data);

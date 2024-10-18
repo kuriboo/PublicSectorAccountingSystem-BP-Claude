@@ -193,4 +193,4 @@ const JournalEntryFormExample = () => {
   );
 };
 
-export default JournalEntryForm;
+export default JournalEntryFormExample;

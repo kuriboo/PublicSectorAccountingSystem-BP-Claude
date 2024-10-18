@@ -114,8 +114,6 @@ const SubdivisionForm: React.FC<Props> = ({
   );
 };
 
-export default SubdivisionForm;
-
 // 使用例
 const sampleData: SubdivisionData = {
   code: '999',
@@ -152,3 +150,5 @@ const SampleUsage: React.FC = () => {
     />
   );
 };
+
+export default SampleUsage;

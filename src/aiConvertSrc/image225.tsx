@@ -105,8 +105,6 @@ const DealingsTable: React.FC<DealingsTableProps> = ({
   );
 };
 
-export default DealingsTable;
-
 // 使用例
 const sampleData = [
   {
@@ -143,3 +141,5 @@ const SampleUsage = () => {
     />
   );
 };
+
+export default SampleUsage;

@@ -122,7 +122,7 @@ const DataRangeSetting: React.FC<DataRangeSettingProps> = ({
   );
 };
 
-export default DataRangeSetting;
+
 
 // Example usage
 const App: React.FC = () => {
@@ -136,3 +136,5 @@ const App: React.FC = () => {
     />
   );  
 };
+
+export default App;

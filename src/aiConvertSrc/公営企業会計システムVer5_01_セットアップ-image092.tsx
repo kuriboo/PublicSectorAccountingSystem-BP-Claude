@@ -187,4 +187,4 @@ const ExampleUsage: React.FC = () => {
   );
 };
 
-export default CashTransferForm;
+export default ExampleUsage;

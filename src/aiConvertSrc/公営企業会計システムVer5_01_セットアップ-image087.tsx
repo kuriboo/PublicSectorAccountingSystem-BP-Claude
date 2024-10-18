@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from '@emotion/styled';
 
 type CashFlowFormProps = {
-  amount?: number;
-  itemName?: string;
-  cfCategory?: 'income' | 'expense';
-  accountingCategory?: 'cash' | 'creditCard' | 'other';
-  politicalDivision?: 'tokyoTo' | 'other';
-  indent?: number;
-  memo?: string;
+  initialAmount?: number;
+  initialItemName?: string;
+  initialCfCategory?: 'income' | 'expense';
+  initialAccountingCategory?: 'cash' | 'creditCard' | 'other';
+  initialPoliticalDivision?: 'tokyoTo' | 'other';
+  initialIndent?: number;
+  initialMemo?: string;
   onSubmit: (formData: CashFlowFormData) => void;
+  onCancel: () => void;
 };
 
 type CashFlowFormData = {
@@ -22,7 +23,7 @@ type CashFlowFormData = {
   memo: string;
 };
 
-const Container = styled.div`
+const Container = styled.form`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -46,12 +47,14 @@ const Input = styled.input`
   padding: 5px;
   border-radius: 3px;
   border: 1px solid #ccc;
+  width: 100%;
 `;
 
 const Select = styled.select`
   padding: 5px;
   border-radius: 3px;
   border: 1px solid #ccc;
+  width: 100%;
 `;
 
 const ButtonGroup = styled.div`
@@ -72,65 +75,154 @@ const Button = styled.button`
   }
 `;
 
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 0.8em;
+  margin-top: 5px;
+`;
+
 const CashFlowForm: React.FC<CashFlowFormProps> = ({
-  amount = 400,
-  itemName = '',
-  cfCategory = 'expense',
-  accountingCategory = 'cash',
-  politicalDivision = 'tokyoTo',
-  indent = 0,
-  memo = '',
+  initialAmount = 400,
+  initialItemName = '',
+  initialCfCategory = 'expense',
+  initialAccountingCategory = 'cash',
+  initialPoliticalDivision = 'tokyoTo',
+  initialIndent = 0,
+  initialMemo = '',
   onSubmit,
+  onCancel,
 }) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [amount, setAmount] = useState<number>(initialAmount);
+  const [itemName, setItemName] = useState<string>(initialItemName);
+  const [cfCategory, setCfCategory] = useState<'income' | 'expense'>(initialCfCategory);
+  const [accountingCategory, setAccountingCategory] = useState<'cash' | 'creditCard' | 'other'>(initialAccountingCategory);
+  const [politicalDivision, setPoliticalDivision] = useState<'tokyoTo' | 'other'>(initialPoliticalDivision);
+  const [indent, setIndent] = useState<number>(initialIndent);
+  const [memo, setMemo] = useState<string>(initialMemo);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validateForm = useCallback(() => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (amount <= 0) {
+      newErrors.amount = '金額は0より大きい値を入力してください。';
+    }
+
+    if (itemName.trim() === '') {
+      newErrors.itemName = '項目名称は必須です。';
+    }
+
+    if (indent < 0) {
+      newErrors.indent = 'インデントは0以上の値を入力してください。';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [amount, itemName, indent]);
+
+  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData: CashFlowFormData = {
-      amount: amount || 0,
-      itemName: itemName || '',
-      cfCategory: cfCategory || 'expense',
-      accountingCategory: accountingCategory || 'cash',
-      politicalDivision: politicalDivision || 'tokyoTo',
-      indent: indent || 0,
-      memo: memo || '',
-    };
-    onSubmit(formData);
-  };
+    if (validateForm()) {
+      const formData: CashFlowFormData = {
+        amount,
+        itemName,
+        cfCategory,
+        accountingCategory,
+        politicalDivision,
+        indent,
+        memo,
+      };
+      onSubmit(formData);
+    }
+  }, [amount, itemName, cfCategory, accountingCategory, politicalDivision, indent, memo, onSubmit, validateForm]);
+
+  const handleReset = useCallback(() => {
+    setAmount(initialAmount);
+    setItemName(initialItemName);
+    setCfCategory(initialCfCategory);
+    setAccountingCategory(initialAccountingCategory);
+    setPoliticalDivision(initialPoliticalDivision);
+    setIndent(initialIndent);
+    setMemo(initialMemo);
+    setErrors({});
+  }, [initialAmount, initialItemName, initialCfCategory, initialAccountingCategory, initialPoliticalDivision, initialIndent, initialMemo]);
 
   return (
-    <Container>
-      <Label>集計番号</Label>
-      <Input type="number" value={amount} readOnly />
+    <Container onSubmit={handleSubmit}>
+      <Label htmlFor="amount">集計番号</Label>
+      <Input
+        id="amount"
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(Number(e.target.value))}
+        required
+      />
+      {errors.amount && <ErrorMessage>{errors.amount}</ErrorMessage>}
 
-      <Label>項目名称1</Label>
-      <Input type="text" defaultValue={itemName} required />
+      <Label htmlFor="itemName">項目名称1</Label>
+      <Input
+        id="itemName"
+        type="text"
+        value={itemName}
+        onChange={(e) => setItemName(e.target.value)}
+        required
+      />
+      {errors.itemName && <ErrorMessage>{errors.itemName}</ErrorMessage>}
       
-      <Label>CF区分</Label>
-      <Select defaultValue={cfCategory}>
+      <Label htmlFor="cfCategory">CF区分</Label>
+      <Select
+        id="cfCategory"
+        value={cfCategory}
+        onChange={(e) => setCfCategory(e.target.value as 'income' | 'expense')}
+      >
         <option value="income">業務活動によるキャッシュ・フロー</option>
         <option value="expense">業務活動によるキャッシュ・フロー</option>
       </Select>
 
-      <Label>金額CFF区分</Label>
-      <Select defaultValue={accountingCategory}>
+      <Label htmlFor="accountingCategory">金額CFF区分</Label>
+      <Select
+        id="accountingCategory"
+        value={accountingCategory}
+        onChange={(e) => setAccountingCategory(e.target.value as 'cash' | 'creditCard' | 'other')}
+      >
         <option value="cash">現金同等物</option>
         <option value="creditCard">現金同等物でないもの</option>
+        <option value="other">その他</option>
       </Select>
 
-      <Label>改行区分</Label>
-      <Select defaultValue={politicalDivision}>
+      <Label htmlFor="politicalDivision">改行区分</Label>
+      <Select
+        id="politicalDivision"
+        value={politicalDivision}
+        onChange={(e) => setPoliticalDivision(e.target.value as 'tokyoTo' | 'other')}
+      >
         <option value="tokyoTo">行政区分</option>
+        <option value="other">その他</option>
       </Select>
 
-      <Label>インデント</Label>
-      <Input type="number" defaultValue={indent} min={0} required />
+      <Label htmlFor="indent">インデント</Label>
+      <Input
+        id="indent"
+        type="number"
+        value={indent}
+        onChange={(e) => setIndent(Number(e.target.value))}
+        min={0}
+        required
+      />
+      {errors.indent && <ErrorMessage>{errors.indent}</ErrorMessage>}
 
-      <Label>備考出力無し</Label>
-      <Input type="text" defaultValue={memo} />
+      <Label htmlFor="memo">備考出力無し</Label>
+      <Input
+        id="memo"
+        type="text"
+        value={memo}
+        onChange={(e) => setMemo(e.target.value)}
+      />
 
       <ButtonGroup>
         <Button type="submit">OK</Button>
-        <Button type="reset">クリア</Button>
-        <Button type="button">キャンセル</Button>
+        <Button type="button" onClick={handleReset}>クリア</Button>
+        <Button type="button" onClick={onCancel}>キャンセル</Button>
       </ButtonGroup>
     </Container>
   );
@@ -143,10 +235,15 @@ const App: React.FC = () => {
     // Handle form submission
   };
 
+  const handleCancel = () => {
+    console.log('Form cancelled');
+    // Handle cancellation
+  };
+
   return (
     <div>
       <h1>Cash Flow Form</h1>
-      <CashFlowForm onSubmit={handleSubmit} />
+      <CashFlowForm onSubmit={handleSubmit} onCancel={handleCancel} />
     </div>
   );
 };

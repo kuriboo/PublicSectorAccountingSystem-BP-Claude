@@ -40,6 +40,7 @@ type Props = {
 type FormData = {
   name: string;
   code: string;
+  phoneNumber: string;
   faxNumber: string;
   postalCode: string;
   address: string;
@@ -56,6 +57,7 @@ const InputForm: React.FC<Props> = ({ onSubmit }) => {
   const [formData, setFormData] = React.useState<FormData>({
     name: '',
     code: '',
+    phoneNumber: '',
     faxNumber: '',
     postalCode: '',
     address: '',
@@ -130,8 +132,6 @@ const InputForm: React.FC<Props> = ({ onSubmit }) => {
   );
 };
 
-export default InputForm;
-
 // サンプルデータを用いた使用例
 const sampleData: FormData = {
   name: 'ABC株式会社',
@@ -161,3 +161,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

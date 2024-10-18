@@ -79,4 +79,4 @@ const SampleFiscalYearTable: React.FC = () => {
   );
 };
 
-export default FiscalYearTable;
+export default SampleFiscalYearTable;

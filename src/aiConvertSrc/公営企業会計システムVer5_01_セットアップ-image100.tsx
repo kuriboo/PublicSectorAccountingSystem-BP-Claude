@@ -89,4 +89,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default NumberInput;
+export default SampleUsage;

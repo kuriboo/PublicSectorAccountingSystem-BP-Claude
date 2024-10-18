@@ -104,10 +104,10 @@ const sampleData = {
   price: 1237000,
   taxRate: 10,
   priceInfoList: [
-    { label: '予算科目', value: 002010411 },
-    { label: '予算節', value: 0002 },
-    { label: '予算細節', value: 0010 },
-    { label: '予算明細', value: 0010 },
+    { label: '予算科目', value: 2010411 },
+    { label: '予算節', value: 2 },
+    { label: '予算細節', value: 10 },
+    { label: '予算明細', value: 10 },
   ],
 };
 
@@ -181,4 +181,4 @@ const DetailTable = styled.table`
   }
 `;
 
-export default TaxCalculator;
+export default TaxCalculatorExample;

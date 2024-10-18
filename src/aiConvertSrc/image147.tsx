@@ -113,4 +113,4 @@ const UsageExample: React.FC = () => {
   );  
 };
 
-export default CodeNameSearch;
+export default UsageExample;

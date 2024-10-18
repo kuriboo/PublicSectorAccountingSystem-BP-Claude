@@ -150,4 +150,4 @@ const SampleBalanceSheet = () => {
   );
 };
 
-export default BalanceSheet;
+export default SampleBalanceSheet;

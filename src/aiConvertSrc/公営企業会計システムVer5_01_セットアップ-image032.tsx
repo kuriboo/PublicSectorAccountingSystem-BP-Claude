@@ -105,8 +105,6 @@ const CompanyBilling: React.FC<CompanyBillingProps> = ({
   );
 };
 
-export default CompanyBilling;
-
 // 使用例
 const App: React.FC = () => {
   return (
@@ -123,3 +121,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default CompanyBilling;

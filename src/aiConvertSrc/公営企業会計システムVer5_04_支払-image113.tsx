@@ -1,5 +1,3 @@
-以下はNext.js + TypeScriptで実装した公益企業登録システムのコンポーネントです。
-
 import React from 'react';
 import styled from 'styled-components';
 

@@ -70,8 +70,6 @@ const ReserveMasterComponent: React.FC<ReserveMasterProps> = ({ reserveMasters }
   );
 };
 
-export default ReserveMasterComponent;
-
 // 使用例
 const sampleData = [
   { code: 0, name: '当初予算', startDate: '令和02年04月01日' },
@@ -88,3 +86,5 @@ const UsageExample = () => {
     </div>
   );
 };
+
+export default UsageExample;

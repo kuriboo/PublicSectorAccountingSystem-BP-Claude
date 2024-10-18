@@ -93,7 +93,6 @@ const ManagementTable: React.FC<ManagementTableProps> = ({ data }) => {
   );
 };
 
-export default ManagementTable;
 
 // 使用例
 const sampleData: ManagementTableRow[] = [
@@ -117,3 +116,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

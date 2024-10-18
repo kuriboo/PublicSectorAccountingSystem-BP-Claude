@@ -250,4 +250,4 @@ const TableCell = styled.td`
   border-bottom: 1px solid #ccc;
 `;
 
-export default FixedAssetSearch;
+export default App;

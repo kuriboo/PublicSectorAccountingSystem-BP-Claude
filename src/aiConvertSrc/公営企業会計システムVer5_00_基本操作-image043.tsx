@@ -97,4 +97,4 @@ const Button = styled.button`
   }
 `;
 
-export default PrintSettingDialog;
+export default App;

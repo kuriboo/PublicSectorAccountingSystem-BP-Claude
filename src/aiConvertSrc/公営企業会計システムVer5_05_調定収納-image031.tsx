@@ -275,4 +275,4 @@ const UsageExample: React.FC = () => {
   );
 };
 
-export default InquiryForm;
+export default UsageExample;

@@ -108,4 +108,4 @@ const BankTransferFormExample = () => {
   );
 };
 
-export default BankTransferForm;
+export default BankTransferFormExample;

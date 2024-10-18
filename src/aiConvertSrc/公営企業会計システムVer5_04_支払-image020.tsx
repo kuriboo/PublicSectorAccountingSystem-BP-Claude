@@ -270,4 +270,4 @@ const CancelButton = styled(ActionButton)`
   background-color: #dc3545;
 `;
 
-export default PredictionForm;
+export default SampleUsage;

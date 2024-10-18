@@ -122,4 +122,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default ContractMasterList;
+export default SampleUsage;

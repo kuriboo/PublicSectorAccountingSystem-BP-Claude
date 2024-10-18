@@ -162,7 +162,7 @@ const App: React.FC = () => {
       name: '負担確定',
       unitPrice: 149,
       quantity: 1,
-      totalPrice: 431,000,
+      totalPrice: 431000,
       consumption: 0,
     },
     {
@@ -170,7 +170,7 @@ const App: React.FC = () => {
       name: '負担確定',
       unitPrice: 150,
       quantity: 1,
-      totalPrice: 1,000,
+      totalPrice: 1000,
       consumption: 0,
     },
   ];

@@ -199,7 +199,7 @@ const ReportForm: React.FC<ReportFormProps> = ({
   )
 }
 
-export default ReportForm;
+
 
 // サンプルデータでの使用例
 const sampleSearchCondition: SearchCondition = {
@@ -231,3 +231,5 @@ const SampleUsage: React.FC = () => {
     </div>  
   );
 }
+
+export default SampleUsage;

@@ -217,5 +217,3 @@ const sampleData: WorkReportFormProps = {
 export const WorkReportFormSample: React.FC = () => {
   return <WorkReportForm {...sampleData} />;
 };
-
-export default WorkReportForm;

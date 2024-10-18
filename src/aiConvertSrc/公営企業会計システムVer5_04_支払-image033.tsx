@@ -169,7 +169,7 @@ const TaxWithholdingTable: React.FC<Props> = ({
   );
 };
 
-export default TaxWithholdingTable;
+
 
 // サンプルデータ
 const sampleData: Props = {

@@ -125,4 +125,4 @@ const Button = styled.button`
   min-width: 100px;
 `;
 
-export default LoanBalanceFileCopy;
+export default SampleUsage;

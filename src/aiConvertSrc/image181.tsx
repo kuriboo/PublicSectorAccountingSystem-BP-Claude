@@ -1,5 +1,3 @@
-以下に、指定された条件に基づいてNext.js + TypeScriptのコンポーネントを生成します。
-
 import React from 'react';
 import styled from '@emotion/styled';
 
@@ -104,9 +102,9 @@ const sampleData: BudgetTableProps['data'] = {
       subtotal: 276789839,
     },
   ],
-  '0101010100010001': [
+  '0101010100010002': [
     {
-      code: '0001',
+      code: '0002',
       name: '分担金',
       division: '新加入者分担金',
       unit: '戸',
@@ -115,9 +113,9 @@ const sampleData: BudgetTableProps['data'] = {
       subtotal: 3754080,
     },
   ],
-  '0101010100010001': [
+  '0101010100010003': [
     {
-      code: '0001',
+      code: '0003',
       name: '雑収益',
       division: '水道メーター修繕代金（S済移転補償工事負担金）',
       unit: '式',
@@ -139,12 +137,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-ポイントは以下の通りです：
-
-1. 再利用可能なBudgetTableコンポーネントを定義し、データをPropsで受け取るようにしました。
-2. Emotionを使用してCSS-in-JS形式でスタイリングを行い、レスポンシブデザインを考慮しました。
-3. データが存在しない場合の例外処理は特に必要ありませんでしたが、各項目の値が存在しない場合に備えてOptionalの型定義を使用しました。
-4. サンプルデータを用意し、Appコンポーネントでの使用例を示しました。
-
-以上です。ご確認ください。

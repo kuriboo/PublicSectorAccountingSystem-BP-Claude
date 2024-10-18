@@ -142,8 +142,6 @@ const Calendar: React.FC<CalendarProps> = ({
   );
 };
 
-export default Calendar;
-
 // Usage example:
 const CalendarExample = () => {
   return (
@@ -156,3 +154,5 @@ const CalendarExample = () => {
     />
   );
 };
+
+export default CalendarExample;

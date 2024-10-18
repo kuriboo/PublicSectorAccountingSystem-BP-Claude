@@ -158,8 +158,6 @@ const ContractForm: React.FC<ContractFormProps> = ({ contractInfo }) => {
   );
 };
 
-export default ContractForm;
-
 // サンプルデータ
 const sampleData: ContractInfo = {
   fiscalYear: '4年',
@@ -278,3 +276,5 @@ const UsageExample: React.FC = () => {
     </div>
   );  
 };
+
+export default UsageExample;

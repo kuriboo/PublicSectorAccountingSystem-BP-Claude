@@ -14,6 +14,8 @@ interface ReservationData {
   periodFrom: string;
   periodTo: string;
   taxRate: string;
+  subjectLevels: string[];
+  taxSpecification: 'specify' | 'doNotSpecify';
 }
 
 const ReservationForm: React.FC<ReservationFormProps> = ({ onSubmit }) => {
@@ -26,14 +28,26 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ onSubmit }) => {
     periodFrom: '',
     periodTo: '',
     taxRate: '10',
+    subjectLevels: [],
+    taxSpecification: 'specify',
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const { name, value, type } = event.target;
+    if (type === 'checkbox') {
+      const checkbox = event.target as HTMLInputElement;
+      setFormData(prevData => ({
+        ...prevData,
+        subjectLevels: checkbox.checked
+          ? [...prevData.subjectLevels, value]
+          : prevData.subjectLevels.filter(level => level !== value),
+      }));
+    } else {
+      setFormData(prevData => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -51,7 +65,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ onSubmit }) => {
           onChange={handleChange}
         >
           <option value="個人予約">個人予約</option>
-          {/* Add other reservation types */}
+          <option value="法人予約">法人予約</option>
+          <option value="団体予約">団体予約</option>
         </Select>
       </FormGroup>
 
@@ -68,66 +83,203 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ onSubmit }) => {
       <FormGroup>
         <Label>帳票種別</Label>
         <RadioGroup>
-          <Radio
-            type="radio"
-            name="taxInvoice"
-            value="personal"
-            checked={formData.taxInvoice === 'personal'}
-            onChange={handleChange}
-          />
-          <RadioLabel>科目別</RadioLabel>
+          <RadioLabel>
+            <Radio
+              type="radio"
+              name="taxInvoice"
+              value="personal"
+              checked={formData.taxInvoice === 'personal'}
+              onChange={handleChange}
+            />
+            科目別
+          </RadioLabel>
           
-          <Radio
-            type="radio"
-            name="taxInvoice"
-            value="corporate"
-            checked={formData.taxInvoice === 'corporate'} 
-            onChange={handleChange}
-          />
-          <RadioLabel>所属別</RadioLabel>
+          <RadioLabel>
+            <Radio
+              type="radio"
+              name="taxInvoice"
+              value="corporate"
+              checked={formData.taxInvoice === 'corporate'} 
+              onChange={handleChange}
+            />
+            所属別
+          </RadioLabel>
         </RadioGroup>
       </FormGroup>
 
       <FormGroup>
         <Label>科目レベル</Label>
-        {/* Add checkboxes for 日, 節, 細節, 明細 */}
+        <CheckboxGroup>
+          {['日', '節', '細節', '明細'].map(level => (
+            <CheckboxLabel key={level}>
+              <Checkbox
+                type="checkbox"
+                name="subjectLevels"
+                value={level}
+                checked={formData.subjectLevels.includes(level)}
+                onChange={handleChange}
+              />
+              {level}
+            </CheckboxLabel>
+          ))}
+        </CheckboxGroup>
       </FormGroup>
 
       <FormGroup>
         <Label>範囲指定</Label>
-        <Input
-          type="text"
-          name="periodFrom"
-          value={formData.periodFrom}
-          onChange={handleChange}
-          placeholder="所属"
-        />
-        <Span>〜</Span>
-        <Input
-          type="text"
-          name="periodTo"
-          value={formData.periodTo}
-          onChange={handleChange}
-          placeholder="所属"
-        />
+        <InputGroup>
+          <Input
+            type="text"
+            name="periodFrom"
+            value={formData.periodFrom}
+            onChange={handleChange}
+            placeholder="所属"
+          />
+          <Span>〜</Span>
+          <Input
+            type="text"
+            name="periodTo"
+            value={formData.periodTo}
+            onChange={handleChange}
+            placeholder="所属"
+          />
+        </InputGroup>
       </FormGroup>
 
       <FormGroup>
         <Label>税率指定</Label>
-        <Input
-          type="text"
-          name="taxRate"
-          value={formData.taxRate}
-          onChange={handleChange}
-        />
-        <Span>%</Span>
-        {/* Add radio buttons for 指定しない and 指定する */}
+        <InputGroup>
+          <Input
+            type="text"
+            name="taxRate"
+            value={formData.taxRate}
+            onChange={handleChange}
+          />
+          <Span>%</Span>
+        </InputGroup>
+        <RadioGroup>
+          <RadioLabel>
+            <Radio
+              type="radio"
+              name="taxSpecification"
+              value="doNotSpecify"
+              checked={formData.taxSpecification === 'doNotSpecify'}
+              onChange={handleChange}
+            />
+            指定しない
+          </RadioLabel>
+          <RadioLabel>
+            <Radio
+              type="radio"
+              name="taxSpecification"
+              value="specify"
+              checked={formData.taxSpecification === 'specify'}
+              onChange={handleChange}
+            />
+            指定する
+          </RadioLabel>
+        </RadioGroup>
       </FormGroup>
       
       <Button type="submit">終了</Button>
     </Form>
   );
 };
+
+// Styled components
+const Form = styled.form`
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 16px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const RadioGroup = styled.div`
+  display: flex;
+  gap: 15px;
+`;
+
+const Radio = styled.input`
+  margin-right: 5px;
+`;
+
+const RadioLabel = styled.label`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const CheckboxGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+`;
+
+const Checkbox = styled.input`
+  margin-right: 5px;
+`;
+
+const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const InputGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const Span = styled.span`
+  color: #666;
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
 
 // Sample usage
 const SampleReservationForm = () => {
@@ -144,45 +296,4 @@ const SampleReservationForm = () => {
   );
 };
 
-// Styled components
-const Form = styled.form`
-  /* Add your form styles */
-`;
-
-const FormGroup = styled.div`
-  /* Add your form group styles */
-`;
-
-const Label = styled.label`
-  /* Add your label styles */
-`;
-
-const Select = styled.select`
-  /* Add your select styles */
-`;
-
-const Input = styled.input`
-  /* Add your input styles */
-`;
-
-const RadioGroup = styled.div`
-  /* Add your radio group styles */
-`;
-
-const Radio = styled.input`
-  /* Add your radio styles */
-`;
-
-const RadioLabel = styled.label`
-  /* Add your radio label styles */  
-`;
-
-const Span = styled.span`
-  /* Add your span styles */
-`;
-
-const Button = styled.button`
-  /* Add your button styles */
-`;
-
-export default ReservationForm;
+export default SampleReservationForm;

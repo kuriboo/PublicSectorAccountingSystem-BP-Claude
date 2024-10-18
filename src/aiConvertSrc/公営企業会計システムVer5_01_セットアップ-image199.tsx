@@ -101,4 +101,4 @@ const MainVisualExample: React.FC = () => {
   );
 };
 
-export default MainVisual;
+export default MainVisualExample;

@@ -180,6 +180,12 @@ const DataValue = styled.span`
   flex: 1;
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+`;
+
 const Button = styled.button`
   padding: 5px 10px;
   margin-right: 10px;
@@ -205,4 +211,4 @@ const NoteTextarea = styled.textarea`
   width: 100%;
 `;
 
-export default ReservationDetails;
+export default App;

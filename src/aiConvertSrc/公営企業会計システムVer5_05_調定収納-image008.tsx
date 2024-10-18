@@ -107,7 +107,7 @@ const AdjustmentAndLevyList: React.FC<AdjustmentAndLevyListProps> = ({
   );
 };
 
-export default AdjustmentAndLevyList;
+
 
 // 使用例
 const UsageExample = () => {
@@ -123,3 +123,5 @@ const UsageExample = () => {
     />
   );
 };
+
+export default UsageExample;

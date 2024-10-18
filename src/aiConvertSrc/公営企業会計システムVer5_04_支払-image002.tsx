@@ -194,7 +194,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit }) => {
   );
 };
 
-export default ExpenseForm;
 
 // サンプルデータ
 const sampleData: ExpenseData = {
@@ -227,3 +226,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

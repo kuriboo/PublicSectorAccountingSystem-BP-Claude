@@ -171,4 +171,4 @@ const ExampleUsage: React.FC = () => {
   return <ReservationForm onSubmit={handleSubmit} onCancel={handleCancel} />;
 };
 
-export default ReservationForm;
+export default ExampleUsage;

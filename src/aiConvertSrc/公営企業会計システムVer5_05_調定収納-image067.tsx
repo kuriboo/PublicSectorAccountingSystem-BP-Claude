@@ -1,5 +1,3 @@
-以下は、画像を元にしたNext.js + TypeScriptのコンポーネントのコードです。
-
 import React from 'react';
 import styled from 'styled-components';
 

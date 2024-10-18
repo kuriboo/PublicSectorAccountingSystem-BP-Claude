@@ -104,4 +104,4 @@ const TransactionListExample: React.FC = () => {
   );
 }
 
-export default TransactionList;
+export default TransactionListExample;

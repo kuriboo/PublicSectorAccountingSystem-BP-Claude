@@ -224,4 +224,4 @@ const CloseButton = styled(Button)`
   color: #fff;
 `;
 
-export default ReservationDetail;
+export default SampleUsage;

@@ -178,4 +178,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default FrontMoneyAdjustmentForm;
+export default SampleUsage;

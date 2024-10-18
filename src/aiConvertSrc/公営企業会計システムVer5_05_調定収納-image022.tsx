@@ -63,7 +63,7 @@ const CompanyRegistrationForm: React.FC<CompanyRegistrationFormProps> = ({
   );
 };
 
-export default CompanyRegistrationForm;
+
 
 // Sample usage
 const SampleUsage: React.FC = () => {
@@ -81,6 +81,8 @@ const SampleUsage: React.FC = () => {
     />
   );
 };
+
+export default SampleUsage;
 
 // Styled components
 const FormWrapper = styled.div`

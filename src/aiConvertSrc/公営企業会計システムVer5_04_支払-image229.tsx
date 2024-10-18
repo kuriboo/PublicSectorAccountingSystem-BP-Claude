@@ -121,4 +121,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default SearchForm;
+export default SampleUsage;

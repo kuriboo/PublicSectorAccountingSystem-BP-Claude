@@ -125,4 +125,4 @@ const SampleWorkPaymentSummary: React.FC = () => {
   );
 };
 
-export default WorkPaymentSummary;
+export default SampleWorkPaymentSummary;

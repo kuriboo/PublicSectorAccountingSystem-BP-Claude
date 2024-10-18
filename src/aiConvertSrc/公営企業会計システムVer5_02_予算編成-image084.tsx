@@ -103,7 +103,7 @@ const BudgetRevisionInput: React.FC<Props> = ({
   );
 };
 
-export default BudgetRevisionInput;
+
 
 // 使用例
 const SampleData: Props = {
@@ -123,3 +123,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

@@ -119,8 +119,6 @@ const WithholdingSlip: React.FC<Props> = ({
   );
 };
 
-export default WithholdingSlip;
-
 // 使用例
 const sampleData: Props = {
   companyName: '株式会社テスト',
@@ -143,3 +141,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

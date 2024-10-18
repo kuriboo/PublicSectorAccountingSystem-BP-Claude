@@ -44,7 +44,7 @@ const SamplePrinterSetting: React.FC = () => {
   );
 };
 
-export default PrinterSetting;
+export default SamplePrinterSetting;
 
 // スタイリング
 const Container = styled.div`

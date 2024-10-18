@@ -40,4 +40,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default Alert;
+export default SampleUsage;

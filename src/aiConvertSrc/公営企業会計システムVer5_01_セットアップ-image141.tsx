@@ -70,4 +70,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default FinancialInstitutionRegistration;
+export default SampleUsage;

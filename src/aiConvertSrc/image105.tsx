@@ -97,4 +97,4 @@ const SampleContractManagementSection: React.FC = () => {
   );
 };
 
-export default ContractManagementSection;
+export default SampleContractManagementSection;

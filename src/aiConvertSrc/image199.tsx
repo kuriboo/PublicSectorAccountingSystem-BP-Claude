@@ -83,4 +83,4 @@ const ExampleUsage: React.FC = () => {
   );
 };
 
-export default SystemBusiness;
+export default ExampleUsage;

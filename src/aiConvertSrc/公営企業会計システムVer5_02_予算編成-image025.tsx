@@ -119,4 +119,4 @@ const ExampleUsage: React.FC = () => {
   );
 };
 
-export default EstimateRequestForm;
+export default ExampleUsage;

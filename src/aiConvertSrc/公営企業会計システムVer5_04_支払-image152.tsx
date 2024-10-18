@@ -67,4 +67,4 @@ const SupportPeriodExample: React.FC = () => {
   return <SupportPeriod {...sampleData} />;
 };
 
-export default SupportPeriod;
+export default SupportPeriodExample;

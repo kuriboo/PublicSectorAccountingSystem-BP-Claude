@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from '@emotion/styled';
 
 type FormData = {
@@ -10,6 +10,10 @@ type FormData = {
   arbitraryPeriod: string;
   showNenkinSeigen: boolean;
   showMitsumorihyo: boolean;
+};
+
+type FormErrors = {
+  [K in keyof FormData]?: string;
 };
 
 type FormProps = {
@@ -64,6 +68,16 @@ const Button = styled.button`
   color: #fff;
   font-weight: bold;
   cursor: pointer;
+  
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+const ErrorMessage = styled.span`
+  color: red;
+  font-size: 0.8rem;
 `;
 
 const RadioButton: React.FC<{
@@ -79,47 +93,82 @@ const RadioButton: React.FC<{
   </Label>
 );
 
-const IndemnityReferenceForm: React.FC<FormProps> = ({ initialData = {}, onSubmit }) => {
-  // State to hold form data
-  const [formData, setFormData] = React.useState<FormData>({
-    rangeType: initialData.rangeType || 'date',
-    startDate: initialData.startDate || new Date(),
-    endDate: initialData.endDate || new Date(),
-    startYear: initialData.startYear || new Date().getFullYear(),
-    endYear: initialData.endYear || 999999,
-    arbitraryPeriod: initialData.arbitraryPeriod || '',
-    showNenkinSeigen: initialData.showNenkinSeigen || false,
-    showMitsumorihyo: initialData.showMitsumorihyo || false,
-  });
+const IndemnityReferenceForm: React.FC<FormProps> = ({ initialData, onSubmit }) => {
+  const [formData, setFormData] = useState<FormData>(() => ({
+    rangeType: initialData?.rangeType ?? 'date',
+    startDate: initialData?.startDate ?? new Date(),
+    endDate: initialData?.endDate ?? new Date(),
+    startYear: initialData?.startYear ?? new Date().getFullYear(),
+    endYear: initialData?.endYear ?? new Date().getFullYear(),
+    arbitraryPeriod: initialData?.arbitraryPeriod ?? '',
+    showNenkinSeigen: initialData?.showNenkinSeigen ?? false,
+    showMitsumorihyo: initialData?.showMitsumorihyo ?? false,
+  }));
 
-  // Event handlers
-  const handleRangeTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [errors, setErrors] = useState<FormErrors>({});
+
+  const validateForm = useCallback(() => {
+    const newErrors: FormErrors = {};
+
+    if (formData.rangeType === 'date' || formData.rangeType === 'month') {
+      if (formData.startDate > formData.endDate) {
+        newErrors.startDate = '開始日は終了日より前である必要があります';
+      }
+    }
+
+    if (formData.rangeType === 'year') {
+      if (formData.startYear > formData.endYear) {
+        newErrors.startYear = '開始年は終了年以前である必要があります';
+      }
+      if (formData.startYear < 1900 || formData.startYear > 9999) {
+        newErrors.startYear = '開始年は1900から9999の間である必要があります';
+      }
+      if (formData.endYear < 1900 || formData.endYear > 9999) {
+        newErrors.endYear = '終了年は1900から9999の間である必要があります';
+      }
+    }
+
+    if (formData.rangeType === 'arbitrary' && formData.arbitraryPeriod.trim() === '') {
+      newErrors.arbitraryPeriod = '任意の期間を入力してください';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [formData]);
+
+  const handleRangeTypeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, rangeType: e.target.value as FormData['rangeType'] }));
-  };
+    setErrors({});
+  }, []);
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDateChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: new Date(value) }));
-  };
+  }, []);
 
-  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleYearChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: parseInt(value, 10) }));
-  };
+    const yearValue = parseInt(value, 10);
+    if (!isNaN(yearValue)) {
+      setFormData(prev => ({ ...prev, [name]: yearValue }));
+    }
+  }, []);
 
-  const handleArbitraryPeriodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleArbitraryPeriodChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, arbitraryPeriod: e.target.value }));
-  };
+  }, []);
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setFormData(prev => ({ ...prev, [name]: checked }));
-  };
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formData);
-  };
+    if (validateForm()) {
+      onSubmit(formData);
+    }
+  }, [formData, onSubmit, validateForm]);
 
   return (
     <Container>
@@ -127,40 +176,22 @@ const IndemnityReferenceForm: React.FC<FormProps> = ({ initialData = {}, onSubmi
         <FormGroup>
           <Label>範囲指定</Label>
           <FieldSet>
-            <RadioButton
-              name="rangeType"
-              value="date"
-              checked={formData.rangeType === 'date'}
-              onChange={handleRangeTypeChange}
-              label="調定日"
-            />
-            <RadioButton
-              name="rangeType"
-              value="month"
-              checked={formData.rangeType === 'month'}
-              onChange={handleRangeTypeChange}
-              label="収納日"
-            />
-            <RadioButton
-              name="rangeType"
-              value="year"
-              checked={formData.rangeType === 'year'}
-              onChange={handleRangeTypeChange}
-              label="伝票番号"
-            />
-            <RadioButton
-              name="rangeType"
-              value="arbitrary"
-              checked={formData.rangeType === 'arbitrary'}
-              onChange={handleRangeTypeChange}
-              label="任意"
-            />
+            {['date', 'month', 'year', 'arbitrary'].map((type) => (
+              <RadioButton
+                key={type}
+                name="rangeType"
+                value={type}
+                checked={formData.rangeType === type}
+                onChange={handleRangeTypeChange}
+                label={type === 'date' ? '調定日' : type === 'month' ? '収納日' : type === 'year' ? '伝票番号' : '任意'}
+              />
+            ))}
           </FieldSet>
         </FormGroup>
 
-        {formData.rangeType === 'date' && (
+        {(formData.rangeType === 'date' || formData.rangeType === 'month') && (
           <FormGroup>
-            <Label>調定日</Label>
+            <Label>{formData.rangeType === 'date' ? '調定日' : '収納日'}</Label>
             <Input
               type="date"
               name="startDate"
@@ -174,35 +205,19 @@ const IndemnityReferenceForm: React.FC<FormProps> = ({ initialData = {}, onSubmi
               value={formData.endDate.toISOString().slice(0, 10)}
               onChange={handleDateChange}
             />
-          </FormGroup>
-        )}
-
-        {formData.rangeType === 'month' && (
-          <FormGroup>
-            <Label>収納日</Label>
-            <Input
-              type="date"
-              name="startDate"
-              value={formData.startDate.toISOString().slice(0, 10)}
-              onChange={handleDateChange}
-            />
-            <span>～</span>
-            <Input
-              type="date"
-              name="endDate"
-              value={formData.endDate.toISOString().slice(0, 10)}
-              onChange={handleDateChange}
-            />
+            {errors.startDate && <ErrorMessage>{errors.startDate}</ErrorMessage>}
           </FormGroup>
         )}
 
         {formData.rangeType === 'year' && (
           <FormGroup>
             <Label>伝票番号</Label>
-            <Input type="number" name="startYear" value={formData.startYear} onChange={handleYearChange} />
+            <Input type="number" name="startYear" value={formData.startYear} onChange={handleYearChange} min="1900" max="9999" />
             <span>年度</span>
             <span>～</span>
-            <Input type="number" name="endYear" value={formData.endYear} onChange={handleYearChange} />
+            <Input type="number" name="endYear" value={formData.endYear} onChange={handleYearChange} min="1900" max="9999" />
+            {errors.startYear && <ErrorMessage>{errors.startYear}</ErrorMessage>}
+            {errors.endYear && <ErrorMessage>{errors.endYear}</ErrorMessage>}
           </FormGroup>
         )}
 
@@ -215,6 +230,7 @@ const IndemnityReferenceForm: React.FC<FormProps> = ({ initialData = {}, onSubmi
               value={formData.arbitraryPeriod}
               onChange={handleArbitraryPeriodChange}
             />
+            {errors.arbitraryPeriod && <ErrorMessage>{errors.arbitraryPeriod}</ErrorMessage>}
           </FormGroup>
         )}
 
@@ -229,14 +245,13 @@ const IndemnityReferenceForm: React.FC<FormProps> = ({ initialData = {}, onSubmi
           </Label>
         </FormGroup>
 
-        <Button type="submit">OK</Button>
+        <Button type="submit" disabled={Object.keys(errors).length > 0}>OK</Button>
       </form>
     </Container>
   );
 };
 
-// Usage example
-const UsageExample = () => {
+const UsageExample: React.FC = () => {
   const handleSubmit = (data: FormData) => {
     console.log(data);
   };

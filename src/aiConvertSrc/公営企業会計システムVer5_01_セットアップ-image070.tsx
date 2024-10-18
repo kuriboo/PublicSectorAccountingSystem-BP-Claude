@@ -37,7 +37,6 @@ const NumDistrict: React.FC<NumDistrictProps> = ({ numDistricts, onChange }) => 
   );
 };
 
-export default NumDistrict;
 
 // Usage example
 const App: React.FC = () => {
@@ -51,3 +50,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

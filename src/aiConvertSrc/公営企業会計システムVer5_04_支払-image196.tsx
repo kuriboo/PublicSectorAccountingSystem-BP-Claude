@@ -1,5 +1,3 @@
-以下は、画像を元にしたNext.js + TypeScriptのコンポーネントです。
-
 import React from 'react';
 import styled from '@emotion/styled';
 
@@ -110,11 +108,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-上記のコードは、画像にある締め処理状況一覧をテーブル形式で表示するコンポーネントです。主な特徴は以下の通りです：
-
-1. TypeScriptの型定義を使用し、データの型を明確にしています。
-2. styled-componentsを使ってテーブルのスタイルを定義しています。
-3. コンポーネントはPropsを受け取り、再利用可能になっています。
-4. データが空の場合の処理も考慮しています。
-5. サンプルデータを用いて使用例を示しています。

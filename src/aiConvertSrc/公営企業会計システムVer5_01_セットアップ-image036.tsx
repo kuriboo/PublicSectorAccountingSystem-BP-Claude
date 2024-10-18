@@ -98,4 +98,4 @@ const UsageExample = () => {
   );
 };
 
-export default MasterList;
+export default UsageExample;

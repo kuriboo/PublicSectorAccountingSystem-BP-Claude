@@ -63,7 +63,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, onChange }) => {
   );
 };
 
-export default NumberInput;
+
 
 // 使用例
 const Example: React.FC = () => {
@@ -77,3 +77,5 @@ const Example: React.FC = () => {
     </div>
   );
 };
+
+export default Example;

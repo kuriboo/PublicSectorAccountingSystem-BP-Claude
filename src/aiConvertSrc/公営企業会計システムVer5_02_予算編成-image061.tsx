@@ -145,7 +145,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   );
 };
 
-export default ReservationForm;
+
 
 // Usage example
 const App: React.FC = () => {
@@ -181,3 +181,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default App;

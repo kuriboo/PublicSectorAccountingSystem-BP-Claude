@@ -175,4 +175,4 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
-export default NyuryokuForm;
+export default SampleNyuryokuForm;

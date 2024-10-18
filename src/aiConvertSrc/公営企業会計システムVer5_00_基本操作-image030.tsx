@@ -90,4 +90,4 @@ const SampleFileSystemList: React.FC = () => {
   return <FileSystemList items={sampleData} />;
 };
 
-export default FileSystemList;
+export default SampleFileSystemList;

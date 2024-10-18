@@ -111,4 +111,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default AuthorizationMasterList;
+export default SampleUsage;

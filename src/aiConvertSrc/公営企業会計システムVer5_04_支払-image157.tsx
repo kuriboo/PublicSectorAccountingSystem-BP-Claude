@@ -1,5 +1,3 @@
-以下は、画像を元にしたNext.js + TypeScriptのコンポーネントです。
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -93,4 +91,4 @@ const SampleInvoice = () => {
   return <InvoiceDetails {...invoiceData} />;
 };
 
-export default InvoiceDetails;
+export default SampleInvoice;

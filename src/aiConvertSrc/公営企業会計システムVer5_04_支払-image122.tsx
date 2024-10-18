@@ -107,4 +107,4 @@ const Button = styled.button`
   }
 `;
 
-export default RangeSpecification;
+export default SampleUsage;

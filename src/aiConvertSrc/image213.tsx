@@ -253,4 +253,4 @@ const TaxRateValue = styled.div`
   text-align: right;
 `;
 
-export default CostDetails;
+export default SampleUsage;

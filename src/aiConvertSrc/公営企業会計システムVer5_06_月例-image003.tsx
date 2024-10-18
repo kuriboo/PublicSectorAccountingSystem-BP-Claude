@@ -73,8 +73,8 @@ const TaxIncluded: React.FC<TaxIncludedProps> = ({ data }) => {
 // サンプルデータ
 const sampleData: InputData[] = [
   { title: '借方', value: '002010211', unit: '記事・備品統品' },
-  { value: '0.00', unit: '自動車用消耗品', taxIncluded: true },
-  { value: '0.00', unit: '自動車用備品' },
+  { title: '自動車用消耗品', value: '0.00', unit: '自動車用消耗品', taxIncluded: true }, // titleを追加
+  { title: '自動車用備品', value: '0.00', unit: '自動車用備品' }, // titleを追加
 ];
 
 // 使用例

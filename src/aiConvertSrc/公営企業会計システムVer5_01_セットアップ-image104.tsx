@@ -29,13 +29,8 @@ const Input = styled.input`
   margin-right: 8px;
 `;
 
-// App.tsx
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import CheckboxWithLabel from './CheckboxWithLabel';
-
 const App: React.FC = () => {
-  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [checkedItems, setCheckedItems] = React.useState<string[]>([]);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;

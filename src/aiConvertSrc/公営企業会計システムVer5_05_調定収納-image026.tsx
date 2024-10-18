@@ -213,7 +213,7 @@ const SearchConditionForm: React.FC<Props> = ({ onSubmit }) => {
   );
 };
 
-export default SearchConditionForm;
+
 
 // Sample usage
 const SamplePage: React.FC = () => {
@@ -229,3 +229,5 @@ const SamplePage: React.FC = () => {
     </div>
   );
 };
+
+export default SamplePage;

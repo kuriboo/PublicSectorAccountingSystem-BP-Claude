@@ -259,7 +259,7 @@ const sampleData: InventoryTableType = {
       division: '連絡・統制費',
       price: 100000,
       amount: 200000, 
-      totalPrice: 3,945,800,
+      totalPrice: 3945800,
     },
     {
       no: '003',
@@ -267,7 +267,7 @@ const sampleData: InventoryTableType = {
       division: '連絡・印画図書',
       price: 200000,
       amount: 400000,
-      totalPrice: 4,000,000,
+      totalPrice: 4000000,
     },
   ],
 };

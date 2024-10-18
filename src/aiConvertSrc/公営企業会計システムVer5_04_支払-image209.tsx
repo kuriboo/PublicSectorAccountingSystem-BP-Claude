@@ -129,7 +129,7 @@ const MeisaiTable: React.FC<MeisaiProps> = ({
   );
 };
 
-export default MeisaiTable;
+
 
 // サンプルデータ
 const sampleData: MeisaiProps = {
@@ -169,3 +169,5 @@ const sampleData: MeisaiProps = {
 const MeisaiTableExample: React.FC = () => {
   return <MeisaiTable {...sampleData} />;
 };
+
+export default MeisaiTableExample;

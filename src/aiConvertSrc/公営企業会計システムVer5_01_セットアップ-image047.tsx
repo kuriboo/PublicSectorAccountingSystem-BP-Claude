@@ -173,4 +173,4 @@ const Button = styled.button`
   padding: 5px 10px;
 `;
 
-export default BusinessInfoForm;
+export default SampleBusinessInfoForm;

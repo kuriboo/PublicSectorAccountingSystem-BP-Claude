@@ -1,5 +1,3 @@
-以下は、画像を元にしたNext.js + TypeScriptのコンポーネントです。
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -150,7 +148,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ searchGroups, onSearch }) => {
   );
 };
 
-export default SearchForm;
+
 
 // 使用例
 const App: React.FC = () => {
@@ -183,3 +181,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

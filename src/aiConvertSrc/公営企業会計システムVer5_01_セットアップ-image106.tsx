@@ -78,8 +78,6 @@ const ContractTerms: React.FC<ContractTermsProps> = ({ terms, onTermChange }) =>
   );
 };
 
-export default ContractTerms;
-
 // 使用例
 const App: React.FC = () => {
   // サンプルデータ
@@ -107,3 +105,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

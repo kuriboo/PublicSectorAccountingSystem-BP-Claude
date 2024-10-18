@@ -131,7 +131,7 @@ const SupportDecisionInput: React.FC<SupportDecisionInputProps> = ({
   );
 };
 
-export default SupportDecisionInput;
+
 
 // 使用例
 const App: React.FC = () => {
@@ -149,3 +149,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

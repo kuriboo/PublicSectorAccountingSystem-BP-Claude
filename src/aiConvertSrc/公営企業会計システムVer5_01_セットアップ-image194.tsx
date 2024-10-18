@@ -85,4 +85,4 @@ const SampleUsage: React.FC = () => {
   return <AccountingTypeMaster accountingTypes={sampleData} />;
 };
 
-export default AccountingTypeMaster;
+export default SampleUsage;

@@ -183,4 +183,4 @@ const SearchButton = styled.button`
   }
 `;
 
-export default SearchConditionForm;
+export default SampleUsage;

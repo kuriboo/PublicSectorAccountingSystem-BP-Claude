@@ -87,4 +87,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default CompanyProfile;
+export default SampleUsage;

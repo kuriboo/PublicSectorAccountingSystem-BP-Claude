@@ -141,8 +141,6 @@ const AccessLog: React.FC<AccessLogProps> = ({
   );
 };
 
-export default AccessLog;
-
 // 使用例
 const App: React.FC = () => {
   return (
@@ -159,3 +157,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default App;

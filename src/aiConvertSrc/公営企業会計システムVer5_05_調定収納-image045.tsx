@@ -153,7 +153,7 @@ const SampleAdjustmentStatement: React.FC = () => {
     registrationDate: '令和05年12月23日',
     description: '給水装置工事加入者分担金 20mm',
     additionalNote: '年_月_日',
-    taxRate: 'taxRate',
+    taxRate: 'taxable',
     adjustmentAmount: 0,
     totalTaxableAmount: 33000,
     totalTaxAmount: 3000,

@@ -151,4 +151,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default PaymentForm;
+export default SampleUsage;

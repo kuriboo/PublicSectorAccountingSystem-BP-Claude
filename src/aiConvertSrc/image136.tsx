@@ -170,4 +170,4 @@ const Button = styled.button`
   }
 `;
 
-export default FinancialReport;
+export default SampleUsage;

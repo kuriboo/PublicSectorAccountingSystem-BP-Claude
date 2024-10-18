@@ -132,7 +132,7 @@ const AccessVisitView: React.FC<AccessVisitViewProps> = ({
   );
 };
 
-export default AccessVisitView;
+
 
 // 使用例
 const sampleData = [
@@ -161,3 +161,5 @@ const UsageExample = () => {
     />
   );  
 };
+
+export default UsageExample;

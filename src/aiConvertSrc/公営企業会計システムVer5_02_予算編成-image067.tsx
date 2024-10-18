@@ -173,7 +173,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
   );
 };
 
-export default RegisterForm;
+
 
 // サンプル使用例
 const SampleUsage: React.FC = () => {
@@ -189,3 +189,5 @@ const SampleUsage: React.FC = () => {
     </div>  
   );
 };
+
+export default SampleUsage;

@@ -125,4 +125,4 @@ const ExampleUsage: React.FC = () => {
   );
 };
 
-export default DivisionSettingDialog;
+export default ExampleUsage;

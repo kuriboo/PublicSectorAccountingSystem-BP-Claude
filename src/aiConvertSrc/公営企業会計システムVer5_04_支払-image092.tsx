@@ -280,4 +280,4 @@ const ButtonRow = styled(Row)`
   justify-content: flex-end;
 `;
 
-export default EntryForm;
+export default UsageExample;

@@ -124,4 +124,4 @@ const CardList: React.FC = () => {
   );
 };
 
-export default Card;
+export default CardList;

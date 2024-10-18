@@ -89,8 +89,6 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
-
 // 使用例
 const SamplePage: React.FC = () => {
   const handleClick = () => {
@@ -113,3 +111,5 @@ const SamplePage: React.FC = () => {
     </div>
   );
 };
+
+export default SamplePage;

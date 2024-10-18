@@ -269,4 +269,4 @@ const ContractInputSample: React.FC = () => {
   );
 };
 
-export default ContractInput;
+export default ContractInputSample;

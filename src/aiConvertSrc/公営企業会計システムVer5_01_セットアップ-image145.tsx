@@ -83,4 +83,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default PublicCompanyManageSystemForm;
+export default SampleUsage;

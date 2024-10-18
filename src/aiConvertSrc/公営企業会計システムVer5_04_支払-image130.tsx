@@ -127,5 +127,5 @@ const AccountInfo = styled.div`
   line-height: 1.5;
 `;
 
-export default PaymentInfo;
+//export default PaymentInfo;
 export { PreviewPaymentInfo };

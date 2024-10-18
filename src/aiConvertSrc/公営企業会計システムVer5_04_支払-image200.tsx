@@ -75,8 +75,8 @@ const CompanySearchForm: React.FC<CompanySearchFormProps> = ({ onSubmit }) => {
     formData.fromDate = form.fromDate.value;
     formData.toDate = form.toDate.value;
     formData.fields = Array.from(form.fields)
-      .filter((checkbox: HTMLInputElement) => checkbox.checked)
-      .map((checkbox: HTMLInputElement) => checkbox.value);
+      .filter((checkbox: unknown) => (checkbox as HTMLInputElement).checked) // 型を明示的に指定
+      .map((checkbox: unknown) => (checkbox as HTMLInputElement).value); // 型を明示的に指定
     formData.month = form.month.checked;
     formData.tanka = form.tanka.value;
     onSubmit(formData);

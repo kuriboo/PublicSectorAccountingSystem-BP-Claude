@@ -132,8 +132,6 @@ const ManagementSystem: React.FC<ManagementSystemProps> = ({
   );
 };
 
-export default ManagementSystem;
-
 // Usage example
 const App: React.FC = () => {
   return (
@@ -153,3 +151,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default App;

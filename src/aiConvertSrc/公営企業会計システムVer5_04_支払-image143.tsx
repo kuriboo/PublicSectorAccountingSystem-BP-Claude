@@ -118,4 +118,4 @@ const UsageExample: React.FC = () => {
   );
 };
 
-export default ReportPeriod;
+export default UsageExample;

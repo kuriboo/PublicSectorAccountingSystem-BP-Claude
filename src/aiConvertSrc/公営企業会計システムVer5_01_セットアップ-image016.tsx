@@ -120,4 +120,4 @@ const Button = styled.button`
   }
 `;
 
-export default PublicSettingDate;
+export default SampleComponent;

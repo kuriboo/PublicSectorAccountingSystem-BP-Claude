@@ -117,7 +117,7 @@ const SampleDialog = () => {
   return (
     <Dialog
       title="EXCEL出力"
-      message="検索条件シートの"あり""なし"
+      message="検索条件シートのあり・なし"
       okLabel="OK"
       cancelLabel="キャンセル"
       onOk={() => console.log('OKがクリックされました')}

@@ -199,4 +199,4 @@ const Button = styled.button<{ primary?: boolean }>`
   }
 `;
 
-export default ApplicationPermissionMaster;
+export default SampleApplicationPermissionMaster;

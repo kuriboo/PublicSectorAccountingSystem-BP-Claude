@@ -250,4 +250,4 @@ const TotalValue = styled.div`
   text-align: right;
 `;
 
-export default SalesSlip;
+export default SampleSalesSlip;

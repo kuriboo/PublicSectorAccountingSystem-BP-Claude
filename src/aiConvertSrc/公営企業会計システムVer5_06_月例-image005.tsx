@@ -160,4 +160,4 @@ const SubmitButton = styled.button`
   }
 `;
 
-export default TransferCondition;
+export default SampleTransferCondition;

@@ -104,4 +104,4 @@ const SampleReservationTable: React.FC = () => {
   return <ReservationTable reservations={sampleData} />;
 };
 
-export default ReservationTable;
+export default SampleReservationTable;

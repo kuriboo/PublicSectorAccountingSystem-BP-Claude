@@ -183,7 +183,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
   );
 };
 
-export default InvoiceForm;
+
 
 // 使用例
 const App: React.FC = () => {
@@ -222,3 +222,5 @@ const App: React.FC = () => {
 
   return <InvoiceForm {...sampleData} />;
 };
+
+export default App;

@@ -90,4 +90,4 @@ const Table = styled.table`
   }
 `;
 
-export default BlockMaster;
+export default App;

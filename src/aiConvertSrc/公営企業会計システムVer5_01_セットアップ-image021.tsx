@@ -300,4 +300,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default TaxForm;
+export default SampleUsage;

@@ -205,4 +205,4 @@ const SubmitButton = styled(Button)`
   color: #fff;
 `;
 
-export default PartitionSetting;
+export default SamplePartitionSetting;

@@ -104,4 +104,4 @@ const ExampleComponent: React.FC = () => {
   );
 };
 
-export default Card;
+export default ExampleComponent;

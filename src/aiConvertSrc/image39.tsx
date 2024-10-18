@@ -174,4 +174,4 @@ const SubmitButton = styled(Button)`
   color: #fff;
 `;
 
-export default TaxExemptionForm;
+export default SampleTaxExemptionForm;

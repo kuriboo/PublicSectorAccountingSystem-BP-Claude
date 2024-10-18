@@ -62,12 +62,10 @@ const DivisionMaster: React.FC<Props> = ({ divisions, selectedDivision, onChange
   );
 };
 
-export default DivisionMaster;
-
 // 使用例
 const divisions: Division[] = [
   { code: 0, name: '職員給与費以外' },
-  { code: 1, code: 1, name: '3条人件費' },
+  { code: 1, name: '3条人件費' },
   { code: 2, name: '3条人件費以外' },
   { code: 3, name: '4条人件費' },
   { code: 4, name: '4条人件費以外' },
@@ -93,3 +91,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

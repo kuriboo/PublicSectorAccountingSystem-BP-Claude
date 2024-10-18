@@ -129,4 +129,4 @@ const ExampleUsage: React.FC = () => {
   );
 };
 
-export default NumberInputComponent;
+export default ExampleUsage;

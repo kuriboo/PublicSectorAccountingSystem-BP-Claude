@@ -88,4 +88,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default AmountDisplay;
+export default SampleUsage;

@@ -283,7 +283,7 @@ const ReportSettingForm: React.FC<Props> = ({ onSubmit }) => {
   );
 };
 
-export default ReportSettingForm;
+
 
 // Example usage
 const App = () => {
@@ -299,3 +299,5 @@ const App = () => {
     </div>
   );
 };
+
+export default App;

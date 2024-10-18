@@ -81,4 +81,4 @@ const SampleSummary: React.FC = () => {
   );
 };
 
-export default Summary;
+export default SampleSummary;

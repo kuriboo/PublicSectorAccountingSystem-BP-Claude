@@ -148,7 +148,7 @@ const ExpenseInputForm: React.FC<ExpenseInputFormProps> = ({
   );
 };
 
-export default ExpenseInputForm;
+
 
 // サンプルデータを用いて使用例を示す
 const ExpenseInputFormSample: React.FC = () => {
@@ -190,3 +190,5 @@ const ExpenseInputFormSample: React.FC = () => {
     />
   );  
 };
+
+export default ExpenseInputFormSample;

@@ -150,4 +150,4 @@ const ExampleUsage: React.FC = () => {
   return <WaterRegionForm onSubmit={handleSubmit} />;
 };
 
-export default WaterRegionForm;
+export default ExampleUsage;

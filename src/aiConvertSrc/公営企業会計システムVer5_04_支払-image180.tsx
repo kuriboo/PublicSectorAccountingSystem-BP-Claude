@@ -127,4 +127,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default BudgetLedger;
+export default SampleUsage;

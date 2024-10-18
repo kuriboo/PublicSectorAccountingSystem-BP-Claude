@@ -145,3 +145,5 @@ const UsageExample: React.FC = () => {
     />
   );
 };
+
+export default UsageExample;

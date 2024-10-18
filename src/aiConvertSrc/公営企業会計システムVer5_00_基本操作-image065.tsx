@@ -81,8 +81,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-```
-
-This code defines a reusable `FeatureCard` component that accepts an `icon`, `title`, and `description` as props. It uses styled-components for CSS-in-JS styling and incorporates responsive design. The component includes type definitions and handles cases where props may be missing. 
-
-The `App` component demonstrates the usage of the `FeatureCard` component with sample data. The code includes comments and avoids using code block symbols.

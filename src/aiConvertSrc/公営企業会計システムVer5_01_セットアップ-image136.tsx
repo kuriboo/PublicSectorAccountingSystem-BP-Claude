@@ -122,4 +122,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default Store;
+export default SampleUsage;

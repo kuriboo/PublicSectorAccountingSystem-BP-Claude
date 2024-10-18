@@ -61,7 +61,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ onSubmit }) => {
           <input type="radio" name="aggregateTarget" value="ブロック" /> ブロック
         </label>
         <label>
-          <input type="radio" name="aggregateTarget" value="セグメント" value={allocationCategory} onChange={e => setAllocationCategory(e.target.value)} /> セグメント
+        <input type="radio" name="aggregateTarget" value="セグメント" onChange={e => setAllocationCategory(e.target.value)} /> セグメント
         </label>
       </div>
 

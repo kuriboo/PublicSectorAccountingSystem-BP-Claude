@@ -151,4 +151,4 @@ const Value = styled.div`
   font-weight: bold;
 `;
 
-export default TaxTable;
+export default TaxTableDemo;

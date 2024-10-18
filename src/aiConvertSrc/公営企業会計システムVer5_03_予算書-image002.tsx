@@ -161,7 +161,7 @@ const YosanKamokuChoseiInput: React.FC<YosanKamokuChoseiInputProps> = ({
   );
 };
 
-export default YosanKamokuChoseiInput;
+
 
 // 使用例
 const App: React.FC = () => {
@@ -181,3 +181,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default YosanKamokuChoseiInput;

@@ -141,8 +141,6 @@ const ProjectSettingsForm: React.FC<Props> = ({
   );
 };
 
-export default ProjectSettingsForm;
-
 // サンプルデータと使用例
 const sampleData = {
   projectCode: '000001',
@@ -182,3 +180,5 @@ const SampleUsage: React.FC = () => {
     />
   );
 };
+
+export default SampleUsage;

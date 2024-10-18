@@ -1,4 +1,3 @@
-```typescript
 import React from 'react';
 import styled from '@emotion/styled';
 
@@ -114,4 +113,4 @@ const CompanyInfoExample: React.FC = () => {
   );
 };
 
-export default CompanyInfo;
+export default CompanyInfoExample;

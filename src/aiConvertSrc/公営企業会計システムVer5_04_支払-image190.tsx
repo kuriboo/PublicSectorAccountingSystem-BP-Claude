@@ -1,6 +1,3 @@
-以下は、指定された条件に基づいて生成したNext.js + TypeScriptのコンポーネントです。
-
-```tsx
 import React from 'react';
 import styled from 'styled-components';
 
@@ -224,15 +221,4 @@ const TableWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-export default InquiryForm;
-```
-
-上記のコードでは、指定された条件に基づいて収納内容照会画面のコンポーネントを生成しました。TypeScriptの型定義を使用し、プロパティを通じてカスタマイズ可能にしています。また、styled-componentsを使用してCSS-in-JS形式でスタイリングを行っています。
-
-コンポーネント内では、入力フィールドやラジオボタン、セレクトボックスなどを配置し、入力された値をプロパティとして受け取るようにしています。また、検索ボタンやCSVボタン、クリアボタン、終了ボタンを配置しています。
-
-最後に、サンプルデータを用いて使用例を示すSampleUsageコンポーネントを作成しました。
-
-各入力フィールドにはデフォルト値を設定し、値が入っていない場合の処理も考慮しています。
-
-このコンポーネントを使用することで、収納内容照会画面の基本的な構造とデザインを実現できます。必要に応じて、さらに機能を追加したり、スタイリングを調整したりすることができます。
+export default SampleUsage;

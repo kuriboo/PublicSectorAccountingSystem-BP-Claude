@@ -105,4 +105,4 @@ const CancelButton = styled(Button)`
   background: #eee;
 `;
 
-export default AuditInfo;
+export default AuditInfoSample;

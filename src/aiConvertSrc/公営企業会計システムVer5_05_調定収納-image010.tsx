@@ -122,4 +122,4 @@ const Separator = styled.span`
   font-weight: bold;
 `;
 
-export default DateRangePicker;
+export default SampleUsage;

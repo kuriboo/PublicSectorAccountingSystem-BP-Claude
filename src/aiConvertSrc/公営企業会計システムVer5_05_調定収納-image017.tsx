@@ -169,4 +169,4 @@ const Button = styled.button`
   }
 `;
 
-export default CollectionFeeDialog;
+export default SampleUsage;

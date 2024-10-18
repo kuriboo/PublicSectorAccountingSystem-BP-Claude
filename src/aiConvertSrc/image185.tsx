@@ -147,8 +147,6 @@ const FinancialSourceMaster: React.FC<FinancialSourceMasterProps> = ({
   );
 };
 
-export default FinancialSourceMaster;
-
 // 使用例
 const SampleData: FinancialSourceMasterProps = {
   financialSourceCode: '01',  
@@ -164,3 +162,5 @@ const App: React.FC = () => {
     </div>
   );  
 };
+
+export default SampleData;

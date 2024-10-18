@@ -187,4 +187,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default BudgetAllocationForm;
+export default SampleUsage;

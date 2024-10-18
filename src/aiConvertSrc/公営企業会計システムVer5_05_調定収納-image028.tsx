@@ -55,4 +55,4 @@ const SampleMainVisual: React.FC = () => {
   );
 };
 
-export default MainVisual;
+export default SampleMainVisual;

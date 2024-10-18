@@ -118,4 +118,4 @@ const Button = styled.button`
   }
 `;
 
-export default PublicChargePayment;
+export default SamplePublicChargePayment;

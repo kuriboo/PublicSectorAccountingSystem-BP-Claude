@@ -173,7 +173,7 @@ const GroupMasterForm: React.FC<Props> = ({
   );
 };
 
-export default GroupMasterForm;
+
 
 // Usage example:
 const SampleData = {
@@ -209,3 +209,5 @@ const SampleUsage: React.FC = () => {
     />
   );
 };
+
+export default SampleUsage;

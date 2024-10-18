@@ -64,8 +64,6 @@ const ApiResponseTable: React.FC<Props> = ({ data }) => {
   );
 };
 
-export default ApiResponseTable;
-
 // 使用例
 const sampleData: ApiResponse[] = [
   { id: 1, name: 'AP1', value: '-char' },
@@ -85,3 +83,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

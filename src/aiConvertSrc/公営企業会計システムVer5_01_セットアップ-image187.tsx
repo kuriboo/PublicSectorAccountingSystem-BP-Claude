@@ -122,17 +122,17 @@ const DistrictMaster: React.FC<Props> = ({
   );
 };
 
-export default DistrictMaster;
+
 
 // Usage example:
 const districts: DistrictMaster[] = [
   { code: 0, name: '職員給与費以外' },
-  { code: 1, code: '3条人件費' },
-  { code: 2, code: '3条人件費以外' },
-  { code: 3, code: '4条人件費' },
-  { code: 4, code: '4条人件費以外' },
-  { code: 9, code: '予備費' },
-  { code: 9, code: '交際費' },
+  { code: 1, name: '3条人件費' },
+  { code: 2, name: '3条人件費以外' },
+  { code: 3, name: '4条人件費' },
+  { code: 4, name: '4条人件費以外' },
+  { code: 5, name: '予備費' },
+  { code: 6, name: '交際費' },
 ];
 
 const App: React.FC = () => {
@@ -162,3 +162,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default App;

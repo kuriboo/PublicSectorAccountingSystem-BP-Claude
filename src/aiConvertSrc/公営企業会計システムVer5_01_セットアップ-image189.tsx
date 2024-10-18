@@ -105,4 +105,4 @@ const sampleData = [
 // Demo component
 const Demo = () => <WatermarkProtection data={sampleData} />;
 
-export default WatermarkProtection;
+export default Demo;

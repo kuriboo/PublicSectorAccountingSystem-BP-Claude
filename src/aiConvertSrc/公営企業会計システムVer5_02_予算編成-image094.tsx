@@ -116,7 +116,7 @@ const Form: React.FC<FormProps> = ({ data, onSubmit, onCancel }) => {
       bikou: formData.get('bikou') as string,
       kinnsyuKingaku: Number(formData.get('kinnsyuKingaku')),
       nyuukin: formData.get('nyuukin') as string,
-      youbi: (formData.getAll('youbi') as string[]).map(Number),
+      youbi: (formData.getAll('youbi') as string[]).map(Number) as unknown as string[],
       endService: formData.get('endService') === 'on',
       water: formData.get('water') === 'on', 
       toilet: formData.get('toilet') === 'on',

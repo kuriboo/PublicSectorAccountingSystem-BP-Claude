@@ -83,7 +83,7 @@ const Form: React.FC<FormProps> = ({ title, onSubmit, onCancel }) => {
   );
 };
 
-export default Form;
+
 
 // Usage example
 const App: React.FC = () => {
@@ -106,3 +106,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

@@ -100,4 +100,4 @@ const SampleCardList: React.FC = () => {
   );
 };
 
-export default Card;
+export default SampleCardList;

@@ -144,8 +144,6 @@ const Invoice: React.FC<InvoiceProps> = ({ data }) => {
   );
 };
 
-export default Invoice;
-
 // 使用例
 const sampleData: InvoiceData = {
   date: '2023年02月01日',
@@ -171,3 +169,5 @@ const App: React.FC = () => {
     </div>
   );  
 };
+
+export default App;

@@ -199,4 +199,4 @@ const Button = styled.button`
   min-width: 80px;
 `;
 
-export default TaxAdjustment;
+export default SampleUsage;

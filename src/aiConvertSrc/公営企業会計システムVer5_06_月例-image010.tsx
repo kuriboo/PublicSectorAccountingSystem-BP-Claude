@@ -150,7 +150,7 @@ const BusinessTripRequestForm: React.FC<Props> = ({
   );
 };
 
-export default BusinessTripRequestForm;
+
 
 // Usage example
 const App = () => {
@@ -180,3 +180,5 @@ const App = () => {
     />
   );
 };
+
+export default App;

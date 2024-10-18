@@ -109,7 +109,7 @@ const BankBalance: React.FC<BankBalanceProps> = ({
   );
 };
 
-export default BankBalance;
+
 
 // 使用例
 const SampleData: BankBalanceProps = {
@@ -130,3 +130,5 @@ const App: React.FC = () => {
     </div>
   );  
 };
+
+export default App;

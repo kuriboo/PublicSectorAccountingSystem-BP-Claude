@@ -124,4 +124,4 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-export default PublicCompanyRegistration;
+export default App;

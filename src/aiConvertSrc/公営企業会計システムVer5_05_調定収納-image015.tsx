@@ -284,4 +284,4 @@ const CompanyCollectFormExample: React.FC = () => {
   );
 };
 
-export default CompanyCollectForm;
+export default CompanyCollectFormExample;

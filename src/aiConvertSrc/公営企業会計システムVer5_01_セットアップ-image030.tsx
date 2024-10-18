@@ -104,8 +104,6 @@ const ReservationCompletion: React.FC<ReservationCompletionProps> = ({
   );
 };
 
-export default ReservationCompletion;
-
 // Usage example
 const App: React.FC = () => {
   return (
@@ -118,3 +116,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default ReservationCompletion;

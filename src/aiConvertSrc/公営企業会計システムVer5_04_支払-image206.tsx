@@ -106,7 +106,7 @@ const EmployeeDetail: React.FC<EmployeeDetailProps> = ({ employee, payments }) =
   );
 };
 
-export default EmployeeDetail;
+
 
 // 使用例
 const sampleEmployee: Employee = {
@@ -125,3 +125,5 @@ const samplePayments: Payment[] = [
 const UsageExample: React.FC = () => {
   return <EmployeeDetail employee={sampleEmployee} payments={samplePayments} />;  
 };
+
+export default UsageExample;

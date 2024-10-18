@@ -152,4 +152,4 @@ const SubmitButton = styled.button`
   padding: 5px 10px;
 `;
 
-export default TaxExemptInput;
+export default SampleUsage;

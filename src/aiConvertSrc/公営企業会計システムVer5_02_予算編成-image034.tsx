@@ -121,8 +121,6 @@ const SupplementaryBudgetEstimate: React.FC<SupplementaryBudgetEstimateProps> = 
   );
 };
 
-export default SupplementaryBudgetEstimate;
-
 // サンプルデータ
 const sampleData = {
   year: 2022,
@@ -160,3 +158,6 @@ const sampleData = {
 const SampleComponent = () => (
   <SupplementaryBudgetEstimate data={sampleData} />
 );
+
+
+export default SampleComponent;

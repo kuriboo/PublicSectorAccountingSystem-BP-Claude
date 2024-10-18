@@ -140,4 +140,4 @@ const CompanyInfoFormExample: React.FC = () => {
   );
 };
 
-export default CompanyInfoForm;
+export default CompanyInfoFormExample;

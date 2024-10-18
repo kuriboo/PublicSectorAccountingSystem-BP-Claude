@@ -230,4 +230,4 @@ const WaterBillingFormSample: React.FC = () => {
   );  
 };
 
-export default WaterBillingForm;
+export default WaterBillingFormSample;

@@ -1,96 +1,104 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from '@emotion/styled';
 
 type ReservationSearchFormProps = {
-  onSubmit: (params: {
-    reservationType: string;
-    arriveYear: number;
-    arriveMonth: number;
-    arriveDay: number;
-    departureYear: number;
-    departureMonth: number;
-    departureDay: number;
-    stayCount: number;
-    roomCount: number;
-    adultCount: number;
-    taxRate: number;
-    fromPrice: number;
-    toPrice: number;
-    fromReserveNumber: number;
-    toReserveNumber: number;
-  }) => void;
+  onSubmit: (params: SearchParams) => void;
+};
+
+type SearchParams = {
+  fiscalYear: number;
+  budgetType: string;
+  count: number;
+  includeLastYearResults: boolean;
+  startYear: number;
+  endYear: number;
+  departmentStart: string;
+  departmentEnd: string;
+  budgetItemStart: string;
+  budgetItemEnd: string;
+  taxRate: number;
 };
 
 const ReservationSearchForm: React.FC<ReservationSearchFormProps> = ({
   onSubmit,
 }) => {
-  // 検索ボタンクリック時の処理
-  const handleSubmit = () => {
-    // フォームの値を取得
-    const reservationType = '予約';
-    const arriveYear = parseInt(document.getElementById('arriveYear').value);
-    const arriveMonth = parseInt(document.getElementById('arriveMonth').value);
-    const arriveDay = parseInt(document.getElementById('arriveDay').value);
-    const departureYear = parseInt(document.getElementById('departureYear').value);
-    const departureMonth = parseInt(document.getElementById('departureMonth').value);  
-    const departureDay = parseInt(document.getElementById('departureDay').value);
-    const stayCount = parseInt(document.getElementById('stayCount').value);
-    const roomCount = parseInt(document.getElementById('roomCount').value);
-    const adultCount = parseInt(document.getElementById('adultCount').value);
-    const taxRate = parseFloat(document.getElementById('taxRate').value);
-    const fromPrice = parseInt(document.getElementById('fromPrice').value);
-    const toPrice = parseInt(document.getElementById('toPrice').value);
-    const fromReserveNumber = parseInt(document.getElementById('fromReserveNumber').value);
-    const toReserveNumber = parseInt(document.getElementById('toReserveNumber').value);
+  const [formData, setFormData] = useState<SearchParams>({
+    fiscalYear: 30,
+    budgetType: '当初予算',
+    count: 1,
+    includeLastYearResults: true,
+    startYear: 26,
+    endYear: 28,
+    departmentStart: '0000000',
+    departmentEnd: '9999999',
+    budgetItemStart: '00000000000000000',
+    budgetItemEnd: '99999999999999999',
+    taxRate: 1.00,
+  });
 
-    // 入力チェック
-    if (arriveYear < 1900 || departureYear < 1900) {
-      alert('年の指定が不正です。');
-      return; 
+  const [errors, setErrors] = useState<Partial<Record<keyof SearchParams, string>>>({});
+
+  const validateForm = useCallback(() => {
+    const newErrors: Partial<Record<keyof SearchParams, string>> = {};
+
+    if (formData.fiscalYear < 1) {
+      newErrors.fiscalYear = '年度は1以上の値を入力してください。';
     }
 
-    if (
-      arriveMonth < 1 || arriveMonth > 12 ||
-      departureMonth < 1 || departureMonth > 12
-    ) {
-      alert('月の指定が不正です。');
-      return;
+    if (formData.count < 1) {
+      newErrors.count = '回数は1以上の値を入力してください。';
     }
 
-    if (arriveDay < 1 || arriveDay > 31 || departureDay < 1 || departureDay > 31) {
-      alert('日の指定が不正です。');  
-      return;
+    if (formData.startYear > formData.endYear) {
+      newErrors.startYear = '開始年度は終了年度以前の値を入力してください。';
     }
 
-    if (fromPrice > toPrice) {
-      alert('料金の範囲指定が不正です。');
-      return;  
+    if (formData.departmentStart > formData.departmentEnd) {
+      newErrors.departmentStart = '開始所属は終了所属以前の値を入力してください。';
     }
 
-    if (fromReserveNumber > toReserveNumber) {
-     alert('予約番号の範囲指定が不正です。'); 
-     return;
+    if (formData.budgetItemStart > formData.budgetItemEnd) {
+      newErrors.budgetItemStart = '開始予算科目は終了予算科目以前の値を入力してください。';
     }
 
-    // 親コンポーネントに検索パラメータを渡す
-    onSubmit({
-      reservationType,
-      arriveYear,
-      arriveMonth, 
-      arriveDay,
-      departureYear,
-      departureMonth,
-      departureDay,
-      stayCount,
-      roomCount,
-      adultCount,
-      taxRate,
-      fromPrice,
-      toPrice,  
-      fromReserveNumber,
-      toReserveNumber,
+    if (formData.taxRate < 0 || formData.taxRate > 100) {
+      newErrors.taxRate = '税率は0%から100%の間で入力してください。';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [formData]);
+
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+    }));
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    if (validateForm()) {
+      onSubmit(formData);
+    }
+  }, [formData, onSubmit, validateForm]);
+
+  const handleClear = useCallback(() => {
+    setFormData({
+      fiscalYear: 30,
+      budgetType: '当初予算',
+      count: 1,
+      includeLastYearResults: true,
+      startYear: 26,
+      endYear: 28,
+      departmentStart: '0000000',
+      departmentEnd: '9999999',
+      budgetItemStart: '00000000000000000',
+      budgetItemEnd: '99999999999999999',
+      taxRate: 1.00,
     });
-  };
+    setErrors({});
+  }, []);
 
   return (
     <Container>
@@ -99,66 +107,82 @@ const ReservationSearchForm: React.FC<ReservationSearchFormProps> = ({
       <FieldContainer>        
         <FieldLabel>対象予算</FieldLabel>
         <div>
-          <Select id="arriveYear" defaultValue="30">
-            <option value="30">30年</option>
+          <Select name="fiscalYear" value={formData.fiscalYear} onChange={handleInputChange}>
+            <option value={30}>30年</option>
           </Select>
           年度
         </div>
+        {errors.fiscalYear && <ErrorMessage>{errors.fiscalYear}</ErrorMessage>}
 
         <FieldLabel>予算編成区分</FieldLabel>
-        <Select id="stayCount" defaultValue="1">
-          <option value="1">当初予算</option>
+        <Select name="budgetType" value={formData.budgetType} onChange={handleInputChange}>
+          <option value="当初予算">当初予算</option>
         </Select>
 
         <FieldLabel>回数</FieldLabel>
-        <Input type="number" defaultValue="1" id="roomCount" />
+        <Input type="number" name="count" value={formData.count} onChange={handleInputChange} />
+        {errors.count && <ErrorMessage>{errors.count}</ErrorMessage>}
 
         <CheckField>
-          <input type="checkbox" id="saimokuCheck" defaultChecked />
-          <label htmlFor="saimokuCheck">過年度実績</label>
+          <input 
+            type="checkbox" 
+            name="includeLastYearResults" 
+            checked={formData.includeLastYearResults} 
+            onChange={handleInputChange} 
+          />
+          <label htmlFor="includeLastYearResults">過年度実績</label>
         </CheckField>
-
       </FieldContainer>
 
       <FieldContainer>
         <FieldLabel>対象実績</FieldLabel>
         <div>  
-          <Select id="departureYear" defaultValue="26">
-            <option value="26">26年</option>
+          <Select name="startYear" value={formData.startYear} onChange={handleInputChange}>
+            <option value={26}>26年</option>
           </Select>
           年度
           〜
-          <Select id="departureMonth" defaultValue="28">
-            <option value="28">28年</option>
+          <Select name="endYear" value={formData.endYear} onChange={handleInputChange}>
+            <option value={28}>28年</option>
           </Select>
           年度
         </div>
+        {errors.startYear && <ErrorMessage>{errors.startYear}</ErrorMessage>}
       </FieldContainer>
 
       <FieldContainer>
         <FieldLabel>作成範囲</FieldLabel>
         <div>
           所属:
-          <Input type="number" defaultValue="0000000" id="fromPrice" />
+          <Input type="text" name="departmentStart" value={formData.departmentStart} onChange={handleInputChange} />
           〜  
-          <Input type="number" defaultValue="9999999" id="toPrice" />
+          <Input type="text" name="departmentEnd" value={formData.departmentEnd} onChange={handleInputChange} />
         </div>
+        {errors.departmentStart && <ErrorMessage>{errors.departmentStart}</ErrorMessage>}
         <div>
           予算科目: 
-          <Input type="number" defaultValue="00000000000000000" id="fromReserveNumber" />
+          <Input type="text" name="budgetItemStart" value={formData.budgetItemStart} onChange={handleInputChange} />
           〜
-          <Input type="number" defaultValue="99999999999999999" id="toReserveNumber" />  
+          <Input type="text" name="budgetItemEnd" value={formData.budgetItemEnd} onChange={handleInputChange} />  
         </div>
+        {errors.budgetItemStart && <ErrorMessage>{errors.budgetItemStart}</ErrorMessage>}
       </FieldContainer>
         
       <FieldContainer>
         <FieldLabel>税金率</FieldLabel>
-        <TaxRateInput type="number" defaultValue="1.00" id="taxRate" />%  
+        <TaxRateInput 
+          type="number" 
+          name="taxRate" 
+          value={formData.taxRate} 
+          onChange={handleInputChange} 
+          step="0.01"
+        />%  
+        {errors.taxRate && <ErrorMessage>{errors.taxRate}</ErrorMessage>}
       </FieldContainer>
 
       <ButtonContainer>
         <Button type="button" onClick={handleSubmit}>OK</Button>  
-        <Button type="button">クリア</Button>
+        <Button type="button" onClick={handleClear}>クリア</Button>
         <Button type="button">終了</Button>
       </ButtonContainer>
       
@@ -229,19 +253,25 @@ const Button = styled.button`
   min-width: 100px;
 `;
 
-export default ReservationSearchForm;
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+`;
 
 // 使用例
-const App = () => {
-  const handleSubmit = (params) => {
+const App: React.FC = () => {
+  const handleSubmit = (params: SearchParams) => {
     console.log(params);
     // 検索処理を実装する  
   };
 
   return (
     <div>  
-      <h1>宿泊予約検索</h1>
+      <h1>科目別執行計画額一覧作成</h1>
       <ReservationSearchForm onSubmit={handleSubmit} />
     </div>
   );  
 };
+
+export default App;

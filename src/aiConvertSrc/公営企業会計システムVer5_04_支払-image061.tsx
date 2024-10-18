@@ -106,4 +106,4 @@ const Button = styled.button`
   }
 `;
 
-export default ScheduleInput;
+export default SampleUsage;

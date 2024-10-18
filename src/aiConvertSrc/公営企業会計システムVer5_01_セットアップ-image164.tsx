@@ -74,7 +74,7 @@ const ElectricMasterPreview: React.FC = () => {
   return <ElectricMaster data={sampleData} />;
 };
 
-export default ElectricMaster;
+export default ElectricMasterPreview;
 
 // Styles
 const Container = styled.div`

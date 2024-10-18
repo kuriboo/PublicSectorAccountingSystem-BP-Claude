@@ -76,4 +76,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default ScheduleChangeConfirmDialog;
+export default SampleUsage;

@@ -1,5 +1,3 @@
-以下は、指定された要件に基づいて作成したNext.js + TypeScriptのコンポーネントです。
-
 import React from 'react';
 import styled from 'styled-components';
 

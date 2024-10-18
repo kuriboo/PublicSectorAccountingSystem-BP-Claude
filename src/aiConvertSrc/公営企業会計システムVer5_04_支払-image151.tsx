@@ -49,4 +49,4 @@ const SampleFurikomibi: React.FC = () => {
   );
 };
 
-export default Furikomibi;
+export default SampleFurikomibi;

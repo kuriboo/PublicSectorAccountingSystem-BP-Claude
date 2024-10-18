@@ -118,7 +118,7 @@ const PurchaseInputSystem: React.FC<PurchaseInputSystemProps> = ({
   );
 };
 
-export default PurchaseInputSystem;
+
 
 // 使用例
 const SampleData: PurchaseInputSystemProps = {
@@ -164,3 +164,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default SampleData;

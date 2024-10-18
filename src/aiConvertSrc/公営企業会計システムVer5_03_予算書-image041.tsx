@@ -95,7 +95,7 @@ const ReservationDetails: React.FC<Props> = ({ reservationInfo }) => {
   );
 };
 
-export default ReservationDetails;
+
 
 // 使用例
 const sampleData: ReservationInfo = {
@@ -114,3 +114,5 @@ const App: React.FC = () => {
     </div>
   );  
 };
+
+export default App;

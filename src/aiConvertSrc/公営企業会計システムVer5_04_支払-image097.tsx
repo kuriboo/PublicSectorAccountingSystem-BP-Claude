@@ -243,4 +243,4 @@ const Button = styled.button`
   }
 `;
 
-export default CompanyProfileForm;
+export default SampleUsage;

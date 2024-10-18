@@ -116,7 +116,6 @@ const CashFlowMasterList: React.FC<CashFlowMasterListProps> = ({
   );
 };
 
-export default CashFlowMasterList;
 
 // Usage example:
 const App: React.FC = () => {
@@ -127,3 +126,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

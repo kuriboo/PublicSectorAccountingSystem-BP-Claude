@@ -130,7 +130,6 @@ const ContractForm: React.FC<ContractFormProps> = ({
   );
 };
 
-export default ContractForm;
 
 // サンプルデータを用いた使用例
 const sampleData: ContractFormProps = {

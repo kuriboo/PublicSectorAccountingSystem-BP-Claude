@@ -115,4 +115,4 @@ const App: React.FC = () => {
   );
 };
 
-export default MainMenu;
+export default App;

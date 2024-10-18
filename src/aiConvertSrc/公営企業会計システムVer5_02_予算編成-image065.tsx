@@ -230,4 +230,4 @@ const SubmitButton = styled.button`
   }
 `;
 
-export default ReservationForm;
+export default App;

@@ -159,7 +159,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ onSubmit }) => {
   );
 };
 
-export default ReservationForm;
+
 
 // Example usage
 const ExampleUsage: React.FC = () => {
@@ -175,3 +175,5 @@ const ExampleUsage: React.FC = () => {
     </div>
   );
 };
+
+export default ExampleUsage;

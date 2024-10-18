@@ -102,4 +102,4 @@ const SampleUsage: React.FC = () => (
   </>
 );
 
-export default Button;
+export default SampleUsage;

@@ -126,4 +126,4 @@ const SampleMasterMaintenance: React.FC = () => {
   );
 };
 
-export default MasterMaintenance;
+export default SampleMasterMaintenance;

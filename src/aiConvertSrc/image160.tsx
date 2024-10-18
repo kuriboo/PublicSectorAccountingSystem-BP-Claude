@@ -1,5 +1,3 @@
-以下は、Next.js + TypeScriptで実装した画像のコンポーネントです。
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -201,4 +199,4 @@ const TitleMasterExample: React.FC = () => {
   return <TitleMaster {...sampleData} />;
 };
 
-export default TitleMaster;
+export default TitleMasterExample;

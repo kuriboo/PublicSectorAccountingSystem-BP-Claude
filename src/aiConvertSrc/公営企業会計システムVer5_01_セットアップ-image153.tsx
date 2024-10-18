@@ -167,7 +167,7 @@ const ReservationMaster: React.FC<ReservationMasterProps> = ({
   );
 };
 
-export default ReservationMaster;
+
 
 // サンプルデータを使用した表示用コンポーネント
 const SampleReservation: React.FC = () => {
@@ -185,3 +185,5 @@ const SampleReservation: React.FC = () => {
     </div>
   );
 };
+
+export default SampleReservation;

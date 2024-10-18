@@ -132,4 +132,4 @@ const ExampleMainMenu: React.FC = () => {
   );
 };
 
-export default MainMenu;
+export default ExampleMainMenu;
