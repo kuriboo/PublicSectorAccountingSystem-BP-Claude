@@ -1,5 +1,3 @@
-以下は、Next.js + TypeScriptを使用して作成した、画像に基づいた業者実績保守コンポーネントのコードです。
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -126,10 +124,4 @@ const SampleUsage: React.FC = () => {
   return <VendorPerformanceMaintenance {...sampleData} />;
 };
 
-export default VendorPerformanceMaintenance;
-
-上記のコードでは、業者実績保守コンポーネントを作成し、プロパティを通じてデータをカスタマイズできるようにしました。また、スタイルコンポーネントを使用してCSS-in-JS形式でスタイリングを行い、レスポンシブデザインを考慮しました。
-
-コンポーネント内では、入力値のない場合や不正な値に対する例外処理は特に行っていませんが、各入力フィールドにはデフォルト値や最小値を設定し、一部の値は読み取り専用にしています。
-
-最後に、サンプルデータを使用してコンポーネントの使用例を示しています。
+export default SampleUsage;

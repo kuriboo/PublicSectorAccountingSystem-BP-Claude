@@ -128,4 +128,4 @@ const SampleMasterSelection: React.FC = () => {
   );
 };
 
-export default MasterSelection;
+export default SampleMasterSelection;

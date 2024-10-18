@@ -1,5 +1,3 @@
-以下が、指定された条件に従って生成したNext.js + TypeScriptのコンポーネントです。
-
 import React from 'react';
 import styled from '@emotion/styled';
 

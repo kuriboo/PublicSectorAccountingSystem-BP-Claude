@@ -114,4 +114,4 @@ const DateInfoExample: React.FC = () => {
   );
 };
 
-export default DateInfo;
+export default DateInfoExample;

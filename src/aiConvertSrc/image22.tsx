@@ -150,8 +150,6 @@ const FinancialOrder: React.FC<FinancialOrderProps> = ({
   );
 };
 
-export default FinancialOrder;
-
 // サンプルデータを使用した表示用コンポーネント
 const SampleFinancialOrder = () => {
   const sampleData: FinancialOrderProps = {
@@ -168,3 +166,5 @@ const SampleFinancialOrder = () => {
 
   return <FinancialOrder {...sampleData} />;
 };
+
+export default SampleFinancialOrder;

@@ -98,8 +98,6 @@ const CompanyInfoForm: React.FC = () => {
   );
 };
 
-export default CompanyInfoForm;
-
 // Usage example
 const App: React.FC = () => {
   return (
@@ -108,3 +106,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default App;

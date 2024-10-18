@@ -99,4 +99,4 @@ const CompanyInfoExample: React.FC = () => {
   return <CompanyInfo {...companyData} />;
 };
 
-export default CompanyInfo;
+export default CompanyInfoExample;

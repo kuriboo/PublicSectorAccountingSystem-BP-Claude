@@ -181,7 +181,7 @@ const FinancialOrder: React.FC<FinancialOrderProps> = ({
   );
 };
 
-export default FinancialOrder;
+
 
 // 使用例
 const SampleData: FinancialOrderProps = {
@@ -224,3 +224,5 @@ const App: React.FC = () => {
     </div>
   );  
 };
+
+export default App;

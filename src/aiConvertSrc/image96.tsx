@@ -51,7 +51,7 @@ const SampleUsage: React.FC = () => {
   return <InputModal onSubmit={handleSubmit} onCancel={handleCancel} />;
 };
 
-export default InputModal;
+export default SampleUsage;
 
 // Styled components
 const ModalContainer = styled.div`

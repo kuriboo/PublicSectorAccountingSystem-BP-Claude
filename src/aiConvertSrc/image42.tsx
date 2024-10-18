@@ -83,4 +83,4 @@ const SampleUsage: React.FC = () => {
   );
 };
 
-export default ContractSelector;
+export default SampleUsage;

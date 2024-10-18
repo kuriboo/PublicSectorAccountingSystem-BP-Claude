@@ -87,4 +87,4 @@ const CalendarExample: React.FC = () => {
   );
 };
 
-export default Calendar;
+export default CalendarExample;

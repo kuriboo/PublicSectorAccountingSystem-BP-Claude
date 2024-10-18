@@ -137,4 +137,4 @@ const Table = styled.table`
   }
 `;
 
-export default TransferCondition;
+export default SampleTransferCondition;

@@ -149,4 +149,4 @@ const SampleUsage = () => {
   return <PublicApprovalForm onSubmit={handleSubmit} />;
 };
 
-export default PublicApprovalForm;
+export default SampleUsage;

@@ -156,8 +156,6 @@ const MasterMaintenance: React.FC<Props> = ({
   );
 };
 
-export default MasterMaintenance;
-
 // Usage example
 const App: React.FC = () => {
   const sampleData: MasterItem[] = [
@@ -180,3 +178,5 @@ const App: React.FC = () => {
     />
   );
 };
+
+export default App;

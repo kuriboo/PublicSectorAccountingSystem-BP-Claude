@@ -102,4 +102,4 @@ const UsageExample: React.FC = () => {
   );
 };
 
-export default NominatedContractorList;
+export default UsageExample;

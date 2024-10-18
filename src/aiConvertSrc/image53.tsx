@@ -9,10 +9,10 @@ interface ResultData {
   派遣算定: number;
   事業所用: number;
   営業費用: number;
-  ○○事業: number;
+  事業: number;
   印刷製本費: number;
   電子書籍費: number;
-  （損保）: number;
+  損保: number;
 }
 
 interface Props {
@@ -74,10 +74,10 @@ const ResultTable: React.FC<Props> = ({ data }) => {
             <td>{row.派遣算定}</td>
             <td>{row.事業所用}</td>
             <td>{row.営業費用}</td>
-            <td>{row.○○事業}</td>
+            <td>{row.事業}</td>
             <td>{row.印刷製本費}</td>
             <td>{row.電子書籍費}</td>
-            <td>{row.（損保）}</td>
+            <td>{row.損保}</td>
           </tr>
         ))}
       </tbody>
@@ -95,10 +95,10 @@ const sampleData: ResultData[] = [
     派遣算定: 100000,
     事業所用: 1000,
     営業費用: 1000,
-    ○○事業: 1000,
+    事業: 1000,
     印刷製本費: 1000,
     電子書籍費: 1000,
-    （損保）: 80
+    損保: 80
   },
   // Add more sample data objects as needed
 ];

@@ -225,4 +225,4 @@ const CheckboxLabel = styled.label`
   margin-right: 10px;
 `;
 
-export default CompanyJobSearch;
+export default App;

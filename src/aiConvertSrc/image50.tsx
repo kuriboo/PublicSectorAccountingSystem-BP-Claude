@@ -108,8 +108,6 @@ const ConsumptionTaxReport: React.FC<ConsumptionTaxReportProps> = ({
   );
 };
 
-export default ConsumptionTaxReport;
-
 // 使用例
 const sampleData: ConsumptionTaxReportProps = {
   date: '2016/03/25',
@@ -137,3 +135,5 @@ const sampleData: ConsumptionTaxReportProps = {
 const ConsumptionTaxReportSample = () => {
   return <ConsumptionTaxReport {...sampleData} />;  
 };
+
+export default ConsumptionTaxReportSample;

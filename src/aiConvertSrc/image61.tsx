@@ -72,8 +72,6 @@ const PurchaseTaxAmountTable: React.FC<PurchaseTaxAmountTableProps> = ({ data })
   );
 };
 
-export default PurchaseTaxAmountTable;
-
 // 使用例
 const sampleData = [
   { category: '課税標準額', amount: 815300 },
@@ -85,3 +83,5 @@ const sampleData = [
 const PurchaseTaxAmountTableExample = () => (
   <PurchaseTaxAmountTable data={sampleData} />
 );
+
+export default PurchaseTaxAmountTableExample;

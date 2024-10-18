@@ -130,4 +130,4 @@ const UsageExample: React.FC = () => {
   );
 };
 
-export default AccountingForm;
+export default UsageExample;

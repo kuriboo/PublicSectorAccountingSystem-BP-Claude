@@ -109,14 +109,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-```
-
-ポイント:
-1. コードのみを出力し、説明文は含めていません。
-2. TypeScriptの型定義を`TaxProjectionTableProps`として定義しています。
-3. `TaxProjectionTable`コンポーネントはプロパティ`data`を受け取り、カスタマイズ可能です。
-4. styled-componentsを使用してCSS-in-JS形式でスタイリングを行っています。レスポンシブデザインを考慮しています。
-5. コメントを適切に含めています。
-6. コードブロックの記号は含めていません。
-7. 各セルの値が存在しない場合は`'-'`を表示するようにしています。
-8. サンプルデータ`sampleData`を定義し、`App`コンポーネント内で`TaxProjectionTable`を使用して表示しています。

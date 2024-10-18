@@ -91,4 +91,4 @@ const SampleMainVisual = () => {
   return <MainVisual {...sampleData} />;
 };
 
-export default MainVisual;
+export default SampleMainVisual;

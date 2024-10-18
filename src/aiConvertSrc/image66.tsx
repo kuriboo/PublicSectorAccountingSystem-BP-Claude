@@ -60,8 +60,6 @@ const TaxCalculator: React.FC<TaxCalculatorProps> = ({ data }) => {
   );
 };
 
-export default TaxCalculator;
-
 // 使用例
 const sampleData: TaxData[] = [
   { taxableIncome: 1000000, taxAmount: 50000 },
@@ -77,3 +75,5 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+export default sampleData;

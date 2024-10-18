@@ -15,7 +15,7 @@ type ResultTableProps = {
     印刷製本費: number;
     電子計算費: number;
     報告書作成費: number;
-    《出向けた清算税額》: number;
+    出向けた清算税額: number;
   }[];
 };
 
@@ -61,7 +61,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ data }) => {
           <th>印刷製本費</th>
           <th>電子計算費</th>
           <th>報告書作成費</th>
-          <th>《出向けた清算税額》</th>
+          <th>出向けた清算税額</th>
         </tr>
       </thead>
       <tbody>
@@ -78,7 +78,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ data }) => {
             <td>{row.印刷製本費.toLocaleString()}</td>
             <td>{row.電子計算費.toLocaleString()}</td>
             <td>{row.報告書作成費.toLocaleString()}</td>
-            <td>{row.《出向けた清算税額》.toLocaleString()}</td>
+            <td>{row.出向けた清算税額.toLocaleString()}</td>
           </tr>
         ))}
       </tbody>
@@ -100,7 +100,7 @@ const ExampleData = [
     印刷製本費: 1000,
     電子計算費: 1000,
     報告書作成費: 1000,
-    《出向けた清算税額》: 80
+    出向けた清算税額: 80
   }  
 ];
 

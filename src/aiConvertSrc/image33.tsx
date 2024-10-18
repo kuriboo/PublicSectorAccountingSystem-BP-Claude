@@ -114,4 +114,4 @@ const Button = styled.button<{ primary?: boolean }>`
   cursor: pointer;
 `;
 
-export default TaxReportForm;
+export default SampleUsage;
